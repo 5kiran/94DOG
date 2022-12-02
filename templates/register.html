@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  </head>
+  <script>
+    function f_clickFunc() {
+      let user = {
+        name = $('#name').val(),
+        email = $('#email').val(),
+        psword = $('#psword').val()
+      }
+
+      if (name === '' || email === '' || psword === '') {
+        alert('내용을 작성해주세요.');
+      } else {
+        $.ajax({
+          type: 'POST',
+          url: '/register',
+          data: JSON.stringify(
+            user
+          ),
+          dataType: "JSON",
+          contentType: "application/json; charset=utf-8",
+          success: function (response) {
+            alert(response['msg']);
+            window.location.reload();
+          },
+        });
+      }
+    }
+  </script>
+  <body>
+    <table>
+      <form name="form" action="/" method="post"></form>
+      <thead>
+        <caption>
+          회원가입
+        </caption>
+      </thead>
+    </table>
+    <tr>
+      <td>이름</td>
+      <td><input type="text" name="user_name" /></td>
+    </tr>
+    <tr>
+      <td>이메일</td>
+      <td><input type="text" name="email" /></td>
+    </tr>
+    <tr>
+      <td>비밀번호</td>
+      <td><input type="text" name="psword" /></td>
+    </tr>
+    <input onClick="f_clickFunc()" type="button" value="가입하기" />
+  </body>
+</html>
