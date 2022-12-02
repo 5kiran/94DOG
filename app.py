@@ -1,36 +1,42 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, jsonify, render_template, request
 import pymysql
-
 app = Flask(__name__)
 
-@app.route('/register')
-def register():
-    return render_template('register.html')
+# db가 아닌 다른 변수명으로 써도 됩니다.
+db = pymysql.connect(
+  host='127.0.0.1',
+  user='root',
+  db='dog94',
+  password='Jungmin0413',
+  charset='utf8')
 
-db = pymysql.connect(host="localhost",
-                      port=3306,
-                      user="root",
-                      db='dog94',
-                      password='Jungmin0413',
-                      charset='utf8')
+curs = db.cursor(pymysql.cursors.DictCursor)
 
-curs = db.cursor()
 
-@app.route("/register", methods=["POST"])
-def user_register():
-  params = request.get_json()
-  name = params['name']
-  psword = params['psword']
-  email = params['email']
+@app.route("/temp")
+def profile():
+  return render_template("register.html")
 
-  sql = """insert into user (name, email, psword)
-            values (%s,%s,%s)
-        """
-  curs.execute(sql, (name, email, psword))
-  curs.fetchall()
+
+@app.route('/register', methods=['POST'])
+def save_post():
+
+  name_receive = request.form.get('name_give')
+  email_receive = request.form.get('email_give')
+  psword_receive = request.form.get('psword_give')
+
+  doc = {
+    'name': name_receive,
+    'email': email_receive,
+    'psword': psword_receive
+  }
+
+  curs.execute(f"insert into user (name,email,psword) value ('{name_receive}','{email_receive}', '{psword_receive}')")
   db.commit()
-  print(params)
-  return "ok"
+  # 스트링 합 연산자
+
+  return jsonify({'msg': '회원가입 완료!'})
+
 
 if __name__ == '__main__':
   app.run('0.0.0.0', port=5000, debug=True)

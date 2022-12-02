@@ -6,34 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-  </head>
   <script>
-    function f_clickFunc() {
-      let user = {
-        name = $('#name').val(),
-        email = $('#email').val(),
-        psword = $('#psword').val()
-      }
+    function register_click() {
+      const name = $('#name').val();
+      const email = $('#email').val();
+      const psword = $('#psword').val();
 
-      if (name === '' || email === '' || psword === '') {
+      if (name == '' || email == '' || psword == '') {
         alert('내용을 작성해주세요.');
       } else {
         $.ajax({
           type: 'POST',
           url: '/register',
-          data: JSON.stringify(
-            user
-          ),
-          dataType: "JSON",
-          contentType: "application/json; charset=utf-8",
+          data: {
+            name_give: name,
+            email_give: email,
+            psword_give: psword
+          },
           success: function (response) {
             alert(response['msg']);
             window.location.reload();
-          },
+          }
         });
       }
     }
   </script>
+  </head>
   <body>
     <table>
       <form name="form" action="/" method="post"></form>
@@ -55,6 +53,6 @@
       <td>비밀번호</td>
       <td><input type="text" name="psword" /></td>
     </tr>
-    <input onClick="f_clickFunc()" type="button" value="가입하기" />
+    <button onclick="register_click()" type="button">회원가입</button>
   </body>
 </html>
