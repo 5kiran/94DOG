@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -6,37 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-  <script>
-    function register_click() {
-      const name = $('#name').val();
-      const email = $('#email').val();
-      const password = $('#password').val();
+    <script>
+      function register_click() {
+        const name = $('#name').val();
+        const email = $('#email').val();
+        const password = $('#password').val();
 
-      if (name == '' || email == '' || password == '') {
-        alert('내용을 작성해주세요.');
-      } else {
-        $.ajax({
-          type: 'POST',
-          url: '/register',
-          data: {
-            name_give: name,
-            email_give: email,
-            password_give: password
-          },
-          success: function (response) {
-            alert(response['msg']);
-            window.location.reload();
-          },
-          error: function (request, status, error) {
-        console.log("code: " + request.status)
-        console.log("message: " + request.responseText)
-        console.log("error: " + error)
-        alert('회원가입 실패');
-          }
-        });
+        if (name == '' || email == '' || password == '') {
+          alert('내용을 작성해주세요.');
+        } else {
+          $.ajax({
+            type: 'POST',
+            url: '/register',
+            data: {
+              name_give: name,
+              email_give: email,
+              password_give: password,
+            },
+            success: function (response) {
+              alert(response['msg']);
+              window.location.reload();
+            },
+            error: function (request, status, error) {
+              console.log('code: ' + request.status);
+              console.log('message: ' + request.responseText);
+              console.log('error: ' + error);
+              alert('회원가입 실패');
+            },
+          });
+        }
       }
-    }
-  </script>
+    </script>
   </head>
   <body>
     <table>
@@ -61,4 +61,58 @@
     </tr>
     <button onclick="register_click()" type="button">회원가입</button>
   </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../static/Style/index.css" />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+    />
+  </head>
+  <body>
+    <div class="register">
+      <h1>Register</h1>
+      <div class="links">
+        <a href="/login">Login</a>
+        <a href="/register" class="active">Register</a>
+      </div>
+      <form action="/register" method="post" autocomplete="off">
+        <label for="name">
+          <i class="fas fa-user"></i>
+        </label>
+        <input type="text" name="name" placeholder="Name" id="name" required />
+        <label for="password">
+          <i class="fas fa-lock"></i>
+        </label>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          id="password"
+          required
+        />
+        <label for="email">
+          <i class="fas fa-envelope"></i>
+        </label>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          id="email"
+          required
+        />
+        <div class="msg">{{ msg }}</div>
+        <input type="submit" onclick="register_click()" value="Register" />
+      </form>
+    </div>
+  </body>
+  <script type="text/javascript" src="../static/JavaScript/index.js"></script>
 </html>
