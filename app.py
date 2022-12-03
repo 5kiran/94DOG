@@ -31,18 +31,21 @@ def like():
   if result is None:
     like_up = f'INSERT INTO liked (user_id,board_id) VALUES ({user_id},{board_id})'
     curs.execute(like_up)
+    board_like_up = f'UPDATE board SET liked = liked +1 WHERE board.id = {board_id}'
+    curs.execute(board_like_up)
     db.commit()
   else:
     like_delete = f'DELETE FROM  liked WHERE liked.user_id = {user_id} AND liked.board_id = {board_id}'
-    print(like_delete)
+    board_like_down = f'UPDATE board SET liked = liked -1 WHERE board.id = {board_id}'
     curs.execute(like_delete)
+    curs.execute(board_like_down)
     db.commit()
     
   return jsonify({'msg': '좋아용'})
 
 @app.route("/liked/board", methods=["GET"])
 def board_like():
-  board_id = "SELECT id,title,content,file_url,user_id  FROM board WHERE id = 2"
+  board_id = "SELECT id,title,content,file_url,user_id,liked  FROM board WHERE id = 2"
   curs.execute(board_id)
   board_data = curs.fetchone()
   
@@ -61,4 +64,3 @@ def board_like():
 
 if __name__ == '__main__':
   app.run('0.0.0.0', port=5000, debug=True)
-  
