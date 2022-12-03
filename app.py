@@ -23,15 +23,15 @@ def save_post():
 
   name_receive = request.form.get('name_give')
   email_receive = request.form.get('email_give')
-  psword_receive = request.form.get('psword_give')
+  password_receive = request.form.get('password_give')
 
-  doc = {
-    'name': name_receive,
-    'email': email_receive,
-    'psword': psword_receive
-  }
+  # doc = {
+  #   'name': name_receive,
+  #   'email': email_receive,
+  #   'password': password_receive
+  # }
 
-  curs.execute(f"insert into user (name,email,psword) value ('{name_receive}','{email_receive}', '{psword_receive}')")
+  curs.execute(f"insert into user (name,email,password) value ('{name_receive}','{email_receive}', '{password_receive}')")
   db.commit()
   # 스트링 합 연산자
 

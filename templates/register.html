@@ -10,9 +10,9 @@
     function register_click() {
       const name = $('#name').val();
       const email = $('#email').val();
-      const psword = $('#psword').val();
+      const password = $('#password').val();
 
-      if (name == '' || email == '' || psword == '') {
+      if (name == '' || email == '' || password == '') {
         alert('내용을 작성해주세요.');
       } else {
         $.ajax({
@@ -21,11 +21,17 @@
           data: {
             name_give: name,
             email_give: email,
-            psword_give: psword
+            password_give: password
           },
           success: function (response) {
             alert(response['msg']);
             window.location.reload();
+          },
+          error: function (request, status, error) {
+        console.log("code: " + request.status)
+        console.log("message: " + request.responseText)
+        console.log("error: " + error)
+        alert('회원가입 실패');
           }
         });
       }
@@ -43,15 +49,15 @@
     </table>
     <tr>
       <td>이름</td>
-      <td><input type="text" name="user_name" /></td>
+      <td><input type="text" id="name" /></td>
     </tr>
     <tr>
       <td>이메일</td>
-      <td><input type="text" name="email" /></td>
+      <td><input type="text" id="email" /></td>
     </tr>
     <tr>
       <td>비밀번호</td>
-      <td><input type="text" name="psword" /></td>
+      <td><input type="text" id="password" /></td>
     </tr>
     <button onclick="register_click()" type="button">회원가입</button>
   </body>
