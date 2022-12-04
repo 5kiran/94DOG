@@ -21,12 +21,12 @@ curs = db.cursor(pymysql.cursors.DictCursor)
 #   return render_template("index.html")
 
 
-@app.route("/register", methods = ['GET', 'POST'])
+@app.route("/register", methods=['GET'])
 def register_page():
   return render_template("register.html")
 
 
-@app.route("/login", methods = ['GET', 'POST'])
+@app.route("/login", methods=['GET', 'POST'])
 def login_page():
   return render_template("login.html")
 
@@ -53,11 +53,10 @@ def register():
 
   return jsonify({'msg': '회원가입 완료'})
 
-@app.route('/login/in', methods = ['POST'])
+@app.route('/login/in', methods=['POST'])
 def login():
   email_receive = request.form['email_give']
   password_receive = request.form['password_give']
-  print(email_receive,password_receive)
   curs.execute('SELECT * FROM user WHERE email = %s AND password = %s', (email_receive,password_receive))
   record = curs.fetchall()
   
