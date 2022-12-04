@@ -20,7 +20,7 @@ function register_click() {
       },
       success: function (response) {
         alert(response['msg']);
-        window.location.reload();
+        window.location.href = '/login';
       },
     });
   }

@@ -49,7 +49,7 @@ def register():
 
   curs.execute(f"insert into user (name,email,password) value ('{name_receive}','{email_receive}', '{password_receive}')")
   db.commit()
-  # 스트링 합 연산자
+  db.close()
 
   return jsonify({'msg': '회원가입 완료!'})
 
@@ -72,7 +72,9 @@ def login():
       return render_template("home.html")
     else:
       msg = '이메일을 확인해주세요.'
-      return render_template("login.html", msg=msg)
+  db.commit()
+  db.close()
+  return render_template("login.html", msg=msg)
 
 
 @app.route('/logout')
