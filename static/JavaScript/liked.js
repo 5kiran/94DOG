@@ -1,15 +1,18 @@
-function like(idNum){
+function like(postId,writer){
   const userId = document.getElementById('userId').value
-  const boardId = idNum
+  const boardId = postId
+  const writerId = writer
   $.ajax({
     type: "POST",
     url: "/liked",
-    data: {user_id_give : userId,board_id_give : boardId},
+    data: {user_id_give : userId,board_id_give : boardId, writer_id_give : writerId},
     success: function (response) {
         alert(response["msg"])
+        window.location.reload()
     }
   });
 }
+
 function showBoard(){
   $.ajax({
     type: 'GET',
@@ -17,13 +20,12 @@ function showBoard(){
     data: {},
     success: function (response) {
       console.log(response['boardData'])
-      let id = response['boardData'][1][0]
-      let title = response['boardData'][1][1]
-      let content = response['boardData'][1][2]
-      let fileUrl = response['boardData'][1][3]
-      let userId = response['boardData'][1][4]
-      let boardLike = response['boardData'][1][5]
-      let likeCount = response['boardData'][0]
+      let title = response['boardData']['title']
+      let content = response['boardData']['content']
+      let fileUrl = response['boardData']['file_url']
+      let id = response['boardData']['id']
+      let userId = response['boardData']['user_id']
+      let boardLike = response['boardData']['liked']
 
 
       let temp_html = `<div id ="boardId${id}">아이디 : ${id}<br>
@@ -32,8 +34,7 @@ function showBoard(){
                         파일 : ${fileUrl}<br>
                         User_id : ${userId}<br>
                         board count LIKE : ${boardLike}
-                        liked select count like : ${likeCount}
-                        <button onclick= "like(${id})" type="button" class="btn btn-dark">좋아요 </button>
+                        <button onclick= "like(${id},${userId})" type="button" class="btn btn-dark">좋아요 </button>
                       </div>`
       $('#board').append(temp_html)
     
