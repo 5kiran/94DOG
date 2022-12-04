@@ -19,7 +19,6 @@ function register_click() {
         password_give: password,
       },
       success: function (response) {
-        alert(response['msg']);
         window.location.href = '/login';
       },
     });
@@ -39,6 +38,9 @@ function login_click() {
       data: {
         email_give: email,
         password_give: password,
+      },
+      success: function (response) {
+        window.location.href = '/home';
       },
     });
   }

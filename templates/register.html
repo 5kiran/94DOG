@@ -19,7 +19,7 @@
         <a href="/login">Login</a>
         <a href="/register" class="active">Register</a>
       </div>
-      <form action="/register" method="post" autocomplete="off">
+      <div>
         <label for="name">
           <i class="fas fa-user"></i>
         </label>
@@ -44,9 +44,8 @@
           id="email"
           required
         />
-        <div class="msg">{{ msg }}</div>
         <input type="submit" onclick="register_click()" value="Register" />
-      </form>
+      </div>
     </div>
   </body>
   <script type="text/javascript" src="../static/JavaScript/index.js"></script>

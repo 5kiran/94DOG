@@ -32,7 +32,7 @@ def login_page():
 
 @app.route("/home")
 def home_page():
-  return render_template("home.html")
+  return render_template("home.html", name = session['name'])
 
 @app.route("/register/in", methods=["POST"])
 def register():
@@ -69,7 +69,7 @@ def login():
     if record:
       session['loggedin'] = True
       session['name'] = record[0]['name']
-      return render_template("home.html")
+      return redirect(url_for('home_page'))
     else:
       msg = '이메일을 확인해주세요.'
   db.commit()
