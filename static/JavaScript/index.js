@@ -19,6 +19,7 @@ function register_click() {
         password_give: password,
       },
       success: function (response) {
+        alert(response['msg']);
         window.location.href = '/login';
       },
     });
@@ -40,7 +41,13 @@ function login_click() {
         password_give: password,
       },
       success: function (response) {
-        window.location.href = '/home';
+        if (response['msg'] == '로그인 성공') {
+          alert(response['msg']);
+          window.location.href = '/home';
+        } else {
+          alert(response['msg']);
+          window.location.reload();
+        }
       },
     });
   }

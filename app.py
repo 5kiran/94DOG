@@ -51,30 +51,22 @@ def register():
   db.commit()
   db.close()
 
-  return jsonify({'msg': '회원가입 완료!'})
+  return jsonify({'msg': '회원가입 완료'})
 
-@app.route('/login/in', methods = ['GET', 'POST'])
+@app.route('/login/in', methods = ['POST'])
 def login():
-  print("hi")
-  msg=''
-  if request.method == 'POST':
-    email_receive = request.form['email_give']
-    password_receive = request.form['password_give']
-    print(email_receive,password_receive)
-    curs.execute('SELECT * FROM user WHERE email = %s AND password = %s', (email_receive,password_receive))
-    record = curs.fetchall()
-    print(record)
-    eeee = record[0]['name']
-    print('record:', eeee)
-    if record:
-      session['loggedin'] = True
-      session['name'] = record[0]['name']
-      return redirect(url_for('home_page'))
-    else:
-      msg = '이메일을 확인해주세요.'
-  db.commit()
-  db.close()
-  return render_template("login.html", msg=msg)
+  email_receive = request.form['email_give']
+  password_receive = request.form['password_give']
+  print(email_receive,password_receive)
+  curs.execute('SELECT * FROM user WHERE email = %s AND password = %s', (email_receive,password_receive))
+  record = curs.fetchall()
+  
+  if record:
+    session['loggedin'] = True
+    session['name'] = record[0]['name']
+    return jsonify({'msg': '로그인 성공'})
+  else:
+    return jsonify({'msg':'사용자 정보가 일치하지 않습니다.'})
 
 
 @app.route('/logout')
