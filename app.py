@@ -64,6 +64,7 @@ def login():
   if record:
     session['loggedin'] = True
     session['name'] = record[0]['name']
+    db.commit()
     return jsonify({'msg': '로그인 성공'})
   else:
     return jsonify({'msg':'사용자 정보가 일치하지 않습니다.'})
