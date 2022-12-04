@@ -1,7 +1,10 @@
-from flask import Flask, jsonify, render_template, request, session
+from flask import Flask, jsonify, render_template, request, session, redirect, url_for
 import pymysql
+import json
+
 app = Flask(__name__)
 
+app.secret_key = 'sad111123'
 # db가 아닌 다른 변수명으로 써도 됩니다.
 db = pymysql.connect(
   host='127.0.0.1',
@@ -13,27 +16,30 @@ db = pymysql.connect(
 curs = db.cursor(pymysql.cursors.DictCursor)
 
 
-@app.route("/login")
-def index():
-  return render_template("index.html")
+# @app.route("/")
+# def index():
+#   return render_template("index.html")
 
-# @app.route('/pythonlogin/', methods=['GET', 'POST'])
-# def login():
-#     # Output message if something goes wrong...
-#     msg = ''
-#     return render_template('index.html', msg='')
 
-@app.route("/register")
+@app.route("/register", methods = ['GET', 'POST'])
 def register_page():
   return render_template("register.html")
 
 
-@app.route('/register/in', methods=['POST'])
+@app.route("/login", methods = ['GET', 'POST'])
+def login_page():
+  return render_template("login.html")
+
+@app.route("/home")
+def home_page():
+  return render_template("home.html")
+
+@app.route("/register/in", methods=["POST"])
 def register():
 
-  name_receive = request.form.get('name_give')
-  email_receive = request.form.get('email_give')
-  password_receive = request.form.get('password_give')
+  name_receive = request.form.get("name_give")
+  email_receive = request.form.get("email_give")
+  password_receive = request.form.get("password_give")
 
   doc = {
     'name': name_receive,
@@ -46,6 +52,34 @@ def register():
   # 스트링 합 연산자
 
   return jsonify({'msg': '회원가입 완료!'})
+
+@app.route('/login/in', methods = ['GET', 'POST'])
+def login():
+  print("hi")
+  msg=''
+  if request.method == 'POST':
+    email_receive = request.form['email_give']
+    password_receive = request.form['password_give']
+    print(email_receive,password_receive)
+    curs.execute('SELECT * FROM user WHERE email = %s AND password = %s', (email_receive,password_receive))
+    record = curs.fetchall()
+    print(record)
+    eeee = record[0]['name']
+    print('record:', eeee)
+    if record:
+      session['loggedin'] = True
+      session['name'] = record[0]['name']
+      return render_template("home.html")
+    else:
+      msg = '이메일을 확인해주세요.'
+      return render_template("login.html", msg=msg)
+
+
+@app.route('/logout')
+def logout():
+  session.pop('loggedin', None)
+  session.pop('name', None)
+  return redirect(url_for('login_page'))
 
 if __name__ == '__main__':
   app.run('0.0.0.0', port=5000, debug=True)

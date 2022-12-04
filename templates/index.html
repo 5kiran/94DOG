@@ -1,45 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>Login</title>
-    <link rel="stylesheet" href="../static/Style/index.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
-    />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
   </head>
   <body>
-    <div class="login">
-      <h1>Login</h1>
-      <div class="links">
-        <a href="/login" class="active">Login</a>
-        <a href="/register">Register</a>
-      </div>
-      <form action="/login" method="post">
-        <label for="email">
-          <i class="fas fa-user"></i>
-        </label>
-        <input
-          type="text"
-          name="email"
-          placeholder="Email"
-          id="eamil"
-          required
-        />
-        <label for="password">
-          <i class="fas fa-lock"></i>
-        </label>
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          id="password"
-          required
-        />
-        <div class="msg">{{ msg }}</div>
-        <input type="submit" value="Login" />
-      </form>
-    </div>
+    <h2>Welcome,{{name}} <a href="{{url_for('logout')}}">logout</a></h2>
   </body>
 </html>
