@@ -30,7 +30,7 @@ def pagination():
 
   # 전체 게시글 수
   cursor = db.cursor(pymysql.cursors.DictCursor)
-  sql = 'SELECT count(*) as all_count FROM board WHERE deleted = false'
+  sql = 'SELECT count(*) as all_count FROM board WHERE deleted = false' 
   cursor.execute(sql)
   all_count = cursor.fetchall()[0]['all_count']
 
@@ -48,7 +48,7 @@ def pagination():
   if end_page > total_page:
     end_page = total_page
 
-  sql = f'SELECT * FROM board WHERE deleted = false LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
+  sql = f'SELECT * FROM board WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
   cursor.execute(sql)
   boards = cursor.fetchall()
 

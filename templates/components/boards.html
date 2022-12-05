@@ -13,8 +13,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>boards</h1>
-
+    <!-- 게시글 목록 -->
     <ul style="padding: 0;">
       {% for board in response.boards %}
         <div class="card mb-2" style="cursor: pointer;" onclick="(alert(`{{ board.id }} 게시글 이동`))">
@@ -33,6 +32,7 @@
       {% endfor%}
     </ul>
 
+    <!-- 페이지네이션 -->
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center"></ul>
     </nav>
