@@ -13,6 +13,7 @@ db = pymysql.connect(
   password='Jungmin0413',
   charset='utf8')
 
+
 curs = db.cursor(pymysql.cursors.DictCursor)
 
 # @app.route("/")
