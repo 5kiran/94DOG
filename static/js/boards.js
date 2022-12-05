@@ -10,8 +10,12 @@ const setBoards = (page) => {
       url: '/boards',
       data: {},
       success: (res) => {
-        setBoardsContent(res.response);
-        setPagination(res.response);
+        if (res.response.total_page === 0) {
+          $('#boards').append(`<h1>등록된 게시글이 없습니다.</h1>`);
+        } else {
+          setBoardsContent(res.response);
+          setPagination(res.response);
+        }
       }
     });
   } else {
@@ -20,8 +24,12 @@ const setBoards = (page) => {
       url: `/boards?p=${page}`,
       data: {},
       success: (res) => {
-        setBoardsContent(res.response);
-        setPagination(res.response);
+        if (res.response.total_page === 0) {
+          $('#boards').append(`<h1>등록된 게시글이 없습니다.</h1>`);
+        } else {
+          setBoardsContent(res.response);
+          setPagination(res.response);
+        }
       }
     });
   }
