@@ -201,7 +201,7 @@ def logout():
 
 @app.route('/liked')
 def liked():
-  return render_template('components/liked.html')
+  return render_template('components/liked.html', name = session['name'], email = session['email'], id = session['id'])
 
 
 @app.route('/liked',methods=['POST'])
@@ -214,7 +214,7 @@ def like():
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
-  user_id = request.form['user_id_give']
+  user_id = session['id']
   board_id = request.form['board_id_give']
   writer_id = request.form['writer_id_give']
   like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
@@ -247,15 +247,29 @@ def board_like():
   password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
-
-  board_id = "SELECT id,title,content,file_url,user_id,liked  FROM board WHERE id = 5"
+  
+  temp_num = 5
+  board_id = f'SELECT id,title,content,file_url,user_id,liked  FROM board WHERE id = {temp_num}'
   curs.execute(board_id)
-  board_data = curs.fetchone()  
+  board_data = curs.fetchone()
+  
+  like_status = 0
+  if like_find_user(temp_num,curs) is not None:
+    like_status += 1  
 
   db.commit()
   db.close()
   
-  return jsonify({'boardData': board_data})
+  return jsonify({'boardData': board_data},like_status)
+
+def like_find_user(board_id,curs):
+  user_id = session['id']
+  
+  like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
+  curs.execute(like_find)
+  like_data = curs.fetchone()
+  
+  return like_data
 
 
 @app.route("/liked/rank", methods=["GET"])

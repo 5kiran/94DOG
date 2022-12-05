@@ -1,14 +1,12 @@
 function like(postId,writer){
-  const userId = document.getElementById('userId').value
   const boardId = postId
   const writerId = writer
   $.ajax({
     type: "POST",
     url: "/liked",
-    data: {user_id_give : userId,board_id_give : boardId, writer_id_give : writerId},
+    data: {board_id_give : boardId, writer_id_give : writerId},
     success: function (response) {
-        alert(response["msg"])
-        window.location.reload()
+      window.location.reload()
     }
   });
 }
@@ -19,25 +17,35 @@ function showBoard(){
     url: `/liked/board`,
     data: {},
     success: function (response) {
-      console.log(response['boardData'])
-      let title = response['boardData']['title']
-      let content = response['boardData']['content']
-      let fileUrl = response['boardData']['file_url']
-      let id = response['boardData']['id']
-      let userId = response['boardData']['user_id']
-      let boardLike = response['boardData']['liked']
-
-
-      let temp_html = `<div id ="boardId${id}">아이디 : ${id}<br>
+      
+      let title = response[0]['boardData']['title']
+      let content = response[0]['boardData']['content']
+      let fileUrl = response[0]['boardData']['file_url']
+      let id = response[0]['boardData']['id']
+      let userId = response[0]['boardData']['user_id']
+      let boardLike = response[0]['boardData']['liked']
+       
+      if(response[1] == 0){
+        let temp_html = `<div id ="boardId${id}">아이디 : ${id}<br>
                         제목 : ${title}<br>
                         내용 : ${content}<br>
                         파일 : ${fileUrl}<br>
                         User_id : ${userId}<br>
                         board count LIKE : ${boardLike}
-                        <button onclick= "like(${id},${userId})" type="button" class="btn btn-dark">좋아요 </button>
+                        <a class="likebutton" onclick= "like(${id},${userId})">🤍</a>
                       </div>`
       $('#board').append(temp_html)
-    
+      } else {
+        let temp_html = `<div id ="boardId${id}">아이디 : ${id}<br>
+                        제목 : ${title}<br>
+                        내용 : ${content}<br>
+                        파일 : ${fileUrl}<br>
+                        User_id : ${userId}<br>
+                        board count LIKE : ${boardLike}
+                        <a class="likebutton" onclick= "like(${id},${userId})">❤️</a>
+                      </div>`
+      $('#board').append(temp_html)
+      }
     }
   });
 }
