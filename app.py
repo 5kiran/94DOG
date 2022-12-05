@@ -28,7 +28,7 @@ def like():
   like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
   curs.execute(like_find)
   result = curs.fetchone()
-  print(result)
+  
   
   if result is None:
     like_up = f'INSERT INTO liked (user_id,board_id,writer_id) VALUES ({user_id},{board_id},{writer_id})'
@@ -36,6 +36,7 @@ def like():
     curs.execute(like_up)
     curs.execute(board_like_up)
     db.commit()
+    
   else:
     like_delete = f'DELETE FROM  liked WHERE liked.user_id = {user_id} AND liked.board_id = {board_id}'
     board_like_down = f'UPDATE board SET liked = liked -1 WHERE board.id = {board_id}'
@@ -47,19 +48,18 @@ def like():
 
 @app.route("/liked/board", methods=["GET"])
 def board_like():
-  board_id = "SELECT id,title,content,file_url,user_id,liked  FROM board WHERE id = 6"
+  board_id = "SELECT id,title,content,file_url,user_id,liked  FROM board WHERE id = 1"
   curs.execute(board_id)
-  board_data = curs.fetchone()
-  print(board_data)  
+  board_data = curs.fetchone()  
   
   return jsonify({'boardData': board_data})
 
 @app.route("/liked/rank", methods=["GET"])
 def like_rank():
-  sql = 'SELECT `user`.name,count(writer_id) AS like_cnt FROM liked LEFT JOIN `user` ON liked.writer_id = `user`.id GROUP BY `user`.name ORDER BY  like_cnt DESC LIMIT 5'
+  sql = 'SELECT `user`.name,count(writer_id) AS like_cnt FROM liked LEFT JOIN `user`ON liked.writer_id = `user`.id GROUP BY `user`.name ORDER BY  like_cnt DESC LIMIT 5'
   curs.execute(sql)
   like_data = curs.fetchall()
-  print(like_data)
+  
   return jsonify({'likeRankList' :like_data})
 
 
