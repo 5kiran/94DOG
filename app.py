@@ -3,6 +3,9 @@ import pymysql
 
 app = Flask(__name__)
 
+app.secret_key = 'sad111123'
+
+
 @app.route('/')
 def home():
   return render_template('main.html', component_name='boards')
@@ -13,7 +16,7 @@ def pagination():
   db = pymysql.connect(
       host="localhost", 	# 데이터베이스 주소
       user="root", 	# 유저네임
-      passwd="qwer1234", 	# 패스워드
+      passwd="dog94", 	# 패스워드
       db="dog94", 	# 사용할 DB
       charset="utf8"	# 인코딩
   )
@@ -92,15 +95,7 @@ def pagination():
 
 
 
-app.secret_key = 'sad111123'
-# db가 아닌 다른 변수명으로 써도 됩니다.
-# db = pymysql.connect(
-#   host='127.0.0.1',
-#   user='root',
-#   db='dog94',
-#   password='qwer1234',
-#   charset='utf8')
-# curs = db.cursor(pymysql.cursors.DictCursor)
+
 
 
 @app.route("/register", methods=['GET'])
@@ -124,7 +119,7 @@ def register():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
@@ -151,7 +146,7 @@ def email():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
@@ -174,7 +169,7 @@ def login():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
@@ -215,7 +210,7 @@ def like():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
@@ -249,7 +244,7 @@ def board_like():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
@@ -269,7 +264,7 @@ def like_rank():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
