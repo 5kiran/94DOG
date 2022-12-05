@@ -52,3 +52,22 @@ function login_click() {
     });
   }
 }
+
+// function email_check() {
+//   const email = $('#email').val();
+//   print('hi');
+//   $.ajax({
+//     type: 'POST',
+//     url: '/email',
+//     data: {
+//       email_give: email,
+//     },
+//     success: function (response) {
+//       if (response['msg'] == '중복된 이메일입니다.') {
+//         alert(response['msg']);
+//       } else {
+//         alert(response['msg']);
+//       }
+//     },
+//   });
+// }
