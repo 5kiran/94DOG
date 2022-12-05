@@ -53,9 +53,9 @@ function login_click() {
   }
 }
 
-function email_check() {
+function email_click() {
   const email = $('#email').val();
-  print('hi');
+  console.log('hi');
   $.ajax({
     type: 'POST',
     url: '/email',
