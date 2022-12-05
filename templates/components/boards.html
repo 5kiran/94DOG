@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>개띠구조대</title>
+
+  <script src="{{ url_for('static', filename='js/boards.js') }}" defer></script>
+</head>
+<body>
+  <div class="container mt-3">
+
+    <!-- 게시글 목록 -->
+    <ul id="boards" style="padding: 0;"></ul>
+
+    <!-- 페이지네이션 -->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center"></ul>
+    </nav>
+
+</body>
+</html>
