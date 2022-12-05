@@ -6,7 +6,9 @@ import pymysql
 
 @app.route('/')
 def home():
-  return render_template('index.html')
+  # return render_template('index.html')
+  return render_template('main_test.html', component_name='boards')
+
 
 @app.route('/boards', methods=['GET'])
 def pagination():
@@ -58,7 +60,8 @@ def pagination():
   db.commit()
   db.close()
 
-  return render_template('components/boards.html', response=response)
+  return jsonify({'response': response})
+  # return render_template('components/boards.html', response=response)
 
 
 # board 데이터 넣는 용도
