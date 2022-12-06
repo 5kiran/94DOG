@@ -5,7 +5,9 @@ from flask_bcrypt import Bcrypt
 app = Flask(__name__)
 
 app.secret_key = 'sad111123'
-
+app.config['BCRYPT_LEVEL'] = 10
+app.config['SECRET_KEY'] = '125451161361342134'
+bcrypt = Bcrypt(app)
 
 @app.route('/')
 def home():
@@ -21,6 +23,7 @@ def pagination():
       db="dog94", 	# 사용할 DB
       charset="utf8"	# 인코딩
   )
+
 
   # 한 페이지의 게시글 수
   ONE_PAGE = 5
@@ -126,6 +129,7 @@ def register():
 
   name_receive = request.form.get("name_give")
   email_receive = request.form.get("email_give")
+  password_receive = request.form.get("password_give")
   pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
 
   curs.execute(f"insert into user (name,email,password) value ('{name_receive}','{email_receive}', '{pw_hash}')")
