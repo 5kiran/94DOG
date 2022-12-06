@@ -300,17 +300,9 @@ def post():
 def viewpost():
     return render_template('main.html', component_name='viewpost')
 
-
-# 원본
-# @app.route("/temp")
-# def profile():
-#     return render_template("components/post.html")
-
-
-# @app.route("/viewpost-layout")
-# def viewpost():
-#     return render_template("components/viewpost.html")
-
+@app.route("/temp_update")
+def post_update():
+    return render_template('main.html', component_name='post_update')
 
 # 게시글 저장 기능
 @app.route('/post', methods=['POST'])
@@ -428,6 +420,32 @@ def view_post(id):
 
     db.commit()
     return jsonify({'view_post_list':view_post})
+
+  
+
+@app.route('/post/modi', methods=['POST'])
+def modi_post():
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+
+    title_receive = request.form.get('title_give')
+    content_receive = request.form.get('content_give')
+    update_at_receive = request.form.get('data_give')
+    id_receive = request.form.get('id_give')
+
+
+    curs.execute(
+        f"update board set title='{title_receive}',content='{content_receive}',updated_at='{update_at_receive}' where id='{id_receive}'")
+    db.commit()
+
+    return jsonify({'msg': '게시글 수정 완료!'})
 
 
 
