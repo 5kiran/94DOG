@@ -273,6 +273,7 @@ def board_like():
   if like_find_user(temp_num,curs) is not None:
     like_status += 1  
 
+
   db.commit()
   db.close()
   
