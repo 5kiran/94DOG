@@ -18,6 +18,7 @@ def home():
   return render_template('main.html', component_name='boards')
 
 
+
 @app.route('/boards', methods=['GET'])
 def pagination():
   db = pymysql.connect(
