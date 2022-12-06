@@ -107,14 +107,14 @@ def register_page():
   return render_template("components/register.html")
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@app.route("/login")
 def login_page():
   return render_template("components/login.html")
 
 
 @app.route("/home")
 def home_page():
-  return render_template("components/home.html", name = session['name'], email = session['email'], id = session['id'])
+  return render_template("components/home.html")
 
 
 @app.route("/register/in", methods=["POST"])
@@ -193,9 +193,8 @@ def login():
 
 @app.route('/logout')
 def logout():
-  session.pop('loggedin', None)
-  session.pop('name', None)
-  return redirect(url_for('login_page'))
+  session.clear()
+  return redirect('/')
 
 
 @app.route('/liked')
