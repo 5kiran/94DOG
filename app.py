@@ -139,6 +139,7 @@ def register():
   return jsonify({'msg': '회원가입 완료'})
 
 
+
 @app.route("/email", methods=["POST"])
 def email():
   db = pymysql.connect(
