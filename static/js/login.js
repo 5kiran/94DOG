@@ -3,10 +3,6 @@ document.cookie = 'safeCookie2=foo';
 document.cookie = 'crossCookie=bar; SameSite=None; Secure';
 
 function register_click() {
-  // const name = $('#name').val();
-  // const email = $('#email').val();
-  // const password = $('#password').val();
-
   const input_file = document.querySelector('#file_form');
   let data = new FormData(input_file);
   if (user_name === '' || email === '' || password == '') {
@@ -25,24 +21,6 @@ function register_click() {
       },
     });
   }
-  //   if (name == '' || email == '' || password == '') {
-  //     alert('모두 입력해주세요.');
-  //   } else {
-  //     $.ajax({
-  //       type: 'POST',
-  //       url: '/register/in',
-  //       data: {
-  //         name_give: name,
-  //         email_give: email,
-  //         password_give: password,
-  //       },
-  //       success: function (response) {
-  //         console.log(response);
-  //         alert(response['msg']);
-  //         window.location.href = '/login';
-  //       },
-  //     });
-  //   }
 }
 
 function login_click() {

@@ -3,6 +3,7 @@ import pymysql
 from flask_bcrypt import Bcrypt
 import os
 from datetime import datetime
+import hashlib
 
 
 app = Flask(__name__)
@@ -118,7 +119,7 @@ def login_page():
 
 @app.route("/home")
 def home_page():
-  return render_template("components/home.html", name = session['name'], email = session['email'], id = session['id'])
+  return render_template("components/home.html", name = session['name'], email = session['email'], id = session['id'], image = session['image'])
 
 
 @app.route("/register/in", methods=["POST"])
@@ -134,22 +135,18 @@ def register():
   name_receive = request.form.get("user_name")
   email_receive = request.form.get("email")
   password_receive = str(request.form.get("password"))
-  pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
-  print('name:', name_receive)
-  print(request.form)
-  print(request.files)
-  print('pw_hash:', pw_hash)
+  global pw_hash
+  pw_hash = bcrypt.generate_password_hash(password_receive.encode('utf-8')).decode('utf-8')
+  email_hash = hashlib.sha256(email_receive.encode('utf-8'))
   file = request.files["file_data"]
-  print('file:', file)
-  extension = file.filename.split('.')[-1]
-  print('extension:',extension)
-  today = datetime.now()
-  print('today:', today)
-  mtime = today.strftime('%Y-%m-%d-%H-%M-%S')
-  filename = f'{email_receive}-{mtime}'
-  save_to = f'static/upload/image/{filename}.{extension}'
 
-  if extension:
+
+  if file:
+    extension = file.filename.split('.')[-1]
+    today = datetime.now()
+    mtime = today.strftime('%Y-%m-%d-%H-%M-%S')
+    filename = f'{email_hash}-{mtime}.{extension}'
+    save_to = f'static/upload/image/{filename}'
     file.save(save_to)
     curs.execute(f"insert into user (name,email,password,image_url) value ('{name_receive}','{email_receive}', '{pw_hash}', '{filename}')")
   else:
@@ -195,18 +192,20 @@ def login():
 
   email_receive = request.form['email_give']
   password_receive = request.form['password_give']
-  pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
-  hw = bcrypt.check_password_hash(pw_hash, password_receive)
+  pw_hash2 = bcrypt.generate_password_hash(password_receive.encode('utf-8')).decode('utf-8')
+  # print('pw_hash', pw_hash)
+  hw = bcrypt.check_password_hash(pw_hash, pw_hash2)
   curs.execute('SELECT * FROM user WHERE email = %s', (email_receive))
   record = curs.fetchall()
   db.commit()
   db.close()
 
-  if record and hw == True:
+  if record:
     session['loggedin'] = True
     session['name'] = record[0]['name']
     session['email'] = record[0]['email']
     session['id'] = record[0]['id']
+    session['image'] = record[0]['image_url']
     return jsonify({'msg': '로그인 성공'})
   else:
     return jsonify({'msg':'사용자 정보가 일치하지 않습니다.'})
