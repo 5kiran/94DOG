@@ -135,8 +135,7 @@ def register():
   name_receive = request.form.get("user_name")
   email_receive = request.form.get("email")
   password_receive = str(request.form.get("password"))
-  global pw_hash
-  pw_hash = bcrypt.generate_password_hash(password_receive.encode('utf-8')).decode('utf-8')
+  pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
   email_hash = hashlib.sha256(email_receive.encode('utf-8'))
   file = request.files["file_data"]
 
@@ -192,15 +191,14 @@ def login():
 
   email_receive = request.form['email_give']
   password_receive = request.form['password_give']
-  pw_hash2 = bcrypt.generate_password_hash(password_receive.encode('utf-8')).decode('utf-8')
-  # print('pw_hash', pw_hash)
-  hw = bcrypt.check_password_hash(pw_hash, pw_hash2)
   curs.execute('SELECT * FROM user WHERE email = %s', (email_receive))
   record = curs.fetchall()
+  password = record[0]['password']
+  hw = bcrypt.check_password_hash(password, password_receive)
   db.commit()
   db.close()
 
-  if record:
+  if record and hw == True:
     session['loggedin'] = True
     session['name'] = record[0]['name']
     session['email'] = record[0]['email']
