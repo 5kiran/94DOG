@@ -1,7 +1,6 @@
 let query = window.location.search;
 let param = new URLSearchParams(query);
 let id = param.get('id');
-alert(id + '번째 게시글로 이동합니다.')
 
 $(document).ready(function(){
     view_post_get(id);
@@ -36,7 +35,7 @@ function delete_post(id) {
         data: { id_give: id },
         success: function (response) {
             alert(response['msg'])
-            location.href="/temp";
+            location.href="/";
         }
     });
 }
@@ -58,4 +57,8 @@ function update_post(id) {
     // } else {
         // window.location.reload()
     // }
+}
+
+function cancle_viewpost() {
+    location.href = "/";
 }
