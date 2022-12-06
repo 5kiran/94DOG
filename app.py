@@ -112,14 +112,14 @@ def register_page():
   return render_template("components/register.html")
 
 
-@app.route("/login", methods=['GET', 'POST'])
+@app.route("/login")
 def login_page():
   return render_template("components/login.html")
 
 
 @app.route("/home")
 def home_page():
-  return render_template("components/home.html", name = session['name'], email = session['email'], id = session['id'], image = session['image'])
+  return render_template("components/home.html")
 
 
 @app.route("/register/in", methods=["POST"])
@@ -212,7 +212,7 @@ def login():
 @app.route('/logout')
 def logout():
   session.clear()
-  return redirect(url_for('login_page'))
+  return redirect('/')
 
 
 @app.route('/liked')
@@ -307,16 +307,26 @@ def like_rank():
   return jsonify({'likeRankList' :like_data})
 
 
-
-
+# 수정2
 @app.route("/temp")
-def profile():
-    return render_template("components/post.html")
+def post():
+    return render_template('main.html', component_name='post')
 
 
 @app.route("/viewpost-layout")
 def viewpost():
-    return render_template("components/viewpost.html")
+    return render_template('main.html', component_name='viewpost')
+
+
+# 원본
+# @app.route("/temp")
+# def profile():
+#     return render_template("components/post.html")
+
+
+# @app.route("/viewpost-layout")
+# def viewpost():
+#     return render_template("components/viewpost.html")
 
 
 # 게시글 저장 기능
@@ -339,6 +349,7 @@ def save_post():
     curs.execute(
         f"insert into board (title,content,updated_at) value ('{title_receive}','{content_receive}','{date_receive}')")
     db.commit()
+    db.close()
 
 
     return jsonify({'msg': '게시글 저장 완료!'})

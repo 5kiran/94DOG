@@ -40,11 +40,11 @@ const setBoardsContent = (response) => {
   let temp = '';
   $('#boards').empty();
   response.boards.forEach((board) => {
-    temp += `<div class="card mb-2" style="cursor: pointer;" onclick="(alert('${board.id} 게시글 이동'))">
+    temp += `<div class="card mb-2" style="cursor: pointer;">
               <div class="d-flex">
                 <div class="p-2 w-100">
                   <div class="card-body">
-                    <h5 class="card-title">${board.title}</h5>
+                    <h5 class="card-title"><a href="/viewpost-layout?id=${board.id}">${board.title}</a></h5>
                     <p class="card-text">${board.content}</p>
                   </div>
                 </div>
