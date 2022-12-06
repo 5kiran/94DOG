@@ -269,23 +269,11 @@ def board_like():
   curs.execute(board_id)
   board_data = curs.fetchone()
   
-  like_status = 0
-  if like_find_user(temp_num,curs) is not None:
-    like_status += 1  
-
   db.commit()
   db.close()
   
   return jsonify({'boardData': board_data},like_status)
 
-def like_find_user(board_id,curs):
-  user_id = session['id']
-  
-  like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
-  curs.execute(like_find)
-  like_data = curs.fetchone()
-  
-  return like_data
 
 
 @app.route("/liked/rank", methods=["GET"])
@@ -334,12 +322,16 @@ def save_post():
 
     curs = db.cursor(pymysql.cursors.DictCursor)
 
+    if len(session) == 0 :
+      return jsonify({'msg': '로그인 후 이용해주세요.'})
+
     title_receive = request.form.get('title_give')
     content_receive = request.form.get('content_give')
     date_receive =request.form.get('data_give')
+    user_id = session['id']
 
     curs.execute(
-        f"insert into board (title,content,updated_at) value ('{title_receive}','{content_receive}','{date_receive}')")
+        f"insert into board (title,content,updated_at,user_id) value ('{title_receive}','{content_receive}','{date_receive}','{user_id}')")
     db.commit()
     db.close()
 
@@ -359,6 +351,9 @@ def update_post():
     charset='utf8')
 
     curs = db.cursor(pymysql.cursors.DictCursor)
+
+    if len(session) == 0 :
+      return jsonify({'msg': '로그인 후 이용해주세요.'})
 
     title_receive = request.form.get('title_give')
     content_receive = request.form.get('content_give')
@@ -385,7 +380,21 @@ def delete_post():
 
     curs = db.cursor(pymysql.cursors.DictCursor)
 
+    user_id = session['id']
     id_receive = request.form.get('id_give')
+    
+    if len(session) == 0:
+      return jsonify({'msg': '로그인 후 이용해주세요.'})
+
+    find_user = f'select * from board where user_id = {user_id} and id = {id_receive}'
+    curs.execute(find_user)
+
+    a = curs.fetchone()
+
+    if a is None:
+      return jsonify({'msg': '작성자가 아닙니다.'})
+
+    
 
     curs.execute(
         f"update board set deleted=1 where id='{id_receive}'")
@@ -395,26 +404,26 @@ def delete_post():
 
 
 
-# 게시글 보기 기능
-@app.route('/post', methods=['get'])
-def show_post():
+# # 게시글 보기 기능
+# @app.route('/post', methods=['get'])
+# def show_post():
 
-    db = pymysql.connect(
-    host='127.0.0.1',
-    user='root',
-    db='dog94',
-    password='dog94',
-    charset='utf8')
+#     db = pymysql.connect(
+#     host='127.0.0.1',
+#     user='root',
+#     db='dog94',
+#     password='dog94',
+#     charset='utf8')
 
-    query = db.cursor()
+#     query = db.cursor()
 
-    sql = "select * from board" 
+#     sql = "select * from board" 
 
-    query.execute(sql)
+#     query.execute(sql)
 
-    people = query.fetchall()
+#     people = query.fetchall()
 
-    return jsonify({'show_post':people})
+#     return jsonify({'show_post':people})
 
 
 # 게시글 타이틀(링크)를 클릭하면 해당 페이지로 이동하는 기능
@@ -436,8 +445,37 @@ def view_post(id):
 
     view_post = curs.fetchall()
 
+    like_status = 0
+
+    if like_find_user(id) is not None:
+      like_status += 1  
+
     db.commit()
-    return jsonify({'view_post_list':view_post})
+    return jsonify({'view_post_list':view_post} , like_status)
+   
+def like_find_user(board_id):
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+    if len(session) == 0 :
+      return 0
+
+    user_id = session['id']
+    
+    like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
+    curs.execute(like_find)
+    like_data = curs.fetchone()
+
+    db.commit()
+    db.close()
+    
+    return like_data
 
   
 
@@ -453,12 +491,23 @@ def modi_post():
 
     curs = db.cursor(pymysql.cursors.DictCursor)
 
+    if len(session) == 0 :
+      return jsonify({'msg': '로그인 후 이용해주세요.'})
+
     title_receive = request.form.get('title_give')
     content_receive = request.form.get('content_give')
     update_at_receive = request.form.get('data_give')
     id_receive = request.form.get('id_give')
+    user_id = session['id']
 
+    find_user = f'select * from board where user_id = {user_id} and id = {id_receive}'
+    curs.execute(find_user)
 
+    a = curs.fetchone()
+    
+    if a is None:
+      return jsonify({'msg': '작성자가 아닙니다.'})
+    
     curs.execute(
         f"update board set title='{title_receive}',content='{content_receive}',updated_at='{update_at_receive}' where id='{id_receive}'")
     db.commit()
