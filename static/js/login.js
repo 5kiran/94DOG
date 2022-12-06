@@ -3,27 +3,46 @@ document.cookie = 'safeCookie2=foo';
 document.cookie = 'crossCookie=bar; SameSite=None; Secure';
 
 function register_click() {
-  const name = $('#name').val();
-  const email = $('#email').val();
-  const password = $('#password').val();
+  // const name = $('#name').val();
+  // const email = $('#email').val();
+  // const password = $('#password').val();
 
-  if (name == '' || email == '' || password == '') {
+  const input_file = document.querySelector('#file_form');
+  let data = new FormData(input_file);
+  if (user_name === '' || email === '' || password == '') {
     alert('모두 입력해주세요.');
   } else {
     $.ajax({
       type: 'POST',
       url: '/register/in',
-      data: {
-        name_give: name,
-        email_give: email,
-        password_give: password,
-      },
+      data: data,
+      contentType: false,
+      processData: false,
       success: function (response) {
+        console.log(response);
         alert(response['msg']);
         window.location.href = '/login';
       },
     });
   }
+  //   if (name == '' || email == '' || password == '') {
+  //     alert('모두 입력해주세요.');
+  //   } else {
+  //     $.ajax({
+  //       type: 'POST',
+  //       url: '/register/in',
+  //       data: {
+  //         name_give: name,
+  //         email_give: email,
+  //         password_give: password,
+  //       },
+  //       success: function (response) {
+  //         console.log(response);
+  //         alert(response['msg']);
+  //         window.location.href = '/login';
+  //       },
+  //     });
+  //   }
 }
 
 function login_click() {
@@ -43,7 +62,7 @@ function login_click() {
       success: function (response) {
         if (response['msg'] == '로그인 성공') {
           alert(response['msg']);
-          window.location.href = '/home';
+          window.location.href = '/';
         } else {
           alert(response['msg']);
           window.location.reload();
@@ -55,7 +74,6 @@ function login_click() {
 
 function email_click() {
   const email = $('#email').val();
-  console.log('hi');
   $.ajax({
     type: 'POST',
     url: '/email',

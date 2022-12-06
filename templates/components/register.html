@@ -19,31 +19,49 @@
         <a href="/login">Login</a>
         <a href="/register" class="active">Register</a>
       </div>
-      <div>
-        <label for="name">
-          <i class="fas fa-user"></i>
-        </label>
-        <input type="text" name="name" placeholder="Name" id="name" required />
-        <label for="password">
-          <i class="fas fa-lock"></i>
-        </label>
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          id="password"
-          required
-        />
-        <label for="email">
-          <i class="fas fa-envelope"></i>
-        </label>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          id="email"
-          required
-        />
+      <div class="mb-3">
+        <form id="file_form" enctype="multipart/form-data">
+          <!-- <label for="name">
+            <i class="fas fa-user"></i>
+          </label> -->
+          <input
+            type="text"
+            name="user_name"
+            placeholder="Name"
+            id="user_name"
+            required
+          />
+          <!-- <label for="password">
+            <i class="fas fa-lock"></i>
+          </label> -->
+          <input
+            type="text"
+            name="password"
+            placeholder="Password"
+            id="password"
+            required
+          />
+          <!-- <label for="email">
+            <i class="fas fa-envelope"></i>
+          </label> -->
+          <input
+            type="text"
+            name="email"
+            placeholder="Email"
+            id="email"
+            required
+          />
+          <input class="form-control" type="file" name="file_data" />
+          <!-- <input class="form-control" accept="image/*" type="file" id="input_file"> -->
+          <button
+            onclick="register_click()"
+            type="button"
+            class="btn btn-primary"
+          >
+            저장
+          </button>
+        </form>
+        <img id="test_img" src="" alt="" />
         <input type="submit" onclick="register_click()" value="Register" />
         <input type="button" onclick="email_click()" value="Eamil Check" />
       </div>

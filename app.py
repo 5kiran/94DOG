@@ -1,12 +1,16 @@
 from flask import Flask, jsonify, render_template, request, session, redirect, url_for
 import pymysql
 from flask_bcrypt import Bcrypt
+import os
+from datetime import datetime
+
 
 app = Flask(__name__)
 
 app.secret_key = 'sad111123'
 app.config['BCRYPT_LEVEL'] = 10
 app.config['SECRET_KEY'] = '125451161361342134'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 bcrypt = Bcrypt(app)
 
 @app.route('/')
@@ -127,17 +131,33 @@ def register():
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
-  name_receive = request.form.get("name_give")
-  email_receive = request.form.get("email_give")
-  password_receive = request.form.get("password_give")
+  name_receive = request.form.get("user_name")
+  email_receive = request.form.get("email")
+  password_receive = str(request.form.get("password"))
   pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
+  print('name:', name_receive)
+  print(request.form)
+  print(request.files)
+  print('pw_hash:', pw_hash)
+  file = request.files["file_data"]
+  print('file:', file)
+  extension = file.filename.split('.')[-1]
+  print('extension:',extension)
+  today = datetime.now()
+  print('today:', today)
+  mtime = today.strftime('%Y-%m-%d-%H-%M-%S')
+  filename = f'{email_receive}-{mtime}'
+  save_to = f'static/upload/image/{filename}.{extension}'
 
-  curs.execute(f"insert into user (name,email,password) value ('{name_receive}','{email_receive}', '{pw_hash}')")
+  if extension:
+    file.save(save_to)
+    curs.execute(f"insert into user (name,email,password,image_url) value ('{name_receive}','{email_receive}', '{pw_hash}', '{filename}')")
+  else:
+    curs.execute(f"insert into user (name,email,password) value ('{name_receive}','{email_receive}', '{pw_hash}')")
   db.commit()
   db.close()
 
-  return jsonify({'msg': '회원가입 완료'})
-
+  return jsonify({'msg': '회원가입 되었습니다.'})
 
 
 @app.route("/email", methods=["POST"])
@@ -194,8 +214,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-  session.pop('loggedin', None)
-  session.pop('name', None)
+  session.clear()
   return redirect(url_for('login_page'))
 
 
