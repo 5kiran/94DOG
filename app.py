@@ -1,7 +1,6 @@
 from flask import Flask, jsonify, render_template, request, session, redirect, url_for
 import pymysql
 from flask_bcrypt import Bcrypt
-import os
 from datetime import datetime
 import hashlib
 
