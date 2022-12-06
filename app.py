@@ -3,6 +3,9 @@ import pymysql
 
 app = Flask(__name__)
 
+app.secret_key = 'sad111123'
+
+
 @app.route('/')
 def home():
   return render_template('main.html', component_name='boards')
@@ -13,7 +16,7 @@ def pagination():
   db = pymysql.connect(
       host="localhost", 	# 데이터베이스 주소
       user="root", 	# 유저네임
-      passwd="qwer1234", 	# 패스워드
+      passwd="dog94", 	# 패스워드
       db="dog94", 	# 사용할 DB
       charset="utf8"	# 인코딩
   )
@@ -92,15 +95,7 @@ def pagination():
 
 
 
-app.secret_key = 'sad111123'
-# db가 아닌 다른 변수명으로 써도 됩니다.
-# db = pymysql.connect(
-#   host='127.0.0.1',
-#   user='root',
-#   db='dog94',
-#   password='qwer1234',
-#   charset='utf8')
-# curs = db.cursor(pymysql.cursors.DictCursor)
+
 
 
 @app.route("/register", methods=['GET'])
@@ -124,7 +119,7 @@ def register():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
@@ -151,7 +146,7 @@ def email():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
@@ -174,7 +169,7 @@ def login():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
@@ -206,7 +201,7 @@ def logout():
 
 @app.route('/liked')
 def liked():
-  return render_template('components/liked.html')
+  return render_template('components/liked.html', name = session['name'], email = session['email'], id = session['id'])
 
 
 @app.route('/liked',methods=['POST'])
@@ -215,11 +210,11 @@ def like():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
-  user_id = request.form['user_id_give']
+  user_id = session['id']
   board_id = request.form['board_id_give']
   writer_id = request.form['writer_id_give']
   like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
@@ -249,18 +244,32 @@ def board_like():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
-
-  board_id = "SELECT id,title,content,file_url,user_id,liked  FROM board WHERE id = 5"
+  
+  temp_num = 5
+  board_id = f'SELECT id,title,content,file_url,user_id,liked  FROM board WHERE id = {temp_num}'
   curs.execute(board_id)
-  board_data = curs.fetchone()  
+  board_data = curs.fetchone()
+  
+  like_status = 0
+  if like_find_user(temp_num,curs) is not None:
+    like_status += 1  
 
   db.commit()
   db.close()
   
-  return jsonify({'boardData': board_data})
+  return jsonify({'boardData': board_data},like_status)
+
+def like_find_user(board_id,curs):
+  user_id = session['id']
+  
+  like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
+  curs.execute(like_find)
+  like_data = curs.fetchone()
+  
+  return like_data
 
 
 @app.route("/liked/rank", methods=["GET"])
@@ -269,7 +278,7 @@ def like_rank():
   host='127.0.0.1',
   user='root',
   db='dog94',
-  password='qwer1234',
+  password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 

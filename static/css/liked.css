@@ -1,0 +1,9 @@
+.likebutton{
+  border: none;
+  outline: 0;
+  /* opacity: 0.8; */
+  box-shadow: none;
+}
+.likebutton:hover{
+  cursor : pointer;
+}
