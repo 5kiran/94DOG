@@ -125,15 +125,9 @@ def register():
 
   name_receive = request.form.get("name_give")
   email_receive = request.form.get("email_give")
-  password_receive = request.form.get("password_give")
+  pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
 
-  doc = {
-    'name': name_receive,
-    'email': email_receive,
-    'password': password_receive
-  }
-
-  curs.execute(f"insert into user (name,email,password) value ('{name_receive}','{email_receive}', '{password_receive}')")
+  curs.execute(f"insert into user (name,email,password) value ('{name_receive}','{email_receive}', '{pw_hash}')")
   db.commit()
   db.close()
 
@@ -175,14 +169,14 @@ def login():
 
   email_receive = request.form['email_give']
   password_receive = request.form['password_give']
-  print('input: ', email_receive, password_receive)
-
-  curs.execute('SELECT * FROM user WHERE email = %s AND password = %s', (email_receive,password_receive))
+  pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
+  hw = bcrypt.check_password_hash(pw_hash, password_receive)
+  curs.execute('SELECT * FROM user WHERE email = %s', (email_receive))
   record = curs.fetchall()
   db.commit()
   db.close()
 
-  if record:
+  if record and hw == True:
     session['loggedin'] = True
     session['name'] = record[0]['name']
     session['email'] = record[0]['email']
