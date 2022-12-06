@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!-- <script src="../static/post.js"></script> -->
+    <title>로그인 창!</title>
+    <link href="../static/css/post.css" rel="stylesheet">
+    <script src="../static/js/post.js"></script>
+</head>
+
+<body>
+    <div class="wrap">
+    </div>
+    <div class="mypost" id="post">
+        <div>
+            <input type="text" class="text" id="title" placeholder="게시글 제목">
+        </div>
+        <div>
+            <input type="text" class="textbox" placeholder="내용" id="content">
+        </div>
+        <div>
+            <input type="text" class="textbox" placeholder="id의 값" id="id">
+        </div>
+        <div class="mb-3">
+            <label for="formFile" class="form-label"></label>
+            <input class="form-control" type="file" id="formFile">
+        </div>
+        <button onclick="save_post()" type="button" class="btn btn-dark">게시글 등록</button>
+        <button onclick="show_post()" type="button" class="btn btn-light hidebutton">게시글 보기</button>
+        <button onclick="update_post()" type="button" class="btn btn-light hidebutton">게시글 수정</button>
+        <button onclick="delete_post()" type="button" class="btn btn-light hidebutton">게시글 삭제</button>
+        <button onclick="cancel_post()" type="button" class="btn btn-light hidebutton">나가기</button>
+    </div>
+    <div class="card" id="card" style="width: 500px;"></div>
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, render_template, request, session, redirect, url_for
 import pymysql
+import bcrypt
 
 app = Flask(__name__)
 
@@ -70,27 +71,27 @@ def pagination():
 
 
 # board 데이터 넣는 용도. 주석 없애고 실행
-# @app.route('/boards/insert', methods=["GET"])
-# def insert():
-#   db = pymysql.connect(
-#       host="localhost", 	# 데이터베이스 주소
-#       user="root", 	# 유저네임
-#       passwd="qwer1234", 	# 패스워드
-#       db="dog94", 	# 사용할 DB
-#       charset="utf8"	# 인코딩
-#   )
+@app.route('/boards/insert', methods=["GET"])
+def insert():
+  db = pymysql.connect(
+      host="localhost", 	# 데이터베이스 주소
+      user="root", 	# 유저네임
+      passwd="dog94", 	# 패스워드
+      db="dog94", 	# 사용할 DB
+      charset="utf8"	# 인코딩
+  )
   
-#   cursor = db.cursor()
+  cursor = db.cursor()
 
-#   for i in range(1, 20):
-#     sql = 'INSERT INTO board (title, content, user_id) VALUES (%s, %s, %s)'
-#     cursor.execute(sql, ('test title'+str(i), 'test content'+str(i), 3))
+  for i in range(1, 20):
+    sql = 'INSERT INTO board (title, content, user_id) VALUES (%s, %s, %s)'
+    cursor.execute(sql, ('test title'+str(i), 'test content'+str(i), 3))
 
-#   db.commit()
-#   db.close()
+  db.commit()
+  db.close()
   
-#   data = {'name': 'test'}
-#   return render_template('components/pagination.html', data=data)
+  data = {'name': 'test'}
+  return render_template('components/pagination.html', data=data)
 
 
 
@@ -283,6 +284,136 @@ def like_rank():
   db.close()
   
   return jsonify({'likeRankList' :like_data})
+
+
+
+
+@app.route("/temp")
+def profile():
+    return render_template("components/post.html")
+
+
+@app.route("/viewpost-layout")
+def viewpost():
+    return render_template("components/viewpost.html")
+
+
+# 게시글 저장 기능
+@app.route('/post', methods=['POST'])
+def save_post():
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+
+    title_receive = request.form.get('title_give')
+    content_receive = request.form.get('content_give')
+    date_receive =request.form.get('data_give')
+
+    curs.execute(
+        f"insert into board (title,content,updated_at) value ('{title_receive}','{content_receive}','{date_receive}')")
+    db.commit()
+
+
+    return jsonify({'msg': '게시글 저장 완료!'})
+
+
+# 게시글 수정 기능
+@app.route('/post/update', methods=['POST'])
+def update_post():
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+
+    title_receive = request.form.get('title_give')
+    content_receive = request.form.get('content_give')
+    id_receive = request.form.get('id_give')
+
+
+    curs.execute(
+        f"update board set title='{title_receive}',content='{content_receive}' where id='{id_receive}'")
+    db.commit()
+
+    return jsonify({'msg': '게시글 수정 완료!'})
+
+
+# 게시글 삭제 기능
+@app.route('/post/delete', methods=['POST'])
+def delete_post():
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+
+    id_receive = request.form.get('id_give')
+
+    curs.execute(
+        f"update board set deleted=1 where id='{id_receive}'")
+    db.commit()
+
+    return jsonify({'msg': '게시글 삭제 완료!'})
+
+
+# 게시글 보기 기능
+@app.route('/post', methods=['get'])
+def show_post():
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+    query = db.cursor()
+
+    sql = "select * from board" 
+
+    query.execute(sql)
+
+    people = query.fetchall()
+
+    return jsonify({'show_post':people})
+
+
+# 게시글 타이틀(링크)를 클릭하면 해당 페이지로 이동하는 기능
+# 예를 들어 4번 게시글을 클릭하면 4번 게시글의 정보를 받아와서 페이지로 이동
+@app.route('/views/<id>', methods=['get'])
+def view_post(id):
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+
+    curs.execute(
+        f"select * from board where id='{id}'")
+
+    view_post = curs.fetchall()
+
+    db.commit()
+    return jsonify({'view_post_list':view_post})
+
 
 
 if __name__ == '__main__':
