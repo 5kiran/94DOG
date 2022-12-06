@@ -21,6 +21,11 @@
   <div class="row" style="height: 500px;">
     <!-- 로그인, 랭킹 -->
     <div class="col-3" style="background-color: darkcyan;">
+      {% if session["id"]%}
+      {% include "components/home.html" %}
+      {% else %}
+      {% include "components/login.html" %}
+      {% endif %}
       {% include "components/likeranking.html" %}
     </div>
     <!-- 게시판, 마이페이지 -->
