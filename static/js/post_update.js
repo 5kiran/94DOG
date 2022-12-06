@@ -1,7 +1,9 @@
+let query = window.location.search;
+let param = new URLSearchParams(query);
+let id = param.get('id');
+
 $(document).ready(function () {
 })
-
-
 
 function getFormatDate(date) {
     var year = date.getFullYear();
@@ -19,35 +21,33 @@ function getFormatDate(date) {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
 }
 
-function save_post() {
+function modi_post() {
     const title = $('#title').val();
     const content = $('#content').val();
     const date = getFormatDate(new Date());
 
     if (title === '' || content === '') {
-        console.log(title, content, date)
         alert('빈칸을 모두 채워주세요 T^T')
     } else {
-        console.log(title, content, date)
         $.ajax({
             type: "POST",
-            url: "/post",
+            url: "/post/modi",
             data: {
                 title_give: title,
                 content_give: content,
-                data_give: date
+                data_give: date,
+                id_give: id
             },
             success: function (response) {
                 alert(response['msg'])
-                location.href = "/";
+                location.href = `/viewpost-layout?id=${id}`;
             }
         });
     }
 }
 
-
 function cancel_post() {
-    location.href = "/";
+    location.href = `/viewpost-layout?id=${id}`;
 }
 
 

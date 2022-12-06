@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>게시글 수정</title>
+    <script src="../static/js/post_update.js"></script>
+</head>
+
+<body>
+    <div class="wrap">
+    </div>
+    <div class="mypost" id="post">
+        <div>
+            <input type="text" class="text" id="title" placeholder="게시글 제목" style="width: 400px;">
+        </div>
+        <div>
+            <input type="text" class="textbox" placeholder="내용" id="content" style="width: 400px; height: 600px;">
+        </div>
+        <div class="mb-3">
+            <label for="formFile" class="form-label"></label>
+            <input class="form-control" type="file" id="formFile" style="width: 250px;">
+        </div>
+        <button onclick="modi_post()" type="button" class="btn btn-dark">게시글 수정 완료</button>
+        <button onclick="cancel_post()" type="button" class="btn btn-light hidebutton">수정 취소</button>
+    </div>
+    <div class="card" id="card" style="width: 500px;"></div>
+</body>
+
+</html>
