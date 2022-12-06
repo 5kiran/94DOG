@@ -394,6 +394,7 @@ def delete_post():
     return jsonify({'msg': '게시글 삭제 완료!'})
 
 
+
 # 게시글 보기 기능
 @app.route('/post', methods=['get'])
 def show_post():
