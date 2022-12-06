@@ -18,22 +18,19 @@
     </div>
     <div class="mypost" id="post">
         <div>
-            <input type="text" class="text" id="title" placeholder="게시글 제목">
+            <input type="text" class="text" id="title" placeholder="게시글 제목" style="width: 400px;">
         </div>
         <div>
-            <input type="text" class="textbox" placeholder="내용" id="content">
-        </div>
-        <div>
-            <input type="text" class="textbox" placeholder="id의 값" id="id">
+            <input type="text" class="textbox" placeholder="내용" id="content" style="width: 400px; height: 600px;">
         </div>
         <div class="mb-3">
             <label for="formFile" class="form-label"></label>
-            <input class="form-control" type="file" id="formFile">
+            <input class="form-control" type="file" id="formFile" style="width: 250px;">
         </div>
         <button onclick="save_post()" type="button" class="btn btn-dark">게시글 등록</button>
-        <button onclick="show_post()" type="button" class="btn btn-light hidebutton">게시글 보기</button>
+        <!-- <button onclick="show_post()" type="button" class="btn btn-light hidebutton">게시글 보기</button>
         <button onclick="update_post()" type="button" class="btn btn-light hidebutton">게시글 수정</button>
-        <button onclick="delete_post()" type="button" class="btn btn-light hidebutton">게시글 삭제</button>
+        <button onclick="delete_post()" type="button" class="btn btn-light hidebutton">게시글 삭제</button> -->
         <button onclick="cancel_post()" type="button" class="btn btn-light hidebutton">나가기</button>
     </div>
     <div class="card" id="card" style="width: 500px;"></div>
