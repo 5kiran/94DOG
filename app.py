@@ -136,7 +136,7 @@ def register():
   email_receive = request.form.get("email")
   password_receive = str(request.form.get("password"))
   pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
-  email_hash = hashlib.sha256(email_receive.encode('utf-8'))
+  email_hash = hashlib.sha256(email_receive.encode('utf-8')).hexdigest()
   file = request.files["file_data"]
 
 
