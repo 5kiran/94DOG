@@ -49,5 +49,3 @@ function modi_post() {
 function cancel_post() {
     location.href = `/viewpost-layout?id=${id}`;
 }
-
-

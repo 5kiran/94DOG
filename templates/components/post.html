@@ -17,16 +17,18 @@
     <div class="wrap">
     </div>
     <div class="mypost" id="post">
+            <form id="file_form" enctype="multipart/form-data">
         <div>
-            <input type="text" class="text" id="title" placeholder="게시글 제목" style="width: 400px;">
+            <input type="text" class="text" id="title" name="title" placeholder="게시글 제목" style="width: 400px;">
         </div>
         <div>
-            <input type="text" class="textbox" placeholder="내용" id="content" style="width: 400px; height: 600px;">
+            <input type="text" class="text" id="content" name="content" placeholder="내용" style="width: 400px; height: 600px;">
         </div>
         <div class="mb-3">
             <label for="formFile" class="form-label"></label>
-            <input class="form-control" type="file" id="formFile" style="width: 250px;">
+            <input class="form-control" type="file" id="post_file" name="post_file" style="width: 250px;" />
         </div>
+             </form>
         <button onclick="save_post()" type="button" class="btn btn-dark">게시글 등록</button>
         <!-- <button onclick="show_post()" type="button" class="btn btn-light hidebutton">게시글 보기</button>
         <button onclick="update_post()" type="button" class="btn btn-light hidebutton">게시글 수정</button>
