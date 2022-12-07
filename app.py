@@ -5,7 +5,7 @@ from datetime import datetime
 import hashlib
 import logging
 import os
-
+from db import DB
 
 # logging system setting
 if not os.path.isdir('logs'):
@@ -47,26 +47,15 @@ def pagination():
 
   app.logger.info(f'[{request.method}] {request.path} :: page={page}')
 
-  db = pymysql.connect(
-      host="localhost", 	# 데이터베이스 주소
-      user="root", 	# 유저네임
-      passwd="dog94", 	# 패스워드
-      db="dog94", 	# 사용할 DB
-      charset="utf8"	# 인코딩
-  )
-
   # 전체 게시글 수
-  cursor = db.cursor(pymysql.cursors.DictCursor)
   sql = 'SELECT count(*) as all_count FROM board WHERE deleted = false' 
-  cursor.execute(sql)
-  all_count = cursor.fetchall()[0]['all_count']
-
+  conn = DB('dict')
+  all_count = conn.select_all(sql)[0]['all_count']
+  
   total_page = all_count // ONE_PAGE + (1 if all_count % ONE_PAGE != 0 else 0)
 
   if total_page == 0:
     response = {'boards': {}, 'page': page, 'total_page': total_page}
-    db.commit()
-    db.close()
     return jsonify({'response': response})
 
   if page < 1 or page > total_page:
@@ -81,14 +70,11 @@ def pagination():
   if end_page > total_page:
     end_page = total_page
 
-  sql = f'SELECT * FROM board WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
-  cursor.execute(sql)
-  boards = cursor.fetchall()
+  sql = f'SELECT board.id,title,user.name,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
+  conn = DB('dict')
+  boards = conn.select_all(sql)
 
   response = {'boards': boards, 'page': page, 'total_page': total_page, 'start_page': start_page, 'end_page': end_page}
-
-  db.commit()
-  db.close()
 
   return jsonify({'response': response})
 
@@ -110,16 +96,10 @@ def home_page():
 
 @app.route("/register/in", methods=["POST"])
 def register():
-  db = pymysql.connect(
-  host='127.0.0.1',
-  user='root',
-  db='dog94',
-  password='dog94',
-  charset='utf8')
-  curs = db.cursor(pymysql.cursors.DictCursor)
 
   name_receive = request.form.get("user_name")
   email_receive = request.form.get("register_email")
+
   password_receive = str(request.form.get("register_password"))
   pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
   email_hash = hashlib.sha256(email_receive.encode('utf-8')).hexdigest()
@@ -127,6 +107,9 @@ def register():
 
   if not os.path.isdir("static/upload/image"):
     os.makedirs('static/upload/image')  # upload/image 폴더 없을 경우 자동생성
+
+  insert_list = []
+  sql = ''
   if file:
     extension = file.filename.split('.')[-1]
     today = datetime.now()
@@ -134,11 +117,16 @@ def register():
     filename = f'{email_hash}-{mtime}.{extension}'
     save_to = f'static/upload/image/{filename}'
     file.save(save_to)
-    curs.execute(f"insert into user (name,email,password,image_url) value ('{name_receive}','{email_receive}', '{pw_hash}', '{filename}')")
+
+    insert_list = [name_receive, email_receive, pw_hash, filename]
+    sql = 'insert into user (name, email,password, image_url) value (%s, %s, %s, %s)'
   else:
-    curs.execute(f"insert into user (name,email,password) value ('{name_receive}','{email_receive}', '{pw_hash}')")
-  db.commit()
-  db.close()
+    insert_list = [name_receive, email_receive, pw_hash]
+    sql = 'insert into user (name, email, password) value (%s, %s, %s)'
+
+  conn = DB('dict')
+  conn.save_one(sql, insert_list)
+
 
   signup = ""
   upload_file = ""
@@ -161,20 +149,11 @@ def register():
 
 @app.route("/email", methods=["POST"])
 def email():
-  db = pymysql.connect(
-  host='127.0.0.1',
-  user='root',
-  db='dog94',
-  password='dog94',
-  charset='utf8')
-  curs = db.cursor(pymysql.cursors.DictCursor)
-
   email_receive = request.form.get("email_give")
 
-  curs.execute('SELECT * FROM user WHERE email = %s', (email_receive))
-  check = curs.fetchall()
-  db.commit()
-  db.close()
+  sql = 'SELECT * FROM user WHERE email = %s'
+  conn = DB('dict')
+  check = conn.select_one(sql, email_receive)
 
   log_check = ""
 
@@ -192,22 +171,16 @@ def email():
 
 @app.route('/login/in', methods=['POST'])
 def login():
-  db = pymysql.connect(
-  host='127.0.0.1',
-  user='root',
-  db='dog94',
-  password='dog94',
-  charset='utf8')
-  curs = db.cursor(pymysql.cursors.DictCursor)
 
   email_receive = request.form['email_give']
   password_receive = request.form['password_give']
-  curs.execute('SELECT * FROM user WHERE email = %s', (email_receive))
-  record = curs.fetchall()
+
+  sql = 'SELECT * FROM user WHERE email = %s'
+  conn = DB('dict')
+  record = conn.select_all(sql, email_receive)
+  
   password = record[0]['password']
   hw = bcrypt.check_password_hash(password, password_receive)
-  db.commit()
-  db.close()
 
   login_email = email_receive
 
@@ -240,56 +213,43 @@ def liked():
 
 @app.route('/liked',methods=['POST'])
 def like():
-  db = pymysql.connect(
-  host='127.0.0.1',
-  user='root',
-  db='dog94',
-  password='dog94',
-  charset='utf8')
-  curs = db.cursor(pymysql.cursors.DictCursor)
-  
-
   user_id = session['id']
   board_id = request.form['board_id_give']
   writer_id = request.form['writer_id_give']
+
   like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
-  
-  curs.execute(like_find)
-  result = curs.fetchone()
+  conn = DB('dict')
+  result = conn.select_one(like_find)
   
   if result is None:
     app.logger.info(f'[{request.method}] {request.path} :: like_user_id={user_id} board_id={board_id} writer_id={writer_id}')
+
     like_up = f'INSERT INTO liked (user_id,board_id,writer_id) VALUES ({user_id},{board_id},{writer_id})'
+    conn = DB('dict')
+    conn.save_one(like_up)
+
     board_like_up = f'UPDATE board SET liked = liked +1 WHERE board.id = {board_id}'
-    curs.execute(like_up)
-    curs.execute(board_like_up)
+    conn = DB('dict')
+    conn.save_one(board_like_up)
+
   else:
     app.logger.info(f'[{request.method}] {request.path} :: unlike_user_id={user_id} board_id={board_id} writer_id={writer_id}')
-    like_delete = f'DELETE FROM  liked WHERE liked.user_id = {user_id} AND liked.board_id = {board_id}'
+
+    like_delete = f'DELETE FROM liked WHERE liked.user_id = {user_id} AND liked.board_id = {board_id}'
+    conn = DB('dict')
+    conn.save_one(like_delete)
+
     board_like_down = f'UPDATE board SET liked = liked -1 WHERE board.id = {board_id}'
-    curs.execute(like_delete)
-    curs.execute(board_like_down)
-    
-  db.commit()
-  db.close()
+    conn = DB('dict')
+    conn.save_one(board_like_down)
     
   return jsonify({'msg': '좋아용'})
 
 @app.route("/liked/rank", methods=["GET"])
 def like_rank():
-  db = pymysql.connect(
-  host='127.0.0.1',
-  user='root',
-  db='dog94',
-  password='dog94',
-  charset='utf8')
-  curs = db.cursor(pymysql.cursors.DictCursor)
-
   sql = 'SELECT `user`.name,count(writer_id) AS like_cnt FROM liked LEFT JOIN `user`ON liked.writer_id = `user`.id GROUP BY `user`.name ORDER BY  like_cnt DESC LIMIT 5'
-  curs.execute(sql)
-  like_data = curs.fetchall()
-  db.commit()
-  db.close()
+  conn = DB('dict')
+  like_data = conn.select_all(sql)
   
   return jsonify({'likeRankList' :like_data})
 
@@ -304,23 +264,15 @@ def post():
 def viewpost():
     return render_template('main.html', component_name='viewpost')
 
+
 @app.route("/temp_update")
 def post_update():
     return render_template('main.html', component_name='post_update')
 
+
 # 게시글 저장 기능
 @app.route('/post', methods=['POST'])
 def save_post():
-
-    db = pymysql.connect(
-    host='127.0.0.1',
-    user='root',
-    db='dog94',
-    password='dog94',
-    charset='utf8')
-
-    curs = db.cursor(pymysql.cursors.DictCursor)
-
     if len(session) == 0 :
       return jsonify({'msg': '로그인 후 이용해주세요.'})
 
@@ -330,6 +282,8 @@ def save_post():
     email_hash = hashlib.sha256(session['email'].encode('utf-8')).hexdigest()
     file = request.files["post_file"]
 
+    sql = ''
+    insert_list = []
     if file:
       extension = file.filename.split('.')[-1]
       today = datetime.now()
@@ -337,29 +291,21 @@ def save_post():
       filename = f'{email_hash}-{mtime}.{extension}'
       save_to = f'static/upload/image/{filename}'
       file.save(save_to)
-      curs.execute(f"insert into board (title,content,user_id,file_url) value ('{title_receive}','{content_receive}','{user_id}','{filename}')")
 
+      sql = 'insert into board (title, content, user_id, file_url) value (%s, %s, %s, %s)'
+      insert_list = [title_receive, content_receive, user_id, filename]
     else:
-      curs.execute(f"insert into board (title,content,user_id) value ('{title_receive}','{content_receive}','{user_id}')")
+      sql = 'insert into board (title, content, user_id) value (%s, %s, %s)'
+      insert_list = [title_receive, content_receive, user_id]
 
-    db.commit()
-    db.close()
+    conn = DB('dict')
+    conn.save_one(sql, insert_list)
    
     return jsonify({'msg': '게시글 저장 완료!'})
 
 # 게시글 삭제 기능
 @app.route('/post/delete', methods=['POST'])
 def delete_post():
-
-    db = pymysql.connect(
-    host='127.0.0.1',
-    user='root',
-    db='dog94',
-    password='dog94',
-    charset='utf8')
-
-    curs = db.cursor(pymysql.cursors.DictCursor)
-    
     if len(session) == 0:
       return jsonify({'msg': '로그인 후 이용해주세요.'})
     
@@ -367,85 +313,49 @@ def delete_post():
     id_receive = request.form.get('id_give')
     
     find_user = f'select * from board where user_id = {user_id} and id = {id_receive}'
-    curs.execute(find_user)
-
-    a = curs.fetchone()
+    conn = DB('dict')
+    a = conn.select_one(find_user)
 
     if a is None:
       return jsonify({'msg': '작성자가 아닙니다.'})
-
     
-
-    curs.execute(
-        f"update board set deleted=1 where id='{id_receive}'")
-    db.commit()
+    sql = f"update board set deleted=1 where id='{id_receive}'"
+    conn = DB('dict')
+    conn.save_one(sql)
 
     return jsonify({'msg': '게시글 삭제 완료!'})
 
 
 @app.route('/views/<id>', methods=['get'])
 def view_post(id):
-
-    db = pymysql.connect(
-    host='127.0.0.1',
-    user='root',
-    db='dog94',
-    password='dog94',
-    charset='utf8')
-
-    curs = db.cursor(pymysql.cursors.DictCursor)
-
-    curs.execute(
-        f"select * from board where id='{id}'")
-
-    view_post = curs.fetchall()
+    sql = f"select board.id, title, liked, content, user.name, user_id, board.created_at, file_url, updated_at from board left join `user` ON board.user_id = user.id WHERE board.id='{id}'"
+    conn = DB('dict')
+    view_post = conn.select_all(sql)
 
     like_status = 0
 
     if like_find_user(id) is not None:
       like_status += 1  
 
-    db.commit()
     return jsonify({'view_post_list':view_post} , like_status)
   
+
 def like_find_user(board_id):
-
-    db = pymysql.connect(
-    host='127.0.0.1',
-    user='root',
-    db='dog94',
-    password='dog94',
-    charset='utf8')
-
-    curs = db.cursor(pymysql.cursors.DictCursor)
     if len(session) == 0 :
       return 0
 
     user_id = session['id']
     
     like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
-    curs.execute(like_find)
-    like_data = curs.fetchone()
+    conn = DB('dict')
+    like_data = conn.select_one(like_find)
 
-    db.commit()
-    db.close()
-    
     return like_data
 
   
 
 @app.route('/post/modi', methods=['POST'])
 def modi_post():
-
-    db = pymysql.connect(
-    host='127.0.0.1',
-    user='root',
-    db='dog94',
-    password='dog94',
-    charset='utf8')
-
-    curs = db.cursor(pymysql.cursors.DictCursor)
-
     if len(session) == 0 :
       return jsonify({'msg': '로그인 후 이용해주세요.'})
 
@@ -456,18 +366,40 @@ def modi_post():
     user_id = session['id']
 
     find_user = f'select * from board where user_id = {user_id} and id = {id_receive}'
-    curs.execute(find_user)
-
-    a = curs.fetchone()
+    conn = DB('dict')
+    a = conn.select_one(find_user)
     
     if a is None:
       return jsonify({'msg': '작성자가 아닙니다.'})
-    
-    curs.execute(
-        f"update board set title='{title_receive}',content='{content_receive}',updated_at='{update_at_receive}' where id='{id_receive}'")
-    db.commit()
+
+    sql = 'update board set title=%s, content=%s, updated_at=%s where id=%s'
+    update_list = [title_receive, content_receive, update_at_receive, id_receive]
+    conn = DB('dict')
+    conn.save_one(sql, update_list)
 
     return jsonify({'msg': '게시글 수정 완료!'})
+
+
+@app.route('/preview/<id>', methods=['get'])
+def preview(id):
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+
+    curs.execute(
+        f"select * from board WHERE id='{id}'")
+
+    previews = curs.fetchall()
+
+
+    db.commit()
+    return jsonify({'preview_list':previews}) 
 
 
 PORT = 5000
