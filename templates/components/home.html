@@ -5,13 +5,37 @@
     <div>
       <img id="userimage" src="static/upload/image/{{session['image']}}" onerror="this.onerror=null; this,src='static/images/userprofile.PNG';"/>
     </div>
-    <div class="userinfo">
-      {{session['name']}}님 환영합니다<br>
-      email : {{session['email']}}
+    <!-- <div class="userinfo">
+      <p id="usercontent">{{session['name']}}님 환영합니다<br>
+        email : {{session['email']}}</p>
+    </div> -->
+    <div id="usercontent" class="card text-bg-warning mb-3" style="max-width: 18rem;">
+      <div class="card-header">{{session['name']}}님 환영합니다</div>
+      <div class="card-body">
+        <p class="card-title">이메일 : {{session['email']}}</p>
+        <p class="card-text">개띠 친구들 화이팅!</p>
+      </div>
     </div>
+
+
   </div>
-  <button type="button" onclick="location.href = '/temp'">게시글 작성</button>
-  <button type="button" onclick="location.href = '/logout' ">로그아웃</button>
+  <button id="home_button"
+        style="padding: 5px; margin-top: 5px"
+        class="w-100 btn btn-lg btn-primary"
+        type="button"
+        onclick="location.href = '/temp'"">
+        게시글 작성
+      </button>
+  <button id="home_button"
+        style="padding: 5px; margin-top: 5px"
+        class="w-100 btn btn-lg btn-primary"
+        type="button"
+        onclick="location.href = '/logout'"">
+        로그아웃
+      </button>
+
+  <!-- <button type="button" onclick="location.href = '/temp'">게시글 작성</button>
+  <button type="button" onclick="location.href = '/logout' ">로그아웃</button> -->
 </div>
 
 

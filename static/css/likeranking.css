@@ -1,7 +1,7 @@
-#likeRankBoard{
+#likeRankBoard {
   background-color: white;
   width: 99%;
-  border: black solid 1px;
+  border: black solid 2px;
 
   margin: 16px 5px 16px 5px;
   padding: 5px 5px 5px 5px;
@@ -10,10 +10,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 1rem;
 }
-#likeRank{
-  background-color: aqua;
-  
+#likeRank {
+  background-color: #ffc107;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,6 +22,6 @@
 
   width: 99%;
   border: black solid 1px;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   margin-top: 10px;
 }

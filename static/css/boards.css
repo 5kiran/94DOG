@@ -1,5 +1,15 @@
 .preview_image {
-    width: 120px;
-    max-width: 200px;
-    height: 120px;
+  width: 120px;
+  max-width: 200px;
+  height: 120px;
+}
+
+.card.mb-2:hover:hover {
+  transform: scale(1.03);
+}
+.page-item {
+  cursor: pointer;
+}
+.pagination {
+  --bs-pagination-color: black;
 }
