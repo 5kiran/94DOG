@@ -21,7 +21,7 @@ function view_post_get(id) {
       let file_url = rows[0]['file_url'];
       let time = rows[0]['created_at'];
       let userId = rows[0]['user_id'];
-      let cnt = rows[0]['viewcount'];
+      let cnt = rows[0]['viewcount'] + 1;
 
       if (file_url != null) {
         if (response[1] == 0) {
