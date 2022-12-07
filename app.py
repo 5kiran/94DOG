@@ -117,17 +117,16 @@ def register():
   password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
-  print(request.form)
 
   name_receive = request.form.get("user_name")
   email_receive = request.form.get("register_email")
   password_receive = str(request.form.get("register_password"))
   pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
-  print('email_receive:', email_receive)
   email_hash = hashlib.sha256(email_receive.encode('utf-8')).hexdigest()
   file = request.files["file_data"]
 
-
+  if not os.path.isdir("static/upload/image"):
+    os.makedirs('static/upload/image')  # upload/image 폴더 없을 경우 자동생성
   if file:
     extension = file.filename.split('.')[-1]
     today = datetime.now()
@@ -140,6 +139,22 @@ def register():
     curs.execute(f"insert into user (name,email,password) value ('{name_receive}','{email_receive}', '{pw_hash}')")
   db.commit()
   db.close()
+
+  signup = ""
+  upload_file = ""
+
+  if file:
+    upload_file = "upload"
+  else:
+    upload_file = "none"
+  app.logger.info(f'[{request.method}] {request.path} :: file_upload={upload_file}')
+
+  if pw_hash:
+    signup = "success"
+  else:
+    signup = "fail"
+  
+  app.logger.info(f'[{request.method}] {request.path} :: register={signup}')
 
   return jsonify({'msg': '회원가입 되었습니다.'})
 
@@ -160,6 +175,14 @@ def email():
   check = curs.fetchall()
   db.commit()
   db.close()
+
+  log_check = ""
+
+  if check:
+    log_check = "fail"
+  else:
+    log_check = "success"
+  app.logger.info(f'[{request.method}] {request.path} :: email_check={log_check}')
 
   if check:
     return jsonify({'msg': '중복된 이메일입니다.'})
@@ -186,6 +209,11 @@ def login():
   db.commit()
   db.close()
 
+  login_time = datetime.now()
+  login_time_check = login_time.strftime('%Y-%m-%d-%H-%M-%S')
+
+  app.logger.info(f'[{request.method}] {request.path} :: login={login_time_check}')
+
   if record and hw == True:
     session['loggedin'] = True
     session['name'] = record[0]['name']
@@ -200,6 +228,10 @@ def login():
 @app.route('/logout')
 def logout():
   session.clear()
+  logout_time = datetime.now()
+  logout_time_check = logout_time.strftime('%Y-%m-%d-%H-%M-%S')
+
+  app.logger.info(f'[{request.method}] {request.path} :: logout={logout_time_check}')
   return redirect('/')
 
 
