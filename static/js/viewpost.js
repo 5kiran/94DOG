@@ -20,34 +20,56 @@ function view_post_get(id) {
                     let id = rows[0]['id']
                     let userId = rows[0]['user_id']
                     let file_url = rows[0]['file_url']
-                    console.log(title)
-                    console.log(content)
-                    console.log(boardLike)
-                    console.log(id)
-                    console.log(userId)
-                
-                    if(response[1] == 0){
-                        let temp_html =  `<h1>${title}</h1>
-                                            <h5>${content}</h5>
-                                            <img src="static/upload/image/${file_url}" width="100%" height="100%">
-                                            <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
-                                            <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
-                                            <div>${boardLike}</div>
-                                            <div>
-                                            <a class="likebutton" onclick= "like(${id},${userId})">🤍</a>
-                                            </div>`
-                        $('#view_post').append(temp_html)
-                    } else{ let temp_html =  `<h1>${title}</h1>
-                                            <h5>${content}</h5>
-                                            <img src="static/upload/image/${file_url}" width="100%" height="100%">
-                                            <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
-                                            <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
-                                            <div>${boardLike}</div>
-                                            <div>
-                                            <a class="likebutton" onclick= "like(${id},${userId})">❤️</a>
-                                            </div>`
-                        $('#view_post').append(temp_html)
 
+
+                    if(file_url != null) {
+                        if(response[1] == 0){
+                            let temp_html =  `<h1>${title}</h1>
+                                                <h5>${content}</h5>
+                                                <img src="static/upload/image/${file_url}" width="100%" height="100%">
+                                                <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
+                                                <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
+                                                <div>${boardLike}</div>
+                                                <div>
+                                                <a class="likebutton" onclick= "like(${id},${userId})">🤍</a>
+                                                </div>`
+                            $('#view_post').append(temp_html)
+                        } else{ let temp_html =  `<h1>${title}</h1>
+                                                <h5>${content}</h5>
+                                                <img src="static/upload/image/${file_url}" width="100%" height="100%">
+                                                <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
+                                                <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
+                                                <div>${boardLike}</div>
+                                                <div>
+                                                <a class="likebutton" onclick= "like(${id},${userId})">❤️</a>
+                                                </div>`
+                            $('#view_post').append(temp_html)
+
+                        }
+                    }
+
+                    else {
+                        if(response[1] == 0){
+                            let temp_html =  `<h1>${title}</h1>
+                                                <h5>${content}</h5>
+                                                <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
+                                                <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
+                                                <div>${boardLike}</div>
+                                                <div>
+                                                <a class="likebutton" onclick= "like(${id},${userId})">🤍</a>
+                                                </div>`
+                            $('#view_post').append(temp_html)
+                        } else{ let temp_html =  `<h1>${title}</h1>
+                                                <h5>${content}</h5>
+                                                <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
+                                                <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
+                                                <div>${boardLike}</div>
+                                                <div>
+                                                <a class="likebutton" onclick= "like(${id},${userId})">❤️</a>
+                                                </div>`
+                            $('#view_post').append(temp_html)
+
+                        }
                     }
                 }
                 }
