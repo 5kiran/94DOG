@@ -19,7 +19,7 @@ function register_click() {
     alert('이메일 형식이 올바르지 않습니다.');
   } else if (check_password.length > 30) {
     alert('패스워드의 길이를 줄여주세요.');
-  } else if (check_name.length > 100) {
+  } else if (check_name.length > 20) {
     alert('이름의 길이를 줄여주세요.');
   } else {
     $.ajax({
