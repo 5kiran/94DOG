@@ -21,7 +21,7 @@ function view_post_get(id) {
       let file_url = rows[0]['file_url'];
       let time = rows[0]['created_at'];
       let userId = rows[0]['user_id'];
-      let cnt = rows[0]['viewcount'];
+      let cnt = rows[0]['viewcount'] + 1;
 
       if (file_url != null) {
         if (response[1] == 0) {
@@ -112,9 +112,11 @@ function like(id, userId) {
     url: '/liked',
     data: { board_id_give: boardId, writer_id_give: writerId },
     success: function (response) {
-        console.log(response[0]['cnt']['liked'])
-        console.log(response[1])
-        let likeCnt = response[0]['cnt']['liked'];
+        console.log(response)
+        if(response['msg']== 1 ){
+            alert('로그인이 필요합니다')
+        }
+        let likeCnt = '좋아요 갯수 :' +  String(response[0]['cnt']['liked']);
         let heart = '❤️'
         let noneheart = '🤍'
         // $('#likeCnt').html(likeCnt)

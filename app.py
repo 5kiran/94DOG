@@ -213,6 +213,11 @@ def liked():
 
 @app.route('/liked',methods=['POST'])
 def like():
+  
+  if len(session)== 0:
+    re = 1 
+    return jsonify({'msg': re})
+  
   user_id = session['id']
   board_id = request.form['board_id_give']
   writer_id = request.form['writer_id_give']
@@ -220,8 +225,7 @@ def like():
   like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
   conn = DB('dict')
   result = conn.select_one(like_find)
-  
-  
+   
   if result is None:
     app.logger.info(f'[{request.method}] {request.path} :: like_user_id={user_id} board_id={board_id} writer_id={writer_id}')
 
@@ -310,6 +314,7 @@ def save_post():
     else:
       sql = 'insert into board (title, content, user_id) value (%s, %s, %s)'
       insert_list = [title_receive, content_receive, user_id]
+
 
     conn = DB('dict')
     conn.save_one(sql, insert_list)
