@@ -3,13 +3,15 @@
 <div class="userbtnbox">
   <div class ="userbox">
     <div>
-      <img id="userimage" src="static/upload/image/{{session['image']}}" />
+      <img id="userimage" src="static/upload/image/{{session['image']}}" onerror="this.onerror=null; this,src='static/images/userprofile.PNG';"/>
     </div>
     <div class="userinfo">
       {{session['name']}}님 환영합니다<br>
       email : {{session['email']}}
     </div>
   </div>
+  <button type="button" onclick="location.href = '/temp'">게시글 작성</button>
   <button type="button" onclick="location.href = '/logout' ">로그아웃</button>
 </div>
+
 

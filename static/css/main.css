@@ -1,5 +1,8 @@
 .sidebar{
   /* background-color: rgb(184, 151, 23); */
   max-width: 320px;
-  padding: 0px 0px 0px 0px;
+}
+a{
+  text-decoration-line: underline;
+  text-decoration: none;
 }
