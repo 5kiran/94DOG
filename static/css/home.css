@@ -1,0 +1,19 @@
+#userimage{
+  width: 99%;
+  max-width: 130px;
+  height: 150px;
+  
+}
+
+.userbox{
+  width: 99%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 5px;
+  background-color: red;
+  margin: 16px 5px 16px 5px;
+  
+  padding: 5px 5px 5px 5px;
+
+  border: black solid 2px;
+}

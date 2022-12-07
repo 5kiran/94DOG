@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>개띠구조대</title>
+  <link href="/static/css/main.css" rel="stylesheet">
   <!-- jQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js" defer></script>
   <!-- bootstrap -->
@@ -20,7 +21,7 @@
   <!-- body -->
   <div class="row" style="height: 500px;">
     <!-- 로그인, 랭킹 -->
-    <div class="col-3" style="background-color: darkcyan;">
+    <div class="col-3 sidebar">
       {% if session["id"]%}
       {% include "components/home.html" %}
       {% else %}

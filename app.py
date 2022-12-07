@@ -136,7 +136,7 @@ def register():
   email_receive = request.form.get("email")
   password_receive = str(request.form.get("password"))
   pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
-  email_hash = hashlib.sha256(email_receive.encode('utf-8'))
+  email_hash = hashlib.sha256(email_receive.encode('utf-8')).hexdigest()
   file = request.files["file_data"]
 
 
@@ -253,29 +253,6 @@ def like():
     
   return jsonify({'msg': '좋아용'})
 
-
-@app.route("/liked/board", methods=["GET"])
-def board_like():
-  db = pymysql.connect(
-  host='127.0.0.1',
-  user='root',
-  db='dog94',
-  password='dog94',
-  charset='utf8')
-  curs = db.cursor(pymysql.cursors.DictCursor)
-  
-  temp_num = 5
-  board_id = f'SELECT id,title,content,file_url,user_id,liked  FROM board WHERE id = {temp_num}'
-  curs.execute(board_id)
-  board_data = curs.fetchone()
-  
-  db.commit()
-  db.close()
-  
-  return jsonify({'boardData': board_data},like_status)
-
-
-
 @app.route("/liked/rank", methods=["GET"])
 def like_rank():
   db = pymysql.connect(
@@ -379,13 +356,13 @@ def delete_post():
     charset='utf8')
 
     curs = db.cursor(pymysql.cursors.DictCursor)
-
-    user_id = session['id']
-    id_receive = request.form.get('id_give')
     
     if len(session) == 0:
       return jsonify({'msg': '로그인 후 이용해주세요.'})
-
+    
+    user_id = session['id']
+    id_receive = request.form.get('id_give')
+    
     find_user = f'select * from board where user_id = {user_id} and id = {id_receive}'
     curs.execute(find_user)
 
