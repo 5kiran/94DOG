@@ -48,8 +48,8 @@ const setBoardsContent = (response) => {
                     <p class="card-text">${board.content}</p>
                   </div>
                 </div>
-                <div class="p-2 flex-shrink-1">
-                  <img src="https://placeimg.com/100/100/any" class="img-fluid rounded-start" alt="...">
+                <div class="p-2 flex-shrink-1 preview_image" >
+                  <img src="static/upload/image/${board.file_url}" class="img-fluid rounded-start" alt="...">
                 </div>
               </div>
             </div>`;
