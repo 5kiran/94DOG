@@ -1,71 +1,46 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../static/css/login.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
-    />
-  </head>
-  <body>
-    <div class="register">
-      <h1>Register</h1>
-      <div class="links">
-        <a href="/login">Login</a>
-        <a href="/register" class="active">Register</a>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="../static/js/register.js" defer></script>
+<link
+  rel="stylesheet"
+  href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+/>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">계정 생성</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="mb-3">
-        <form id="file_form" enctype="multipart/form-data">
-          <!-- <label for="name">
-            <i class="fas fa-user"></i>
-          </label> -->
-          <input
-            type="text"
-            name="user_name"
-            placeholder="Name"
-            id="user_name"
-            required
-          />
-          <!-- <label for="password">
-            <i class="fas fa-lock"></i>
-          </label> -->
-          <input
-            type="text"
-            name="password"
-            placeholder="Password"
-            id="password"
-            required
-          />
-          <!-- <label for="email">
-            <i class="fas fa-envelope"></i>
-          </label> -->
-          <input
-            type="text"
-            name="email"
-            placeholder="Email"
-            id="email"
-            required
-          />
-          <input class="form-control" type="file" name="file_data" />
-          <!-- <input class="form-control" accept="image/*" type="file" id="input_file"> -->
-          <button
-            onclick="register_click()"
-            type="button"
-            class="btn btn-primary"
-          >
-            저장
-          </button>
-        </form>
-        <img id="test_img" src="" alt="" />
-        <input type="submit" onclick="register_click()" value="Register" />
-        <input type="button" onclick="email_click()" value="Eamil Check" />
+      <div class="modal-body">
+        <div class="register">
+          <div class="mb-3">
+            <form id="file_form" enctype="multipart/form-data">
+              <div class="form-floating">
+                <input type="user_name" name="user_name" class="form-control" id="user_name" placeholder="Name" required>
+                <label for="user_name">이름</label>
+              </div>
+              <div class="form-floating">
+                <input type="password" name="register_password" class="form-control" id="register_password" placeholder="Password" required>
+                <label for="register_password">비밀번호</label>
+              </div>
+              <div class="form-floating">
+                <input type="text" name="register_email" class="form-control" id="register_email" placeholder="Email" required>
+                <label for="register_email">이메일</label>
+              </div>
+              <input type="button" onclick="email_click()" class="btn btn-primary" value="Email Check" />
+              <input class="form-control" type="file"  name="file_data" />
+              <!-- <input class="form-control" accept="image/*" type="file" id="input_file"> -->
+            </form>
+            <img id="test_img" src="" alt="" />
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button onclick="register_click()" type="button"  class="btn btn-primary">가입하기</button>
       </div>
     </div>
+  </div>
+</div>
   </body>
-  <script src="../static/js/login.js"></script>
-</html>
+

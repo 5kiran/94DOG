@@ -1,46 +1,81 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Login</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../static/css/login.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
-    />
-  </head>
-  <body>
-    <div class="login">
-      <h1>Login</h1>
-      <div class="links">
-        <a href="/login" class="active">Login</a>
-        <a href="/register">Register</a>
-      </div>
-      <div>
-        <label for="email">
-          <i class="fas fa-user"></i>
-        </label>
+<meta charset="utf-8" />
+<title>Login</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<link rel="stylesheet" href="../static/css/login.css" />
+<link
+  rel="stylesheet"
+  href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+/>
+<link
+  href="/docs/5.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+  crossorigin="anonymous"
+/>
+<body>
+  <div id="loginpage" class="login">
+    <div id="box">
+      <!-- <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        id="email"
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        id="password"
+        required
+      /> -->
+      <div style="margin: 5px" class="form-floating">
         <input
           type="email"
+          class="form-control"
           name="email"
-          placeholder="Email"
           id="email"
-          required
+          placeholder="name@example.com"
         />
-        <label for="password">
-          <i class="fas fa-lock"></i>
-        </label>
+        <label for="email">이메일</label>
+      </div>
+      <div style="margin: 5px" class="form-floating">
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          class="form-control"
           id="password"
-          required
+          placeholder="Password"
         />
-        <input type="button" onclick="login_click()" value="Login" />
+        <label for="password">비밀번호</label>
       </div>
+      <!-- <input type="button" onclick="login_click()" value="로그인" /> -->
+      <button
+        style="padding: 5px; margin-top: 5px"
+        class="w-100 btn btn-lg btn-primary"
+        onclick="login_click()"
+        type="submit"
+      >
+        로그인
+      </button>
+      <button
+        style="padding: 5px; margin-top: 5px"
+        class="w-100 btn btn-lg btn-primary"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        회원가입
+      </button>
+      <!-- <button
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        회원가입
+      </button> -->
+      {% include "components/register.html" %}
     </div>
-  </body>
-  <script src="../static/js/login.js"></script>
-</html>
+  </div>
+</body>
+<script src="../static/js/login.js"></script>
