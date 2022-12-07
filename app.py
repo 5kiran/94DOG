@@ -220,6 +220,9 @@ def like():
   like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
   conn = DB('dict')
   result = conn.select_one(like_find)
+  liked = f'SELECT liked FROM board where id = {board_id}'
+  conn = DB('dict')
+  cnt = conn.select_one(liked)
   
   if result is None:
     app.logger.info(f'[{request.method}] {request.path} :: like_user_id={user_id} board_id={board_id} writer_id={writer_id}')
@@ -231,6 +234,9 @@ def like():
     board_like_up = f'UPDATE board SET liked = liked +1 WHERE board.id = {board_id}'
     conn = DB('dict')
     conn.save_one(board_like_up)
+    
+    curr = 1
+    return jsonify({'cnt': cnt},curr)
 
   else:
     app.logger.info(f'[{request.method}] {request.path} :: unlike_user_id={user_id} board_id={board_id} writer_id={writer_id}')
@@ -243,7 +249,8 @@ def like():
     conn = DB('dict')
     conn.save_one(board_like_down)
     
-  return jsonify({'msg': '좋아용'})
+    curr = 0
+    return jsonify({'cnt': cnt},curr)
 
 @app.route("/liked/rank", methods=["GET"])
 def like_rank():

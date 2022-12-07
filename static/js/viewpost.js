@@ -33,9 +33,9 @@ function view_post_get(id) {
                                                 <img src="static/upload/image/${file_url}" width="100%" height="100%">
                                                 <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
                                                 <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
-                                                <div>${boardLike}</div>
+                                                <div "likeCnt">${boardLike}</div>
                                                 <div>
-                                                <a class="likebutton" onclick= "like(${id},${userId})">🤍</a>
+                                                <a id="likeimg" class="likebutton" onclick= "like(${id},${userId})">🤍</a>
                                                 </div>`
                             $('#view_post').append(temp_html)
                         } else{ let temp_html =  `<h1>${title}</h1>
@@ -45,9 +45,9 @@ function view_post_get(id) {
                                                 <img src="static/upload/image/${file_url}" width="100%" height="100%">
                                                 <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
                                                 <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
-                                                <div>${boardLike}</div>
+                                                <div id="likeCnt">${boardLike}</div>
                                                 <div>
-                                                <a class="likebutton" onclick= "like(${id},${userId})">❤️</a>
+                                                <a id="likeimg" class="likebutton" onclick= "like(${id},${userId})">❤️</a>
                                                 </div>`
                             $('#view_post').append(temp_html)
 
@@ -62,9 +62,9 @@ function view_post_get(id) {
                                                 <h5>${content}</h5>
                                                 <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
                                                 <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
-                                                <div>${boardLike}</div>
+                                                <div id="likeCnt">${boardLike}</div>
                                                 <div>
-                                                <a class="likebutton" onclick= "like(${id},${userId})">🤍</a>
+                                                <a  id="likeimg" class="likebutton" onclick= "like(${id},${userId})">🤍</a>
                                                 </div>`
                             $('#view_post').append(temp_html)
                         } else{ let temp_html =  `<h1>${title}</h1>
@@ -73,9 +73,9 @@ function view_post_get(id) {
                                                 <h5>${content}</h5>
                                                 <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
                                                 <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
-                                                <div>${boardLike}</div>
+                                                <div id="likeCnt">${boardLike}</div>
                                                 <div>
-                                                <a class="likebutton" onclick= "like(${id},${userId})">❤️</a>
+                                                <a id="likeimg"class="likebutton" onclick= "like(${id},${userId})">❤️</a>
                                                 </div>`
                             $('#view_post').append(temp_html)
 
@@ -110,7 +110,22 @@ function like(id,userId){
     url: "/liked",
     data: {board_id_give : boardId, writer_id_give : writerId},
     success: function (response) {
-      window.location.reload()
+        console.log(response[0]['cnt']['liked'])
+        console.log(response[1])
+        let likeCnt = response[0]['cnt']['liked'];
+        let heart = '❤️'
+        let noneheart = '🤍'
+        // $('#likeCnt').html(likeCnt)
+        if(response[1] === 0){
+            console.log('왔냐?')
+            $('#likeCnt').html(likeCnt)
+            $('#likeimg').html(noneheart)
+        }else{
+            $('#likeCnt').html(likeCnt)
+            $('#likeimg').html(heart)
+        }
+    //   window.location.reload()
+    $()
     }
   });
 }

@@ -28,15 +28,16 @@ function save_post() {
   }
 }
 
-function like(postId,writer){
-  const boardId = postId
-  const writerId = writer
-  $.ajax({
-    type: "POST",
-    url: "/liked",
-    data: {board_id_give : boardId, writer_id_give : writerId},
-    success: function (response) {
-      window.location.reload()
-    }
-  });
-}
+// function like(postId,writer){
+//   const boardId = postId
+//   const writerId = writer
+//   $.ajax({
+//     type: "POST",
+//     url: "/liked",
+//     data: {board_id_give : boardId, writer_id_give : writerId},
+//     success: function (response) {
+//       console.log(response)
+//       window.location.reload()
+//     }
+//   });
+// }
