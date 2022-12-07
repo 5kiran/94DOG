@@ -11,22 +11,24 @@ function view_post_get(id) {
                 type: "get", 
                 url: `/views/${id}`,
                 success: function (response) {
-
+                         
+              
                     let rows = response[0]['view_post_list']
 
                     let title = rows[0]['title']
                     let content = rows[0]['content']
                     let boardLike = rows[0]['liked']
                     let id = rows[0]['id']
-                    let userId = rows[0]['user_id']
+                    let name = rows[0]['name']
                     let file_url = rows[0]['file_url']
                     let time = rows[0]['created_at']
-
-
+                    let userId = rows[0]['user_id']
+    
                     if(file_url != null) {
                         if(response[1] == 0){
                             let temp_html =  `<h1>${title}</h1>
                                                 <h5>작성 시간 : ${time}</h5>
+                                                <h5>작성자 : ${name}</h5>
                                                 <h5>${content}</h5>
                                                 <img src="static/upload/image/${file_url}" width="100%" height="100%">
                                                 <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
@@ -37,7 +39,8 @@ function view_post_get(id) {
                                                 </div>`
                             $('#view_post').append(temp_html)
                         } else{ let temp_html =  `<h1>${title}</h1>
-                                                   <h5>작성 시간 : ${time}</h5>        
+                                                <h5>작성 시간 : ${time}</h5>   
+                                                <h5>작성자 : ${name}</h5>     
                                                 <h5>${content}</h5>
                                                 <img src="static/upload/image/${file_url}" width="100%" height="100%">
                                                 <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
@@ -54,7 +57,8 @@ function view_post_get(id) {
                     else {
                         if(response[1] == 0){
                             let temp_html =  `<h1>${title}</h1>
-                                               <h5>작성 시간 : ${time}</h5>        
+                                               <h5>작성 시간 : ${time}</h5>
+                                               <h5>작성자 : ${name}</h5>        
                                                 <h5>${content}</h5>
                                                 <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
                                                 <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
@@ -65,6 +69,7 @@ function view_post_get(id) {
                             $('#view_post').append(temp_html)
                         } else{ let temp_html =  `<h1>${title}</h1>
                                                 <h5>작성 시간 : ${time}</h5>
+                                                <h5>작성자 : ${name}</h5>
                                                 <h5>${content}</h5>
                                                 <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
                                                 <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>

@@ -81,7 +81,7 @@ def pagination():
   if end_page > total_page:
     end_page = total_page
 
-  sql = f'SELECT * FROM board WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
+  sql = f'SELECT board.id,title,user.name,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
   cursor.execute(sql)
   boards = cursor.fetchall()
 
@@ -396,7 +396,7 @@ def view_post(id):
     curs = db.cursor(pymysql.cursors.DictCursor)
 
     curs.execute(
-        f"select * from board where id='{id}'")
+        f"select board.id,title,liked,content,user.name,user_id,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE board.id='{id}'")
 
     view_post = curs.fetchall()
 
