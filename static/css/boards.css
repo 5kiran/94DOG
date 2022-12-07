@@ -1,8 +1,5 @@
 .preview_image {
-    width: 120%;
+    width: 120px;
     max-width: 200px;
-}
-a{
-    text-decoration-line: none;
-    text-decoration-color: None;
+    height: 120px;
 }
