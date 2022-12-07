@@ -125,7 +125,6 @@ def register():
   email_hash = hashlib.sha256(email_receive.encode('utf-8')).hexdigest()
   file = request.files["file_data"]
 
-
   if not os.path.isdir("static/upload/image"):
     os.makedirs('static/upload/image')  # upload/image 폴더 없을 경우 자동생성
   if file:
