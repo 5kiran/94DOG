@@ -36,6 +36,7 @@ const setBoards = (page) => {
 };
 
 const setBoardsContent = (response) => {
+  console.log(response)
   let temp = '';
   $('#boards').empty();
   response.boards.forEach((board) => {
@@ -45,7 +46,7 @@ const setBoardsContent = (response) => {
                 <div class="p-2 w-100">
                   <div class="card-body">
                     <h5 class="card-title">${board.title}</h5>
-                    <p class="card-text">${board.content}</p>
+                    <p class="card-text">${board.name}</p>
                   </div>
                 </div>
                 <div class="p-2 flex-shrink-1" >
