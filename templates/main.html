@@ -39,13 +39,13 @@
     <!-- body -->
     <div class="row">
       <!-- 로그인, 랭킹 -->
-      <div class="col-3 sidebar">
+      <div class="col-3 sidebar" style="box-sizing: border-box">
         {% if session["id"]%} {% include "components/home.html" %} {% else %} {%
         include "components/login.html" %} {% endif %} {% include
         "components/likeranking.html" %}
       </div>
       <!-- 게시판, 마이페이지 -->
-      <div class="col-9" id="main_section">
+      <div class="col-9" id="main_section" style="box-sizing: border-box">
         {% if component_name == 'boards' %} {% include "components/boards.html"
         %} {% elif component_name == 'post' %} {% include "components/post.html"
         %} {% elif component_name == 'viewpost' %} {% include
