@@ -112,7 +112,6 @@ function like(id, userId) {
     url: '/liked',
     data: { board_id_give: boardId, writer_id_give: writerId },
     success: function (response) {
-        console.log(response)
         if(response['msg']== 1 ){
             alert('로그인이 필요합니다')
         }
@@ -121,15 +120,13 @@ function like(id, userId) {
         let noneheart = '🤍'
         // $('#likeCnt').html(likeCnt)
         if(response[1] === 0){
-            console.log('왔냐?')
             $('#likeCnt').html(likeCnt)
             $('#likeimg').html(noneheart)
         }else{
             $('#likeCnt').html(likeCnt)
             $('#likeimg').html(heart)
         }
-    //   window.location.reload()
-    $()
+        showRank()
     }
   });
 }
