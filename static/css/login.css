@@ -1,9 +1,10 @@
 #loginpage {
   background-color: white;
   width: 99%;
-  border: black solid 2px;
+  border: black solid 1px;
 
-  margin: 16px 5px 16px 5px;
+  /* margin: 16px 5px 16px 5px; */
+  margin: 15px 0 0 0;
   padding: 5px 5px 5px 5px;
 
   display: flex;

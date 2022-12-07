@@ -40,7 +40,7 @@ const setBoardsContent = (response) => {
   $('#boards').empty();
   response.boards.forEach((board) => {
     temp += `<a href="/viewpost-layout?id=${board.id}">
-              <div class="card mb-2" style="cursor: pointer;">
+              <div class="card border-secondary border-2 mb-2" style="cursor: pointer;">
               <div class="d-flex">
                 <div class="p-2 w-100">
                   <div class="card-body">
