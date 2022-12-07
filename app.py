@@ -380,6 +380,28 @@ def modi_post():
     return jsonify({'msg': '게시글 수정 완료!'})
 
 
+@app.route('/preview/<id>', methods=['get'])
+def preview(id):
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+
+    curs.execute(
+        f"select * from board WHERE id='{id}'")
+
+    previews = curs.fetchall()
+
+
+    db.commit()
+    return jsonify({'preview_list':previews}) 
+
+
 PORT = 5000
 if __name__ == '__main__':
   app.logger.info('     _______. _______ .______      ____    ____  _______ .______              ______   .__   __. ')
