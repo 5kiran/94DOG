@@ -39,19 +39,21 @@ const setBoardsContent = (response) => {
   let temp = '';
   $('#boards').empty();
   response.boards.forEach((board) => {
-    temp += `<div class="card mb-2" style="cursor: pointer;">
+    temp += `<a href="/viewpost-layout?id=${board.id}">
+              <div class="card mb-2" style="cursor: pointer;">
               <div class="d-flex">
                 <div class="p-2 w-100">
                   <div class="card-body">
-                    <h5 class="card-title"><a href="/viewpost-layout?id=${board.id}">${board.title}</a></h5>
+                    <h5 class="card-title">${board.title}</h5>
                     <p class="card-text">${board.content}</p>
                   </div>
                 </div>
-                <div class="p-2 flex-shrink-1 preview_image" >
-                  <img src="static/upload/image/${board.file_url}" onerror="this.onerror=null; this,src='static/images/default.png';" class="img-fluid rounded-start" >
+                <div class="p-2 flex-shrink-1" >
+                  <img src="static/upload/image/${board.file_url}" onerror="this.onerror=null; this,src='static/images/default.png';" class="img-fluid rounded-start preview_image" >
                 </div>
               </div>
-            </div>`;
+            </div>
+            </a>`;
   })
   $('#boards').append(temp);
 };
