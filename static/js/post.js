@@ -40,3 +40,7 @@ function like(postId,writer){
     }
   });
 }
+
+function cancel_post() {
+  location.href = `/`;
+}

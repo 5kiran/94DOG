@@ -70,7 +70,7 @@ def pagination():
   if end_page > total_page:
     end_page = total_page
 
-  sql = f'SELECT board.id,title,user.name,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
+  sql = f'SELECT board.id,title,user.name,viewcount,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
   conn = DB('dict')
   boards = conn.select_all(sql)
 
@@ -330,9 +330,25 @@ def delete_post():
 
 @app.route('/views/<id>', methods=['get'])
 def view_post(id):
-    sql = f"select board.id, title, liked, content, user.name, user_id, board.created_at, file_url, updated_at from board left join `user` ON board.user_id = user.id WHERE board.id='{id}'"
+    sql = f"select board.id, title, liked, content, user.name, user_id, board.created_at, file_url, updated_at, viewcount from board left join `user` ON board.user_id = user.id WHERE board.id='{id}'"
     conn = DB('dict')
     view_post = conn.select_all(sql)
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+
+    curs.execute(f"update board set viewcount = board.viewcount + 1 WHERE board.id='{id}'")
+
+    db.commit()
+    db.close()
+
 
     like_status = 0
 
