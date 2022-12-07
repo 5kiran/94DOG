@@ -1,0 +1,15 @@
+#loginpage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: black solid 1px;
+  border-radius: 1rem;
+}
+
+#box {
+  width: 90%;
+  margin: 5px;
+  max-width: 1000px;
+}
