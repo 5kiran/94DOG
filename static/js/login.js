@@ -14,7 +14,6 @@ function login_click() {
       },
       success: function (response) {
         if (response['msg'] == '로그인 성공') {
-          alert(response['msg']);
           window.location.href = '/';
         } else {
           alert(response['msg']);
