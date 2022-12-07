@@ -380,31 +380,6 @@ def delete_post():
     return jsonify({'msg': '게시글 삭제 완료!'})
 
 
-
-# # 게시글 보기 기능
-# @app.route('/post', methods=['get'])
-# def show_post():
-
-#     db = pymysql.connect(
-#     host='127.0.0.1',
-#     user='root',
-#     db='dog94',
-#     password='dog94',
-#     charset='utf8')
-
-#     query = db.cursor()
-
-#     sql = "select * from board" 
-
-#     query.execute(sql)
-
-#     people = query.fetchall()
-
-#     return jsonify({'show_post':people})
-
-
-# 게시글 타이틀(링크)를 클릭하면 해당 페이지로 이동하는 기능
-# 예를 들어 4번 게시글을 클릭하면 4번 게시글의 정보를 받아와서 페이지로 이동
 @app.route('/views/<id>', methods=['get'])
 def view_post(id):
 
@@ -429,7 +404,7 @@ def view_post(id):
 
     db.commit()
     return jsonify({'view_post_list':view_post} , like_status)
-   
+  
 def like_find_user(board_id):
 
     db = pymysql.connect(

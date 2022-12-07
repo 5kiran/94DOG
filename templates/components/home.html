@@ -1,12 +1,15 @@
 
 <link href="/static/css/home.css" rel="stylesheet">
-<div class ="userbox">
-  <div>
-    <img id="userimage" src="static/upload/image/{{session['image']}}" />
-  </div>
-  <div>
-    {{session['name']}}님 환영합니다<br>
-    email : {{session['email']}}
+<div class="userbtnbox">
+  <div class ="userbox">
+    <div>
+      <img id="userimage" src="static/upload/image/{{session['image']}}" />
+    </div>
+    <div class="userinfo">
+      {{session['name']}}님 환영합니다<br>
+      email : {{session['email']}}
+    </div>
   </div>
   <button type="button" onclick="location.href = '/logout' ">로그아웃</button>
 </div>
+
