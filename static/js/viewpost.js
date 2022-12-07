@@ -26,61 +26,61 @@ function view_post_get(id) {
       if (file_url != null) {
         if (response[1] == 0) {
           let temp_html = `<h1>${title}</h1>
-                                                <h5>작성 시간 : ${time}</h5>
-                                                <h5>작성자 : ${name}</h5>
-                                                <h5>조회수 : ${cnt}</h5>
-                                                <div>
-                                                <h5 id ="likeCnt">좋아요 갯수 :${boardLike}</h5>
-                                                <a  id ="likeimg" class="likebutton" onclick= "like(${id},${userId})">🤍</a><br>
-                                                </div>
-                                                <h5>내용 : <br><br>${content}</h5>
-                                                <img src="static/upload/image/${file_url}" style="width:500px; height:500px;"><br>
-                                                <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
-                                                <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
-                                                `;
+                          <h5>작성 시간 : ${time}</h5>
+                          <h5>작성자 : ${name}</h5>
+                          <h5>조회수 : ${cnt}</h5>
+                          <div>
+                          <h5 id ="likeCnt">좋아요 갯수 :${boardLike}</h5>
+                          <a  id ="likeimg" class="likebutton" onclick= "like(${id},${userId})">🤍</a><br>
+                          </div>
+                          <h5>내용 : <br><br>${content}</h5>
+                          <img src="static/upload/image/${file_url}" style="width:500px; height:500px;"><br>
+                          <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-outline-dark delete_ment">삭제</button>
+                          <button type="button" id="${id}" class="btn btn-outline-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
+                          `;
           $('#view_post').append(temp_html);
         } else {
           let temp_html = `<h1>${title}</h1>
-                                                <h5>작성 시간 : ${time}</h5>
-                                                <h5>작성자 : ${name}</h5>
-                                                <h5>조회수 : ${cnt}</h5>
-                                                <div>
-                                                <h5 id ="likeCnt">좋아요 갯수 :${boardLike}</h5>
-                                                <a  id ="likeimg" class="likebutton" onclick= "like(${id},${userId})">❤️</a><br>
-                                                </div>
-                                                <h5>내용 : <br><br>${content}</h5>
-                                                <img src="static/upload/image/${file_url}" style="width:500px; height:500px;"><br>
-                                                <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
-                                                <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
-                                                `;
+                          <h5>작성 시간 : ${time}</h5>
+                          <h5>작성자 : ${name}</h5>
+                          <h5>조회수 : ${cnt}</h5>
+                          <div>
+                          <h5 id ="likeCnt">좋아요 갯수 :${boardLike}</h5>
+                          <a  id ="likeimg" class="likebutton" onclick= "like(${id},${userId})">❤️</a><br>
+                          </div>
+                          <h5>내용 : <br><br>${content}</h5>
+                          <img src="static/upload/image/${file_url}" style="width:500px; height:500px;"><br>
+                          <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-outline-dark delete_ment">삭제</button>
+                          <button type="button" id="${id}" class="btn btn-outline-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
+                          `;
           $('#view_post').append(temp_html);
         }
       } else {
         if (response[1] == 0) {
-                                                let temp_html = `<h1>${title}</h1>
-                                                <h5>작성 시간 : ${time}</h5>
-                                                <h5>작성자 : ${name}</h5>
-                                                <h5>조회수 : ${cnt}</h5>
-                                                <div>
-                                                <h5 id ="likeCnt">좋아요 갯수 :${boardLike}</h5>
-                                                <a id ="likeimg" class="likebutton" onclick= "like(${id},${userId})">🤍</a><br>
-                                                </div>    
-                                                <h5>내용 : <br><br>${content}</h5>
-                                                <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
-                                                <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>`;
+                          let temp_html = `<h1>${title}</h1>
+                          <h5>작성 시간 : ${time}</h5>
+                          <h5>작성자 : ${name}</h5>
+                          <h5>조회수 : ${cnt}</h5>
+                          <div>
+                          <h5 id ="likeCnt">좋아요 갯수 :${boardLike}</h5>
+                          <a id ="likeimg" class="likebutton" onclick= "like(${id},${userId})">🤍</a><br>
+                          </div>    
+                          <h5>내용 : <br><br>${content}</h5>
+                          <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-outline-dark delete_ment">삭제</button>
+                          <button type="button" id="${id}" class="btn btn-outline-dark recover"><a href="/temp_update?id=${id}">수정</a></button>`;
           $('#view_post').append(temp_html);
         } else {
-                                                let temp_html = `<h1>${title}</h1>
-                                                <h5>작성 시간 : ${time}</h5>
-                                                <h5>작성자 : ${name}</h5>
-                                                <h5>조회수 : ${cnt}</h5>
-                                                <div>
-                                                <h5 id ="likeCnt">좋아요 갯수 :${boardLike}</h5>
-                                                <a id ="likeimg" class="likebutton" onclick= "like(${id},${userId})">❤️</a><br>
-                                                </div>    
-                                                <h5>내용 : <br><br>${content}</h5>
-                                                <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
-                                                <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>`;
+                          let temp_html = `<h1>${title}</h1>
+                          <h5>작성 시간 : ${time}</h5>
+                          <h5>작성자 : ${name}</h5>
+                          <h5>조회수 : ${cnt}</h5>
+                          <div>
+                          <h5 id ="likeCnt">좋아요 갯수 :${boardLike}</h5>
+                          <a id ="likeimg" class="likebutton" onclick= "like(${id},${userId})">❤️</a><br>
+                          </div>    
+                          <h5>내용 : <br><br>${content}</h5>
+                          <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-outline-dark delete_ment">삭제</button>
+                          <button type="button" id="${id}" class="btn btn-outline-dark recover"><a href="/temp_update?id=${id}">수정</a></button>`;
           $('#view_post').append(temp_html);
         }
       }

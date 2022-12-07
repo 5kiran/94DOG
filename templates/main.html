@@ -33,27 +33,31 @@
     <script src="../static/js/post.js"></script>
   </head>
   <body>
-    <!-- header -->
-    {% include "components/header.html" %}
 
-    <!-- body -->
-    <div class="row">
-      <!-- 로그인, 랭킹 -->
-      <div class="col-3 sidebar">
-        {% if session["id"]%} {% include "components/home.html" %} {% else %} {%
-        include "components/login.html" %} {% endif %} {% include
-        "components/likeranking.html" %}
+    <div class="container mb-5">
+      <!-- header -->
+      {% include "components/header.html" %}
+
+      <!-- body -->
+      <div class="row">
+        <!-- 로그인, 랭킹 -->
+        <div class="col-3 sidebar">
+          {% if session["id"]%} {% include "components/home.html" %} {% else %} {%
+          include "components/login.html" %} {% endif %} {% include
+          "components/likeranking.html" %}
+        </div>
+        <!-- 게시판, 마이페이지 -->
+        <div class="col-9" id="main_section">
+          {% if component_name == 'boards' %} {% include "components/boards.html"
+          %} {% elif component_name == 'post' %} {% include "components/post.html"
+          %} {% elif component_name == 'viewpost' %} {% include
+          "components/viewpost.html" %} {% elif component_name == 'post_update' %}
+          {% include "components/post_update.html" %} {% endif %}
+        </div>
       </div>
-      <!-- 게시판, 마이페이지 -->
-      <div class="col-9" id="main_section">
-        {% if component_name == 'boards' %} {% include "components/boards.html"
-        %} {% elif component_name == 'post' %} {% include "components/post.html"
-        %} {% elif component_name == 'viewpost' %} {% include
-        "components/viewpost.html" %} {% elif component_name == 'post_update' %}
-        {% include "components/post_update.html" %} {% endif %}
-      </div>
+      <!-- footer -->
+      <!-- {% include "components/footer.html" %} -->
     </div>
-    <!-- footer -->
-    <!-- {% include "components/footer.html" %} -->
+    
   </body>
 </html>

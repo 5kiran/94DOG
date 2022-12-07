@@ -1,6 +1,6 @@
 
 <link href="/static/css/home.css" rel="stylesheet">
-<div class="userbtnbox">
+<div class="userbtnbox" style="width: 100%; margin: 15px 0 0 0;">
   <div class ="userbox">
     <div>
       <img id="userimage" src="static/upload/image/{{session['image']}}" onerror="this.onerror=null; this,src='static/images/userprofile.PNG';"/>
@@ -8,7 +8,7 @@
     <div id="usercontent" class="card text-bg-warning mb-3" style="max-width: 18rem;">
       <div class="card-header">{{session['name']}}님 환영합니다</div>
       <div class="card-body">
-        <p class="card-title">이메일 : {{session['email']}}</p>
+        <p class="card-title">{{session['email']}}</p>
         <p class="card-text">개띠 친구들 화이팅!</p>
       </div>
     </div>

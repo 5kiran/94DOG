@@ -22,50 +22,19 @@
       <form id="file_form" enctype="multipart/form-data">
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label"></label>
-          <input
-            type="text"
-            class="form-control text"
-            id="exampleFormControlInput1 title"
-            name="title"
-            placeholder="게시글 제목"
-            style="width: 95%; max-width: 600px"
-          />
+          <input type="text" class="form-control text" id="exampleFormControlInput1 title" name="title" placeholder="게시글 제목" style="width: 95%; max-width: 600px"/>
         </div>
         <div class="mb-3">
           <label for="exampleFormControlTextarea1" class="form-label"></label>
-          <textarea
-            class="form-control text"
-            id="exampleFormControlTextarea1 content"
-            name="content"
-            rows="3"
-            placeholder="내용"
-            style="width: 95%; max-width: 800px; height: 400px; max-height: 95%"
-          ></textarea>
+          <textarea class="form-control text" id="exampleFormControlTextarea1 content" name="content" rows="3" placeholder="내용" style="width: 95%; max-width: 800px; height: 400px; max-height: 95%"></textarea>
         </div>
         <div class="mb-3">
           <label for="formFile" class="form-label"></label>
-          <input
-            class="form-control"
-            type="file"
-            id="post_file"
-            name="post_file"
-            style="width: 250px"
-          />
+          <input class="form-control" type="file" id="post_file" name="post_file" style="width: 250px"/>
         </div>
       </form>
-      <button onclick="save_post()" type="button" class="btn btn-dark">
-        게시글 등록
-      </button>
-      <!-- <button onclick="show_post()" type="button" class="btn btn-light hidebutton">게시글 보기</button>
-        <button onclick="update_post()" type="button" class="btn btn-light hidebutton">게시글 수정</button>
-        <button onclick="delete_post()" type="button" class="btn btn-light hidebutton">게시글 삭제</button> -->
-      <button
-        onclick="cancel_post()"
-        type="button"
-        class="btn btn-light hidebutton"
-      >
-        나가기
-      </button>
+      <button onclick="save_post()" type="button" class="btn btn-dark">게시글 등록</button>
+      <button onclick="cancel_post()" type="button" class="btn btn-light hidebutton">나가기</button>
     </div>
     <div class="card" id="card" style="width: 500px"></div>
   </body>

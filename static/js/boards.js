@@ -40,7 +40,7 @@ const setBoardsContent = (response) => {
   $('#boards').empty();
   response.boards.forEach((board) => {
     temp += `<a href="/viewpost-layout?id=${board.id}">
-              <div class="card mb-2" style="cursor: pointer;">
+              <div class="card border-secondary border-2 mb-2" style="cursor: pointer;">
               <div class="d-flex">
                 <div class="p-2 w-100">
                   <div class="card-body">
@@ -66,7 +66,7 @@ const setPagination = (response) => {
 
   let temp = '';
   if (start_page != 1) {
-    temp += `<li class="page-item">
+    temp += `<li class="page-item" style="cursor: pointer;">
               <a class="page-link" onclick="setBoards(${start_page-1})"><span aria-hidden="true">&laquo;</span></a>
             </li>`;
   } else {
@@ -76,13 +76,13 @@ const setPagination = (response) => {
   }
   for (let i=start_page;i<=end_page;i++) {
     if (i == page) {
-      temp += `<li class="page-item active"><a class="page-link" onclick="setBoards(${i})">${i}</a></li>`;
+      temp += `<li class="page-item active" style="cursor: pointer;"><a class="page-link" onclick="setBoards(${i})">${i}</a></li>`;
     } else {
-      temp += `<li class="page-item"><a class="page-link" onclick="setBoards(${i})">${i}</a></li>`;
+      temp += `<li class="page-item" style="cursor: pointer;"><a class="page-link" onclick="setBoards(${i})">${i}</a></li>`;
     }
   }
   if (end_page != total_page) {
-    temp += `<li class="page-item">
+    temp += `<li class="page-item" style="cursor: pointer;">
               <a class="page-link" onclick="setBoards(${end_page+1})"><span aria-hidden="true">&raquo;</span></a>
             </li>`;
   } else {

@@ -1,42 +1,40 @@
 <nav class="navbar sticky-top" style="background-color: white">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/">
-      <img
-        src="{{ url_for('static', filename='images/dozi.jpeg') }}"
-        alt="Logo"
-        width="50"
-        class="d-inline-block align-text-top"
-      />
-      개띠구조대
-    </a>
-    <div class="d-flex">
-      <button
-        id="home"
-        class="btn btn-outline-dark me-1"
-        type="button"
-        style="width: 75px"
-        onclick="location.href='/'"
-      >
-        <i class="fa-solid fa-house"></i>
-      </button>
-      <button
-        id="mypage"
-        class="btn btn-outline-dark me-1"
-        type="button"
-        style="width: 75px"
-      >
-        <i class="fa-solid fa-user"></i>
-      </button>
-      <button
-        id="board"
-        class="btn btn-outline-dark me-1"
-        type="button"
-        style="width: 75px"
-        onclick="window.open('https://github.com/5kiran/94DOG');"
-      >
-        <i class="fa-brands fa-github fs-3"></i>
-      </button>
-    </div>
+  <a class="navbar-brand" href="/">
+    <img
+      src="{{ url_for('static', filename='images/dozi.jpeg') }}"
+      alt="Logo"
+      width="45"
+      class="d-inline-block align-middle mr-2"
+    />
+    <span class="text-uppercase font-weight-bold">개띠구조대</span>
+  </a>
+  <div class="d-flex">
+    <button
+      id="home"
+      class="btn btn-outline-dark me-1"
+      type="button"
+      style="width: 75px"
+      onclick="location.href='/'"
+    >
+      <i class="fa-solid fa-house"></i>
+    </button>
+    <button
+      id="mypage"
+      class="btn btn-outline-dark me-1"
+      type="button"
+      style="width: 75px"
+    >
+      <i class="fa-solid fa-user"></i>
+    </button>
+    <button
+      id="board"
+      class="btn btn-outline-dark"
+      type="button"
+      style="width: 75px"
+      onclick="window.open('https://github.com/5kiran/94DOG');"
+    >
+      <i class="fa-brands fa-github fs-3"></i>
+    </button>
   </div>
 </nav>
 

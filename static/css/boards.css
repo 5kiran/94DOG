@@ -8,7 +8,7 @@
   transform: scale(1.03);
 }
 .page-item {
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 .pagination {
   --bs-pagination-color: black;
