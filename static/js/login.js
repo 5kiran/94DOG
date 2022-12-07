@@ -17,7 +17,6 @@ function login_click() {
           window.location.href = '/';
         } else {
           alert(response['msg']);
-          window.location.reload();
         }
       },
     });
