@@ -3,7 +3,7 @@
 <div class="userbtnbox">
   <div class ="userbox">
     <div>
-      <img id="userimage" src="static/upload/image/{{session['image']}}" />
+      <img id="userimage" src="static/upload/image/{{session['image']}}" onerror="this.onerror=null; this,src='static/images/userprofile.PNG';"/>
     </div>
     <div class="userinfo">
       {{session['name']}}님 환영합니다<br>
