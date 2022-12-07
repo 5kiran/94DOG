@@ -6,11 +6,16 @@
   rel="stylesheet"
   href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
 />
+<link
+  href="/docs/5.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+  crossorigin="anonymous"
+/>
 <body>
-  <div class="login">
-    <h1>Login</h1>
-    <div>
-      <input
+  <div id="loginpage" class="login">
+    <div id="box">
+      <!-- <input
         type="email"
         name="email"
         placeholder="Email"
@@ -23,15 +28,52 @@
         placeholder="Password"
         id="password"
         required
-      />
-      <input type="button" onclick="login_click()" value="Login" />
+      /> -->
+      <div style="margin: 5px" class="form-floating">
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          id="email"
+          placeholder="name@example.com"
+        />
+        <label for="email">이메일</label>
+      </div>
+      <div style="margin: 5px" class="form-floating">
+        <input
+          type="password"
+          name="password"
+          class="form-control"
+          id="password"
+          placeholder="Password"
+        />
+        <label for="password">비밀번호</label>
+      </div>
+      <!-- <input type="button" onclick="login_click()" value="로그인" /> -->
       <button
+        style="padding: 5px; margin-top: 5px"
+        class="w-100 btn btn-lg btn-primary"
+        onclick="login_click()"
+        type="submit"
+      >
+        로그인
+      </button>
+      <button
+        style="padding: 5px; margin-top: 5px"
+        class="w-100 btn btn-lg btn-primary"
         type="button"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
         회원가입
       </button>
+      <!-- <button
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        회원가입
+      </button> -->
       {% include "components/register.html" %}
     </div>
   </div>
