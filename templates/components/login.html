@@ -1,46 +1,39 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Login</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../static/css/login.css" />
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
-    />
-  </head>
-  <body>
-    <div class="login">
-      <h1>Login</h1>
-      <div class="links">
-        <a href="/login" class="active">Login</a>
-        <a href="/register">Register</a>
-      </div>
-      <div>
-        <label for="email">
-          <i class="fas fa-user"></i>
-        </label>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          id="email"
-          required
-        />
-        <label for="password">
-          <i class="fas fa-lock"></i>
-        </label>
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          id="password"
-          required
-        />
-        <input type="button" onclick="login_click()" value="Login" />
-      </div>
+<meta charset="utf-8" />
+<title>Login</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<link rel="stylesheet" href="../static/css/login.css" />
+<link
+  rel="stylesheet"
+  href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+/>
+<body>
+  <div class="login">
+    <h1>Login</h1>
+    <div>
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        id="email"
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        id="password"
+        required
+      />
+      <input type="button" onclick="login_click()" value="Login" />
+      <button
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal"
+      >
+        회원가입
+      </button>
+      {% include "components/register.html" %}
     </div>
-  </body>
-  <script src="../static/js/login.js"></script>
-</html>
+  </div>
+</body>
+<script src="../static/js/login.js"></script>

@@ -130,11 +130,13 @@ def register():
   password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
+  print(request.form)
 
   name_receive = request.form.get("user_name")
-  email_receive = request.form.get("email")
-  password_receive = str(request.form.get("password"))
+  email_receive = request.form.get("register_email")
+  password_receive = str(request.form.get("register_password"))
   pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
+  print('email_receive:', email_receive)
   email_hash = hashlib.sha256(email_receive.encode('utf-8')).hexdigest()
   file = request.files["file_data"]
 
