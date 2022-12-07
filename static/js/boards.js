@@ -48,7 +48,7 @@ const setBoardsContent = (response) => {
                   </div>
                 </div>
                 <div class="p-2 flex-shrink-1 preview_image" >
-                  <img src="static/upload/image/${board.file_url}" onerror="this.onerror=null; this,src='static/images/default.png';" class="img-fluid rounded-start" >
+                  <img id="nullimg"src="static/upload/image/${board.file_url}" onerror="this.onerror=null; this,src='static/images/default.png';" class="img-fluid rounded-start" >
                 </div>
               </div>
             </div>`;

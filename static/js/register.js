@@ -13,7 +13,7 @@ function register_click() {
     /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
   let count = cnt;
 
-  if (user_name === '' || check_email === '' || password_password === '') {
+  if (user_name === '' || check_email === '' || check_password === '') {
     alert('모두 입력해주세요.');
   } else if (!emailRegExp.test(check_email)) {
     alert('이메일 형식이 올바르지 않습니다.');

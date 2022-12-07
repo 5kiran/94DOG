@@ -2,3 +2,7 @@
     width: 120%;
     max-width: 200px;
 }
+a{
+    text-decoration-line: none;
+    text-decoration-color: None;
+}

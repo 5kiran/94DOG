@@ -216,20 +216,24 @@ def like():
   password='dog94',
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
+  
 
   user_id = session['id']
   board_id = request.form['board_id_give']
   writer_id = request.form['writer_id_give']
   like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
+  
   curs.execute(like_find)
   result = curs.fetchone()
   
   if result is None:
+    app.logger.info(f'[{request.method}] {request.path} :: like_user_id={user_id} board_id={board_id} writer_id={writer_id}')
     like_up = f'INSERT INTO liked (user_id,board_id,writer_id) VALUES ({user_id},{board_id},{writer_id})'
     board_like_up = f'UPDATE board SET liked = liked +1 WHERE board.id = {board_id}'
     curs.execute(like_up)
     curs.execute(board_like_up)
   else:
+    app.logger.info(f'[{request.method}] {request.path} :: unlike_user_id={user_id} board_id={board_id} writer_id={writer_id}')
     like_delete = f'DELETE FROM  liked WHERE liked.user_id = {user_id} AND liked.board_id = {board_id}'
     board_like_down = f'UPDATE board SET liked = liked -1 WHERE board.id = {board_id}'
     curs.execute(like_delete)

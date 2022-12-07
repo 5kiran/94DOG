@@ -13,3 +13,7 @@
   margin: 5px;
   max-width: 1000px;
 }
+a{
+  text-decoration-line: none;
+  text-decoration-color: None;
+}
