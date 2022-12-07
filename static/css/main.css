@@ -3,10 +3,6 @@
   max-width: 320px;
   width: 99%;
 }
-#main_section {
-  box-sizing: border-box;
-  background-color: green;
-}
 a {
   text-decoration-line: underline;
   text-decoration: none;

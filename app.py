@@ -178,13 +178,15 @@ def login():
   sql = 'SELECT * FROM user WHERE email = %s'
   conn = DB('dict')
   record = conn.select_all(sql, email_receive)
-  
+  if not record:
+    return jsonify({'msg':'사용자 정보가 일치하지 않습니다.'})
   password = record[0]['password']
   hw = bcrypt.check_password_hash(password, password_receive)
 
   login_email = email_receive
 
   app.logger.info(f'[{request.method}] {request.path} :: login={login_email}')
+
 
   if record and hw == True:
     session['loggedin'] = True
