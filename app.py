@@ -315,6 +315,7 @@ def save_post():
       sql = 'insert into board (title, content, user_id) value (%s, %s, %s)'
       insert_list = [title_receive, content_receive, user_id]
 
+
     conn = DB('dict')
     conn.save_one(sql, insert_list)
    
