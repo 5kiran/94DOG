@@ -3,6 +3,18 @@ import pymysql
 from flask_bcrypt import Bcrypt
 from datetime import datetime
 import hashlib
+import logging
+import os
+
+
+# logging system setting
+if not os.path.isdir('logs'):
+  os.mkdir('logs')  # logs 폴더 없을 경우 자동생성
+logging.getLogger('werkzeug').disabled = True
+logging.basicConfig(filename = "logs/server.log", level = logging.DEBUG
+                  # , datefmt = '%Y/%m/%d %H:%M:%S %p'  # 년/월/일 시(12시간단위)/분/초 PM/AM
+                  , datefmt = '%Y/%m/%d %H:%M:%S'  # 년/월/일 시(24시간단위)/분/초
+                  , format = '%(asctime)s:%(levelname)s:%(message)s')
 
 
 app = Flask(__name__)
@@ -13,22 +25,15 @@ app.config['SECRET_KEY'] = '125451161361342134'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 bcrypt = Bcrypt(app)
 
+
 @app.route('/')
 def home():
+  app.logger.info(f'[{request.method}] {request.path}')
   return render_template('main.html', component_name='boards')
 
 
 @app.route('/boards', methods=['GET'])
 def pagination():
-  db = pymysql.connect(
-      host="localhost", 	# 데이터베이스 주소
-      user="root", 	# 유저네임
-      passwd="dog94", 	# 패스워드
-      db="dog94", 	# 사용할 DB
-      charset="utf8"	# 인코딩
-  )
-
-
   # 한 페이지의 게시글 수
   ONE_PAGE = 5
   # 한 섹션의 페이지 수
@@ -38,6 +43,16 @@ def pagination():
   # 현재 페이지
   if request.args:
     page = int(request.args['p'])
+
+  app.logger.info(f'[{request.method}] {request.path} :: page={page}')
+
+  db = pymysql.connect(
+      host="localhost", 	# 데이터베이스 주소
+      user="root", 	# 유저네임
+      passwd="dog94", 	# 패스워드
+      db="dog94", 	# 사용할 DB
+      charset="utf8"	# 인코딩
+  )
 
   # 전체 게시글 수
   cursor = db.cursor(pymysql.cursors.DictCursor)
@@ -75,35 +90,6 @@ def pagination():
   db.close()
 
   return jsonify({'response': response})
-
-
-# board 데이터 넣는 용도. 주석 없애고 실행
-@app.route('/boards/insert', methods=["GET"])
-def insert():
-  db = pymysql.connect(
-      host="localhost", 	# 데이터베이스 주소
-      user="root", 	# 유저네임
-      passwd="dog94", 	# 패스워드
-      db="dog94", 	# 사용할 DB
-      charset="utf8"	# 인코딩
-  )
-  
-  cursor = db.cursor()
-
-  for i in range(1, 20):
-    sql = 'INSERT INTO board (title, content, user_id) VALUES (%s, %s, %s)'
-    cursor.execute(sql, ('test title'+str(i), 'test content'+str(i), 3))
-
-  db.commit()
-  db.close()
-  
-  data = {'name': 'test'}
-  return render_template('components/pagination.html', data=data)
-
-
-
-
-
 
 
 @app.route("/register", methods=['GET'])
@@ -449,6 +435,14 @@ def modi_post():
     return jsonify({'msg': '게시글 수정 완료!'})
 
 
-
+PORT = 5000
 if __name__ == '__main__':
-  app.run('0.0.0.0', port=5000, debug=True)
+  app.logger.info('     _______. _______ .______      ____    ____  _______ .______              ______   .__   __. ')
+  app.logger.info('    /       ||   ____||   _  \     \   \  /   / |   ____||   _  \            /  __  \  |  \ |  | ')
+  app.logger.info('   |   (----`|  |__   |  |_)  |     \   \/   /  |  |__   |  |_)  |          |  |  |  | |   \|  | ')
+  app.logger.info('    \   \    |   __|  |      /       \      /   |   __|  |      /           |  |  |  | |  . `  | ')
+  app.logger.info('.----)   |   |  |____ |  |\  \----.   \    /    |  |____ |  |\  \----.      |  `--`  | |  |\   | ')
+  app.logger.info('|_______/    |_______|| _| `._____|    \__/     |_______|| _| `._____|       \______/  |__| \__| ')
+  app.logger.info('                                                                                       PORT='+str(PORT))
+
+  app.run('0.0.0.0', port=PORT, debug=True, use_reloader=False)
