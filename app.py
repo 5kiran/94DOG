@@ -1,17 +1,22 @@
 from flask import Flask, jsonify, render_template, request, session, redirect, url_for
 import pymysql
 from flask_bcrypt import Bcrypt
+from datetime import datetime
+import hashlib
+
 
 app = Flask(__name__)
 
 app.secret_key = 'sad111123'
 app.config['BCRYPT_LEVEL'] = 10
 app.config['SECRET_KEY'] = '125451161361342134'
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 bcrypt = Bcrypt(app)
 
 @app.route('/')
 def home():
   return render_template('main.html', component_name='boards')
+
 
 
 @app.route('/boards', methods=['GET'])
@@ -127,16 +132,28 @@ def register():
   charset='utf8')
   curs = db.cursor(pymysql.cursors.DictCursor)
 
-  name_receive = request.form.get("name_give")
-  email_receive = request.form.get("email_give")
-  password_receive = request.form.get("password_give")
+  name_receive = request.form.get("user_name")
+  email_receive = request.form.get("email")
+  password_receive = str(request.form.get("password"))
   pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
+  email_hash = hashlib.sha256(email_receive.encode('utf-8')).hexdigest()
+  file = request.files["file_data"]
 
-  curs.execute(f"insert into user (name,email,password) value ('{name_receive}','{email_receive}', '{pw_hash}')")
+
+  if file:
+    extension = file.filename.split('.')[-1]
+    today = datetime.now()
+    mtime = today.strftime('%Y-%m-%d-%H-%M-%S')
+    filename = f'{email_hash}-{mtime}.{extension}'
+    save_to = f'static/upload/image/{filename}'
+    file.save(save_to)
+    curs.execute(f"insert into user (name,email,password,image_url) value ('{name_receive}','{email_receive}', '{pw_hash}', '{filename}')")
+  else:
+    curs.execute(f"insert into user (name,email,password) value ('{name_receive}','{email_receive}', '{pw_hash}')")
   db.commit()
   db.close()
 
-  return jsonify({'msg': '회원가입 완료'})
+  return jsonify({'msg': '회원가입 되었습니다.'})
 
 
 @app.route("/email", methods=["POST"])
@@ -174,10 +191,10 @@ def login():
 
   email_receive = request.form['email_give']
   password_receive = request.form['password_give']
-  pw_hash = bcrypt.generate_password_hash(password_receive).decode('utf-8')
-  hw = bcrypt.check_password_hash(pw_hash, password_receive)
   curs.execute('SELECT * FROM user WHERE email = %s', (email_receive))
   record = curs.fetchall()
+  password = record[0]['password']
+  hw = bcrypt.check_password_hash(password, password_receive)
   db.commit()
   db.close()
 
@@ -186,6 +203,7 @@ def login():
     session['name'] = record[0]['name']
     session['email'] = record[0]['email']
     session['id'] = record[0]['id']
+    session['image'] = record[0]['image_url']
     return jsonify({'msg': '로그인 성공'})
   else:
     return jsonify({'msg':'사용자 정보가 일치하지 않습니다.'})
@@ -236,40 +254,6 @@ def like():
   return jsonify({'msg': '좋아용'})
 
 
-@app.route("/liked/board", methods=["GET"])
-def board_like():
-  db = pymysql.connect(
-  host='127.0.0.1',
-  user='root',
-  db='dog94',
-  password='dog94',
-  charset='utf8')
-  curs = db.cursor(pymysql.cursors.DictCursor)
-  
-  temp_num = 5
-  board_id = f'SELECT id,title,content,file_url,user_id,liked  FROM board WHERE id = {temp_num}'
-  curs.execute(board_id)
-  board_data = curs.fetchone()
-  
-  like_status = 0
-  if like_find_user(temp_num,curs) is not None:
-    like_status += 1  
-
-  db.commit()
-  db.close()
-  
-  return jsonify({'boardData': board_data},like_status)
-
-def like_find_user(board_id,curs):
-  user_id = session['id']
-  
-  like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
-  curs.execute(like_find)
-  like_data = curs.fetchone()
-  
-  return like_data
-
-
 @app.route("/liked/rank", methods=["GET"])
 def like_rank():
   db = pymysql.connect(
@@ -316,12 +300,16 @@ def save_post():
 
     curs = db.cursor(pymysql.cursors.DictCursor)
 
+    if len(session) == 0 :
+      return jsonify({'msg': '로그인 후 이용해주세요.'})
+
     title_receive = request.form.get('title_give')
     content_receive = request.form.get('content_give')
     date_receive =request.form.get('data_give')
+    user_id = session['id']
 
     curs.execute(
-        f"insert into board (title,content,updated_at) value ('{title_receive}','{content_receive}','{date_receive}')")
+        f"insert into board (title,content,updated_at,user_id) value ('{title_receive}','{content_receive}','{date_receive}','{user_id}')")
     db.commit()
     db.close()
 
@@ -341,6 +329,9 @@ def update_post():
     charset='utf8')
 
     curs = db.cursor(pymysql.cursors.DictCursor)
+
+    if len(session) == 0 :
+      return jsonify({'msg': '로그인 후 이용해주세요.'})
 
     title_receive = request.form.get('title_give')
     content_receive = request.form.get('content_give')
@@ -367,7 +358,21 @@ def delete_post():
 
     curs = db.cursor(pymysql.cursors.DictCursor)
 
+    user_id = session['id']
     id_receive = request.form.get('id_give')
+    
+    if len(session) == 0:
+      return jsonify({'msg': '로그인 후 이용해주세요.'})
+
+    find_user = f'select * from board where user_id = {user_id} and id = {id_receive}'
+    curs.execute(find_user)
+
+    a = curs.fetchone()
+
+    if a is None:
+      return jsonify({'msg': '작성자가 아닙니다.'})
+
+    
 
     curs.execute(
         f"update board set deleted=1 where id='{id_receive}'")
@@ -376,30 +381,6 @@ def delete_post():
     return jsonify({'msg': '게시글 삭제 완료!'})
 
 
-# 게시글 보기 기능
-@app.route('/post', methods=['get'])
-def show_post():
-
-    db = pymysql.connect(
-    host='127.0.0.1',
-    user='root',
-    db='dog94',
-    password='dog94',
-    charset='utf8')
-
-    query = db.cursor()
-
-    sql = "select * from board" 
-
-    query.execute(sql)
-
-    people = query.fetchall()
-
-    return jsonify({'show_post':people})
-
-
-# 게시글 타이틀(링크)를 클릭하면 해당 페이지로 이동하는 기능
-# 예를 들어 4번 게시글을 클릭하면 4번 게시글의 정보를 받아와서 페이지로 이동
 @app.route('/views/<id>', methods=['get'])
 def view_post(id):
 
@@ -417,8 +398,37 @@ def view_post(id):
 
     view_post = curs.fetchall()
 
+    like_status = 0
+
+    if like_find_user(id) is not None:
+      like_status += 1  
+
     db.commit()
-    return jsonify({'view_post_list':view_post})
+    return jsonify({'view_post_list':view_post} , like_status)
+  
+def like_find_user(board_id):
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+    if len(session) == 0 :
+      return 0
+
+    user_id = session['id']
+    
+    like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
+    curs.execute(like_find)
+    like_data = curs.fetchone()
+
+    db.commit()
+    db.close()
+    
+    return like_data
 
   
 
@@ -434,12 +444,23 @@ def modi_post():
 
     curs = db.cursor(pymysql.cursors.DictCursor)
 
+    if len(session) == 0 :
+      return jsonify({'msg': '로그인 후 이용해주세요.'})
+
     title_receive = request.form.get('title_give')
     content_receive = request.form.get('content_give')
     update_at_receive = request.form.get('data_give')
     id_receive = request.form.get('id_give')
+    user_id = session['id']
 
+    find_user = f'select * from board where user_id = {user_id} and id = {id_receive}'
+    curs.execute(find_user)
 
+    a = curs.fetchone()
+    
+    if a is None:
+      return jsonify({'msg': '작성자가 아닙니다.'})
+    
     curs.execute(
         f"update board set title='{title_receive}',content='{content_receive}',updated_at='{update_at_receive}' where id='{id_receive}'")
     db.commit()
