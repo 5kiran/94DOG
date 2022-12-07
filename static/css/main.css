@@ -1,14 +1,33 @@
-.sidebar{
+.sidebar {
   /* background-color: rgb(184, 151, 23); */
   max-width: 320px;
+  width: 99%;
 }
-a{
+a {
   text-decoration-line: underline;
   text-decoration: none;
 }
-a:link { color: black; text-decoration: none;}
-a:visited { color: black; text-decoration: none;}
-a:hover { color: black; text-decoration: none;}
-div:hover{color: black; text-decoration: none;}
-div:visited { color: black; text-decoration: none;}
-div:link { color: black; text-decoration: none;}
+a:link {
+  color: black;
+  text-decoration: none;
+}
+a:visited {
+  color: black;
+  text-decoration: none;
+}
+a:hover {
+  color: black;
+  text-decoration: none;
+}
+div:hover {
+  color: black;
+  text-decoration: none;
+}
+div:visited {
+  color: black;
+  text-decoration: none;
+}
+div:link {
+  color: black;
+  text-decoration: none;
+}

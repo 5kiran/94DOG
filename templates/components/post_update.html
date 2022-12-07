@@ -15,17 +15,21 @@
     <div class="wrap">
     </div>
     <div class="mypost" id="post">
-        <div>
-            <input type="text" class="text" id="title" placeholder="게시글 제목" style="width: 400px;">
-        </div>
-        <div>
-            <input type="text" class="textbox" placeholder="내용" id="content" style="width: 400px; height: 600px;">
-        </div>
-        <div class="mb-3">
-            <label for="formFile" class="form-label"></label>
-            <input class="form-control" type="file" id="formFile" style="width: 250px;">
-        </div>
-        <button onclick="modi_post()" type="button" class="btn btn-dark">게시글 수정 완료</button>
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label"></label>
+                <input type="text" class="text" id="title" style="width: 95%; max-width: 600px;"/>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label"></label>
+                    <textarea class="textbox" id="content" rows="3" style="width: 95%; max-width: 600px; height: 400px; max-height: 95%;"></textarea>
+                    </div>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label"></label>
+                    <input class="form-control" type="file" id="post_file" name="post_file" style="width: 250px;" />
+                </div>
+                <div>
+    
+        <button onclick="modi_post()" type="button" class="btn btn-dark">수정 완료</button>
         <button onclick="cancel_post()" type="button" class="btn btn-light hidebutton">수정 취소</button>
     </div>
     <div class="card" id="card" style="width: 500px;"></div>

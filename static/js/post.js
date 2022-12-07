@@ -3,13 +3,13 @@
 
 function save_post() {
 
-  // const title = $('#title').val();
-  // const content = $('#content').val();
+  const title = $('#title').val();
+  const content = $('#content').val();
 
   const input_file = document.querySelector('#file_form');
   let data = new FormData(input_file);
-  const title_give = document.getElementById('title').value;
-  const content_give = document.getElementById('content').value;
+  // const title_give = document.getElementById('title').value;
+  // const content_give = document.getElementById('content').value;
 
   if (title === '' || content === '') {
     alert('빈칸을 모두 채워주세요 T^T');

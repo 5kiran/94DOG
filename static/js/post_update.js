@@ -3,6 +3,7 @@ let param = new URLSearchParams(query);
 let id = param.get('id');
 
 $(document).ready(function () {
+    preview(id) 
 })
 
 function getFormatDate(date) {
@@ -49,3 +50,17 @@ function modi_post() {
 function cancel_post() {
     location.href = `/viewpost-layout?id=${id}`;
 }
+
+function preview(id) {
+    $.ajax({
+        type: "get", 
+        url: `/preview/${id}`,
+        success: function (response) {
+                let rows = response['preview_list'][0]
+                
+                let title = rows['title']
+                let content = rows['content']
+
+                $(`#title`).val(title)
+                $(`#content`).val(content)
+        }})}

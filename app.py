@@ -16,8 +16,6 @@ logging.basicConfig(filename = "logs/server.log", level = logging.DEBUG
                   , datefmt = '%Y/%m/%d %H:%M:%S'  # 년/월/일 시(24시간단위)/분/초
                   , format = '%(asctime)s:%(levelname)s:%(message)s')
 
-
-
 app = Flask(__name__)
 
 app.secret_key = 'sad111123'
@@ -70,7 +68,7 @@ def pagination():
   if end_page > total_page:
     end_page = total_page
 
-  sql = f'SELECT board.id,title,user.name,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
+  sql = f'SELECT board.id,title,user.name,viewcount,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
   conn = DB('dict')
   boards = conn.select_all(sql)
 
@@ -178,13 +176,15 @@ def login():
   sql = 'SELECT * FROM user WHERE email = %s'
   conn = DB('dict')
   record = conn.select_all(sql, email_receive)
-  
+  if not record:
+    return jsonify({'msg':'사용자 정보가 일치하지 않습니다.'})
   password = record[0]['password']
   hw = bcrypt.check_password_hash(password, password_receive)
 
   login_email = email_receive
 
   app.logger.info(f'[{request.method}] {request.path} :: login={login_email}')
+
 
   if record and hw == True:
     session['loggedin'] = True
@@ -220,9 +220,7 @@ def like():
   like_find = f'SELECT * FROM board LEFT JOIN liked ON board.id = liked.board_id WHERE board.id = {board_id} AND liked.user_id = {user_id}'
   conn = DB('dict')
   result = conn.select_one(like_find)
-  liked = f'SELECT liked FROM board where id = {board_id}'
-  conn = DB('dict')
-  cnt = conn.select_one(liked)
+  
   
   if result is None:
     app.logger.info(f'[{request.method}] {request.path} :: like_user_id={user_id} board_id={board_id} writer_id={writer_id}')
@@ -234,6 +232,10 @@ def like():
     board_like_up = f'UPDATE board SET liked = liked +1 WHERE board.id = {board_id}'
     conn = DB('dict')
     conn.save_one(board_like_up)
+    
+    liked = f'SELECT liked FROM board where id = {board_id}'
+    conn = DB('dict')
+    cnt = conn.select_one(liked)
     
     curr = 1
     return jsonify({'cnt': cnt},curr)
@@ -248,6 +250,10 @@ def like():
     board_like_down = f'UPDATE board SET liked = liked -1 WHERE board.id = {board_id}'
     conn = DB('dict')
     conn.save_one(board_like_down)
+    
+    liked = f'SELECT liked FROM board where id = {board_id}'
+    conn = DB('dict')
+    cnt = conn.select_one(liked)
     
     curr = 0
     return jsonify({'cnt': cnt},curr)
@@ -335,9 +341,25 @@ def delete_post():
 
 @app.route('/views/<id>', methods=['get'])
 def view_post(id):
-    sql = f"select board.id, title, liked, content, user.name, user_id, board.created_at, file_url, updated_at from board left join `user` ON board.user_id = user.id WHERE board.id='{id}'"
+    sql = f"select board.id, title, liked, content, user.name, user_id, board.created_at, file_url, updated_at, viewcount from board left join `user` ON board.user_id = user.id WHERE board.id='{id}'"
     conn = DB('dict')
     view_post = conn.select_all(sql)
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+
+    curs.execute(f"update board set viewcount = board.viewcount + 1 WHERE board.id='{id}'")
+
+    db.commit()
+    db.close()
+
 
     like_status = 0
 
@@ -385,6 +407,28 @@ def modi_post():
     conn.save_one(sql, update_list)
 
     return jsonify({'msg': '게시글 수정 완료!'})
+
+
+@app.route('/preview/<id>', methods=['get'])
+def preview(id):
+
+    db = pymysql.connect(
+    host='127.0.0.1',
+    user='root',
+    db='dog94',
+    password='dog94',
+    charset='utf8')
+
+    curs = db.cursor(pymysql.cursors.DictCursor)
+
+    curs.execute(
+        f"select * from board WHERE id='{id}'")
+
+    previews = curs.fetchall()
+
+
+    db.commit()
+    return jsonify({'preview_list':previews}) 
 
 
 PORT = 5000

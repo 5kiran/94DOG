@@ -1,41 +1,72 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     <meta name="description" content="" />
     <meta name="author" content="" />
     <!-- <script src="../static/post.js"></script> -->
     <title>로그인 창!</title>
-    <link href="../static/css/post.css" rel="stylesheet">
+    <link href="../static/css/post.css" rel="stylesheet" />
     <script src="../static/js/post.js"></script>
-</head>
+  </head>
 
-<body>
-    <div class="wrap">
-    </div>
+  <body>
+    <div class="wrap"></div>
     <div class="mypost" id="post">
-            <form id="file_form" enctype="multipart/form-data">
-        <div>
-            <input type="text" class="text" id="title" name="title" placeholder="게시글 제목" style="width: 400px;">
-        </div>
-        <div>
-            <input type="text" class="text" id="content" name="content" placeholder="내용" style="width: 400px; height: 600px;">
+      <form id="file_form" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label"></label>
+          <input
+            type="text"
+            class="form-control text"
+            id="exampleFormControlInput1 title"
+            name="title"
+            placeholder="게시글 제목"
+            style="width: 95%; max-width: 600px"
+          />
         </div>
         <div class="mb-3">
-            <label for="formFile" class="form-label"></label>
-            <input class="form-control" type="file" id="post_file" name="post_file" style="width: 250px;" />
+          <label for="exampleFormControlTextarea1" class="form-label"></label>
+          <textarea
+            class="form-control text"
+            id="exampleFormControlTextarea1 content"
+            name="content"
+            rows="3"
+            placeholder="내용"
+            style="width: 95%; max-width: 800px; height: 400px; max-height: 95%"
+          ></textarea>
         </div>
-             </form>
-        <button onclick="save_post()" type="button" class="btn btn-dark">게시글 등록</button>
-        <!-- <button onclick="show_post()" type="button" class="btn btn-light hidebutton">게시글 보기</button>
+        <div class="mb-3">
+          <label for="formFile" class="form-label"></label>
+          <input
+            class="form-control"
+            type="file"
+            id="post_file"
+            name="post_file"
+            style="width: 250px"
+          />
+        </div>
+      </form>
+      <button onclick="save_post()" type="button" class="btn btn-dark">
+        게시글 등록
+      </button>
+      <!-- <button onclick="show_post()" type="button" class="btn btn-light hidebutton">게시글 보기</button>
         <button onclick="update_post()" type="button" class="btn btn-light hidebutton">게시글 수정</button>
         <button onclick="delete_post()" type="button" class="btn btn-light hidebutton">게시글 삭제</button> -->
-        <button onclick="cancel_post()" type="button" class="btn btn-light hidebutton">나가기</button>
+      <button
+        onclick="cancel_post()"
+        type="button"
+        class="btn btn-light hidebutton"
+      >
+        나가기
+      </button>
     </div>
-    <div class="card" id="card" style="width: 500px;"></div>
-</body>
-
+    <div class="card" id="card" style="width: 500px"></div>
+  </body>
 </html>
