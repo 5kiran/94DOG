@@ -22,7 +22,7 @@ function view_post_get(id) {
                     let file_url = rows[0]['file_url']
                     let time = rows[0]['created_at']
                     let userId = rows[0]['user_id']
-                    let cnt = rows[0]['viewcount']
+                    let cnt = rows[0]['viewcount'] 
     
                     if(file_url != null) {
                         if(response[1] == 0){
@@ -30,27 +30,29 @@ function view_post_get(id) {
                                                 <h5>작성 시간 : ${time}</h5>
                                                 <h5>작성자 : ${name}</h5>
                                                 <h5>조회수 : ${cnt}</h5>
-                                                <h5>${content}</h5>
-                                                <img src="static/upload/image/${file_url}" width="100%" height="100%">
+                                                <div>
+                                                <h5>좋아요 갯수 :${boardLike}</h5>
+                                                <a class="likebutton" onclick= "like(${id},${userId})">🤍</a><br>
+                                                </div>
+                                                <h5>내용 : <br><br>${content}</h5>
+                                                <img src="static/upload/image/${file_url}" style="width:500px; height:500px;"><br>
                                                 <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
                                                 <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
-                                                <div>${boardLike}</div>
-                                                <div>
-                                                <a class="likebutton" onclick= "like(${id},${userId})">🤍</a>
-                                                </div>`
+                                                `
                             $('#view_post').append(temp_html)
-                        } else{ let temp_html =  `<h1>${title}</h1>
-                                                <h5>작성 시간 : ${time}</h5>   
-                                                <h5>작성자 : ${name}</h5> 
-                                                <h5>조회수 : ${cnt}</h5>   
-                                                <h5>${content}</h5>
-                                                <img src="static/upload/image/${file_url}" width="100%" height="100%">
+                        } else{ let temp_html = `<h1>${title}</h1>
+                                                <h5>작성 시간 : ${time}</h5>
+                                                <h5>작성자 : ${name}</h5>
+                                                <h5>조회수 : ${cnt}</h5>
+                                                <div>
+                                                <h5>좋아요 갯수 :${boardLike}</h5>
+                                                <a class="likebutton" onclick= "like(${id},${userId})">❤️</a><br>
+                                                </div>
+                                                <h5>내용 : <br><br>${content}</h5>
+                                                <img src="static/upload/image/${file_url}" style="width:500px; height:500px;"><br>
                                                 <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
                                                 <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
-                                                <div>${boardLike}</div>
-                                                <div>
-                                                <a class="likebutton" onclick= "like(${id},${userId})">❤️</a>
-                                                </div>`
+                                                `
                             $('#view_post').append(temp_html)
 
                         }
