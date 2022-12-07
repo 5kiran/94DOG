@@ -209,10 +209,9 @@ def login():
   db.commit()
   db.close()
 
-  login_time = datetime.now()
-  login_time_check = login_time.strftime('%Y-%m-%d-%H-%M-%S')
+  login_email = email_receive
 
-  app.logger.info(f'[{request.method}] {request.path} :: login={login_time_check}')
+  app.logger.info(f'[{request.method}] {request.path} :: login={login_email}')
 
   if record and hw == True:
     session['loggedin'] = True
@@ -227,11 +226,10 @@ def login():
 
 @app.route('/logout')
 def logout():
-  session.clear()
-  logout_time = datetime.now()
-  logout_time_check = logout_time.strftime('%Y-%m-%d-%H-%M-%S')
+  logout_email = session['email']
 
-  app.logger.info(f'[{request.method}] {request.path} :: logout={logout_time_check}')
+  app.logger.info(f'[{request.method}] {request.path} :: logout={logout_email}')
+  session.clear()
   return redirect('/')
 
 
