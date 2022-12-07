@@ -16,8 +16,6 @@ logging.basicConfig(filename = "logs/server.log", level = logging.DEBUG
                   , datefmt = '%Y/%m/%d %H:%M:%S'  # 년/월/일 시(24시간단위)/분/초
                   , format = '%(asctime)s:%(levelname)s:%(message)s')
 
-
-
 app = Flask(__name__)
 
 app.secret_key = 'sad111123'
