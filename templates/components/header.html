@@ -1,14 +1,34 @@
-<nav class="navbar">
+<nav class="navbar sticky-top" style="background-color: white;">
   <div class="container-fluid">
-
     <a class="navbar-brand" href="/">
       <img src="{{ url_for('static', filename='images/dozi.jpeg') }}" alt="Logo" width="50" class="d-inline-block align-text-top">
       개띠구조대
     </a>
     <div class="d-flex">
-      <button class="btn btn-outline-success me-1" type="submit">Home</button>
-      <button class="btn btn-outline-success me-1" type="submit">마이페이지</button>
-      <button class="btn btn-outline-success me-1" type="submit">게시판</button>
+      <button id="home" class="btn btn-outline-dark me-1" type="button" style="width: 75px;"><i class="fa-solid fa-house"></i></button>
+      <button id="mypage" class="btn btn-outline-dark me-1" type="button" style="width: 75px;"><i class="fa-solid fa-user"></i></button>
+      <button id="board" class="btn btn-outline-dark me-1" type="button" style="width: 75px;"><i class="fa-solid fa-clipboard"></i></button>
     </div>
   </div>
 </nav>
+
+<script>
+  document.querySelector('#home').addEventListener('mouseover', (e)=>{
+    document.querySelector('#home').innerHTML = '메인';
+  })
+  document.querySelector('#home').addEventListener('mouseout', (e)=>{
+    document.querySelector('#home').innerHTML = '<i class="fa-solid fa-house"></i>';
+  })
+  document.querySelector('#mypage').addEventListener('mouseover', (e)=>{
+    document.querySelector('#mypage').innerHTML = '내정보';
+  })
+  document.querySelector('#mypage').addEventListener('mouseout', (e)=>{
+    document.querySelector('#mypage').innerHTML = '<i class="fa-solid fa-user"></i>';
+  })
+  document.querySelector('#board').addEventListener('mouseover', (e)=>{
+    document.querySelector('#board').innerHTML = '게시판';
+  })
+  document.querySelector('#board').addEventListener('mouseout', (e)=>{
+    document.querySelector('#board').innerHTML = '<i class="fa-solid fa-clipboard"></i>';
+  })
+</script>

@@ -48,8 +48,8 @@ const setBoardsContent = (response) => {
                     <p class="card-text">${board.content}</p>
                   </div>
                 </div>
-                <div class="p-2 flex-shrink-1">
-                  <img src="https://placeimg.com/100/100/any" class="img-fluid rounded-start" alt="...">
+                <div class="p-2 flex-shrink-1 preview_image" >
+                  <img src="static/upload/image/${board.file_url}" class="img-fluid rounded-start" alt="...">
                 </div>
               </div>
             </div>`;
@@ -66,11 +66,11 @@ const setPagination = (response) => {
   let temp = '';
   if (start_page != 1) {
     temp += `<li class="page-item">
-              <a class="page-link" onclick="setBoards(${start_page-1})">이전</a>
+              <a class="page-link" onclick="setBoards(${start_page-1})"><span aria-hidden="true">&laquo;</span></a>
             </li>`;
   } else {
     temp += `<li class="page-item disabled">
-              <a class="page-link">이전</a>
+              <a class="page-link"><span aria-hidden="true">&laquo;</span></a>
             </li>`;
   }
   for (let i=start_page;i<=end_page;i++) {
@@ -82,11 +82,11 @@ const setPagination = (response) => {
   }
   if (end_page != total_page) {
     temp += `<li class="page-item">
-              <a class="page-link" onclick="setBoards(${end_page+1})">다음</a>
+              <a class="page-link" onclick="setBoards(${end_page+1})"><span aria-hidden="true">&raquo;</span></a>
             </li>`;
   } else {
     temp += `<li class="page-item disabled">
-              <a class="page-link">다음</a>
+              <a class="page-link"><span aria-hidden="true">&raquo;</span></a>
             </li>`;
   }
   $('.pagination').empty();

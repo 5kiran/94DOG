@@ -19,6 +19,7 @@ function view_post_get(id) {
                     let boardLike = rows[0]['liked']
                     let id = rows[0]['id']
                     let userId = rows[0]['user_id']
+                    let file_url = rows[0]['file_url']
                     console.log(title)
                     console.log(content)
                     console.log(boardLike)
@@ -28,6 +29,7 @@ function view_post_get(id) {
                     if(response[1] == 0){
                         let temp_html =  `<h1>${title}</h1>
                                             <h5>${content}</h5>
+                                            <img src="static/upload/image/${file_url}" width="100%" height="100%">
                                             <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
                                             <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
                                             <div>${boardLike}</div>
@@ -37,6 +39,7 @@ function view_post_get(id) {
                         $('#view_post').append(temp_html)
                     } else{ let temp_html =  `<h1>${title}</h1>
                                             <h5>${content}</h5>
+                                            <img src="static/upload/image/${file_url}" width="100%" height="100%">
                                             <button onclick="delete_post(${id})" type="button" id="delete_post" class="btn btn-dark delete_ment">삭제</button>
                                             <button type="button" id="${id}" class="btn btn-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
                                             <div>${boardLike}</div>
@@ -49,7 +52,7 @@ function view_post_get(id) {
                 }
                 }
             );
-    }
+        }
 
 function delete_post(id) {
     $.ajax({

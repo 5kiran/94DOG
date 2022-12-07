@@ -254,7 +254,6 @@ def like():
     
   return jsonify({'msg': '좋아용'})
 
-
 @app.route("/liked/rank", methods=["GET"])
 def like_rank():
   db = pymysql.connect(
@@ -304,47 +303,28 @@ def save_post():
     if len(session) == 0 :
       return jsonify({'msg': '로그인 후 이용해주세요.'})
 
-    title_receive = request.form.get('title_give')
-    content_receive = request.form.get('content_give')
-    date_receive =request.form.get('data_give')
+    title_receive = request.form.get("title")
+    content_receive = request.form.get("content")
     user_id = session['id']
+    email_hash = hashlib.sha256(session['email'].encode('utf-8')).hexdigest()
+    file = request.files["post_file"]
 
-    curs.execute(
-        f"insert into board (title,content,updated_at,user_id) value ('{title_receive}','{content_receive}','{date_receive}','{user_id}')")
+    if file:
+      extension = file.filename.split('.')[-1]
+      today = datetime.now()
+      mtime = today.strftime('%Y-%m-%d-%H-%M-%S')
+      filename = f'{email_hash}-{mtime}.{extension}'
+      save_to = f'static/upload/image/{filename}'
+      file.save(save_to)
+      curs.execute(f"insert into board (title,content,user_id,file_url) value ('{title_receive}','{content_receive}','{user_id}','{filename}')")
+
+    else:
+      curs.execute(f"insert into board (title,content,user_id) value ('{title_receive}','{content_receive}','{user_id}')")
+
     db.commit()
     db.close()
-
-
+   
     return jsonify({'msg': '게시글 저장 완료!'})
-
-
-# 게시글 수정 기능
-@app.route('/post/update', methods=['POST'])
-def update_post():
-
-    db = pymysql.connect(
-    host='127.0.0.1',
-    user='root',
-    db='dog94',
-    password='dog94',
-    charset='utf8')
-
-    curs = db.cursor(pymysql.cursors.DictCursor)
-
-    if len(session) == 0 :
-      return jsonify({'msg': '로그인 후 이용해주세요.'})
-
-    title_receive = request.form.get('title_give')
-    content_receive = request.form.get('content_give')
-    id_receive = request.form.get('id_give')
-
-
-    curs.execute(
-        f"update board set title='{title_receive}',content='{content_receive}' where id='{id_receive}'")
-    db.commit()
-
-    return jsonify({'msg': '게시글 수정 완료!'})
-
 
 # 게시글 삭제 기능
 @app.route('/post/delete', methods=['POST'])
@@ -358,13 +338,13 @@ def delete_post():
     charset='utf8')
 
     curs = db.cursor(pymysql.cursors.DictCursor)
-
-    user_id = session['id']
-    id_receive = request.form.get('id_give')
     
     if len(session) == 0:
       return jsonify({'msg': '로그인 후 이용해주세요.'})
-
+    
+    user_id = session['id']
+    id_receive = request.form.get('id_give')
+    
     find_user = f'select * from board where user_id = {user_id} and id = {id_receive}'
     curs.execute(find_user)
 

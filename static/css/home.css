@@ -1,0 +1,31 @@
+#userimage{
+  width: 99%;
+  height: 150px;
+  
+}
+.userbtnbox{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background-color: white;
+  border: black solid 2px;
+  margin: 16px 5px 16px 5px;
+  padding: 5px 5px 5px 5px;
+}
+.userbox{
+  width: 99%;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-gap: 5px;
+}
+button{
+  width: 99%;
+  max-width: 130px;
+  border-radius: 10px ;
+  margin: 5px 0px 5px 0px;
+}
+.userinfo{
+  background-color: aquamarine;
+}

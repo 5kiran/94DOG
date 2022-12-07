@@ -12,9 +12,8 @@ function showRank(){
         count += 1
         let temp_html = `
                           <div id = "likeRank" >
-                            <div>${count}위</div>
-                            <div>${name}</div>
-                            <div>${rank}개</div>
+                            <div>${count}위</div> ${name}님 ❤️${rank}개
+                          </div>
                           `
           $('#likeRankBoard').append(temp_html)
       }
