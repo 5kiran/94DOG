@@ -7,3 +7,7 @@
 .likebutton:hover{
   cursor : pointer;
 }
+a{
+  text-decoration-line: none;
+  text-decoration-color: None;
+}

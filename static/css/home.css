@@ -29,3 +29,7 @@ button{
 .userinfo{
   background-color: aquamarine;
 }
+a{
+  text-decoration-line: none;
+  text-decoration-color: None;
+}
