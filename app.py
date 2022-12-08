@@ -83,19 +83,13 @@ def register_page():
   return render_template("components/register.html")
 
 
-@app.route("/login")
+@app.route("/login", methods=['GET'])
 def login_page():
   return render_template("components/login.html")
 
 
-@app.route("/home")
-def home_page():
-  return render_template("components/home.html")
-
-
-@app.route("/register/in", methods=["POST"])
+@app.route("/register", methods=["POST"])
 def register():
-
   name_receive = request.form.get("user_name")
   email_receive = request.form.get("register_email")
 
@@ -149,7 +143,7 @@ def register():
 @app.route("/email", methods=["POST"])
 def email():
   email_receive = request.form.get("email_give")
-  email_regex = re.compile("^[a-zA-Z0–9][a-zA-Z0–9._]+[@][a-zA-Z][A-Za-z.]+[.]\w{2,}")
+  email_regex = re.compile('^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
 
   sql = 'SELECT * FROM user WHERE email = %s'
   conn = DB('dict')
@@ -172,9 +166,8 @@ def email():
     return jsonify({'msg': '사용 가능한 이메일입니다.'})
 
 
-@app.route('/login/in', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login():
-
   email_receive = request.form['email_give']
   password_receive = request.form['password_give']
 
@@ -189,7 +182,6 @@ def login():
   login_email = email_receive
 
   app.logger.info(f'[{request.method}] {request.path} :: login={login_email}')
-
 
   if record and hw == True:
     session['loggedin'] = True

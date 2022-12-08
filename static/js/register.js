@@ -22,7 +22,7 @@ function register_click() {
   } else {
     $.ajax({
       type: 'POST',
-      url: '/register/in',
+      url: '/register',
       data: data,
       contentType: false,
       processData: false,
