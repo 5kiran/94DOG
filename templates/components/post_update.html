@@ -9,25 +9,36 @@
     <meta name="author" content="" />
     <title>게시글 수정</title>
     <script src="../static/js/post_update.js"></script>
-</head>
+  </head>
 
-<body>
-  <div class="mypost" id="post">
-    <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label"></label>
-        <input type="text" class="text" id="title" style="width: 95%; max-width: 600px;"/>
+  <body>
+
+    <div class="mypost" id="post">
+      <form id="file_form" enctype="multipart/form-data">
+        <div class="mt-3 mb-2">
+          <input type="text" class="form-control text border-dark" id="title" name="title"/>
+        </div>
+        <div class="mb-2">
+          <textarea class="form-control text border-dark" id="content" name="content" rows="8"></textarea>
+        </div>
+        <div class="mb-2">
+          <input onchange="preview_image(this)" class="form-control" type="file" id="post_file" name="post_file" style="width: 250px"/>
+        </div>
+      </form>
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+        <button onclick="cancel_post()" type="button" class="btn btn-outline-secondary hidebutton">수정 취소</button>
+        <button onclick="modi_post()" type="button" class="btn btn-dark">수정 완료</button>
+      </div>
+      <div>
+        <img src="" id="post_file_preview" style="max-width: 500px; max-height: 500px;">
+      </div>
     </div>
-    <div class="mb-3">
-      <label for="exampleFormControlTextarea1" class="form-label"></label>
-      <textarea class="textbox" id="content" rows="3" style="width: 95%; max-width: 600px; height: 400px; max-height: 95%;"></textarea>
-    </div>
-    <div class="mb-3">
-      <label for="formFile" class="form-label"></label>
-      <input class="form-control" type="file" id="post_file" name="post_file" style="width: 250px;" />
-    </div>
-  <div>
-      <button onclick="modi_post()" type="button" class="btn btn-dark">수정 완료</button>
-      <button onclick="cancel_post()" type="button" class="btn btn-light hidebutton">수정 취소</button>
-  </div>
-</body>
+
+    <script>
+      function preview_image(e){
+        let url = URL.createObjectURL(e.files[0]);
+        document.querySelector('#post_file_preview').src = url;
+      }
+    </script>
+  </body>
 </html>

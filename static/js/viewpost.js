@@ -35,9 +35,7 @@ function view_post_get(id) {
         document.querySelector('#post_time').innerHTML = time;
         document.querySelector('#post_name').innerHTML = name;
         document.querySelector('#post_cnt').innerHTML = cnt;
-        document.querySelector(
-          '#likeCnt'
-        ).innerHTML = `좋아요 갯수 :${boardLike}`;
+        document.querySelector('#likeCnt').innerHTML = `좋아요 갯수 :${boardLike}`;
 
         document.querySelector('#likeimg').addEventListener('click', () => {
           like(id, userId);
@@ -60,9 +58,9 @@ function view_post_get(id) {
             delete_post(id);
           }
         });
-        document.querySelector(
-          '#update_post > a'
-        ).href = `/temp_update?id=${id}`;
+        document.querySelector('#update_post').addEventListener('click', ()=>{
+          location.href = `/temp_update?id=${id}`;
+        })
       }
     },
   });
