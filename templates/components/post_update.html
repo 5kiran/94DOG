@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -12,27 +12,22 @@
 </head>
 
 <body>
-    <div class="wrap">
+  <div class="mypost" id="post">
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label"></label>
+        <input type="text" class="text" id="title" style="width: 95%; max-width: 600px;"/>
     </div>
-    <div class="mypost" id="post">
-            <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label"></label>
-                <input type="text" class="text" id="title" style="width: 95%; max-width: 600px;"/>
-                </div>
-                <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label"></label>
-                    <textarea class="textbox" id="content" rows="3" style="width: 95%; max-width: 600px; height: 400px; max-height: 95%;"></textarea>
-                    </div>
-                <div class="mb-3">
-                    <label for="formFile" class="form-label"></label>
-                    <input class="form-control" type="file" id="post_file" name="post_file" style="width: 250px;" />
-                </div>
-                <div>
-    
-        <button onclick="modi_post()" type="button" class="btn btn-dark">수정 완료</button>
-        <button onclick="cancel_post()" type="button" class="btn btn-light hidebutton">수정 취소</button>
+    <div class="mb-3">
+      <label for="exampleFormControlTextarea1" class="form-label"></label>
+      <textarea class="textbox" id="content" rows="3" style="width: 95%; max-width: 600px; height: 400px; max-height: 95%;"></textarea>
     </div>
-    <div class="card" id="card" style="width: 500px;"></div>
+    <div class="mb-3">
+      <label for="formFile" class="form-label"></label>
+      <input class="form-control" type="file" id="post_file" name="post_file" style="width: 250px;" />
+    </div>
+  <div>
+      <button onclick="modi_post()" type="button" class="btn btn-dark">수정 완료</button>
+      <button onclick="cancel_post()" type="button" class="btn btn-light hidebutton">수정 취소</button>
+  </div>
 </body>
-
 </html>
