@@ -57,7 +57,7 @@ function view_post_get(id) {
         }
       } else {
         if (response[1] == 0) {
-                          let temp_html = `<h1>${title}</h1>
+          let temp_html = `<h1>${title}</h1>
                           <h5>작성 시간 : ${time}</h5>
                           <h5>작성자 : ${name}</h5>
                           <h5>조회수 : ${cnt}</h5>
@@ -70,7 +70,7 @@ function view_post_get(id) {
                           <button type="button" id="${id}" class="btn btn-outline-dark recover"><a href="/temp_update?id=${id}">수정</a></button>`;
           $('#view_post').append(temp_html);
         } else {
-                          let temp_html = `<h1>${title}</h1>
+          let temp_html = `<h1>${title}</h1>
                           <h5>작성 시간 : ${time}</h5>
                           <h5>작성자 : ${name}</h5>
                           <h5>조회수 : ${cnt}</h5>
@@ -112,21 +112,21 @@ function like(id, userId) {
     url: '/liked',
     data: { board_id_give: boardId, writer_id_give: writerId },
     success: function (response) {
-        if(response['msg']== 1 ){
-            alert('로그인이 필요합니다')
-        }
-        let likeCnt = '좋아요 갯수 :' +  String(response[0]['cnt']['liked']);
-        let heart = '❤️'
-        let noneheart = '🤍'
-        // $('#likeCnt').html(likeCnt)
-        if(response[1] === 0){
-            $('#likeCnt').html(likeCnt)
-            $('#likeimg').html(noneheart)
-        }else{
-            $('#likeCnt').html(likeCnt)
-            $('#likeimg').html(heart)
-        }
-        showRank()
-    }
+      if (response['msg'] == 1) {
+        alert('로그인이 필요합니다');
+      }
+      let likeCnt = '좋아요 갯수 :' + String(response[0]['cnt']['liked']);
+      let heart = '❤️';
+      let noneheart = '🤍';
+      // $('#likeCnt').html(likeCnt)
+      if (response[1] === 0) {
+        $('#likeCnt').html(likeCnt);
+        $('#likeimg').html(noneheart);
+      } else {
+        $('#likeCnt').html(likeCnt);
+        $('#likeimg').html(heart);
+      }
+      showRank();
+    },
   });
 }
