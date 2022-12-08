@@ -95,7 +95,7 @@ function like(id, userId) {
   const writerId = userId;
   $.ajax({
     type: 'POST',
-    url: '/liked',
+    url: '/api/liked',
     data: { board_id_give: boardId, writer_id_give: writerId },
     success: function (response) {
       if (response['msg'] == 1) {
