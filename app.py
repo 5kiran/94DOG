@@ -104,7 +104,7 @@ def login_page():
   return render_template("components/login.html")
 
 
-@app.route("/register", methods=["POST"])
+@app.route("/api/users/register", methods=["POST"])
 def register():
   name_receive = request.form.get("user_name")
   email_receive = request.form.get("register_email")
@@ -156,7 +156,7 @@ def register():
   return jsonify({'msg': '회원가입 되었습니다.'})
 
 
-@app.route("/email", methods=["POST"])
+@app.route("/api/users/email", methods=["POST"])
 def email():
   email_receive = request.form.get("email_give")
   email_regex = re.compile('^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
@@ -177,13 +177,12 @@ def email():
   if re.fullmatch(email_regex, email_receive) == None:
     return jsonify({'msg': '이메일 형식이 올바르지 않습니다.'})
   elif check:
-  # if check:
     return jsonify({'msg': '중복된 이메일입니다.'})
   else:
     return jsonify({'msg': '사용 가능한 이메일입니다.'})
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/users/login', methods=['POST'])
 def login():
   email_receive = request.form['email_give']
   password_receive = request.form['password_give']
