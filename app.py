@@ -151,6 +151,7 @@ def email():
 
   log_check = ""
 
+
   if check:
     log_check = "fail"
   else:
@@ -379,7 +380,7 @@ def view_post(id):
 
     curs = db.cursor(pymysql.cursors.DictCursor)
 
-    curs.execute(f"update board set viewcount = board.viewcount + 1 WHERE board.id='{id}'")
+    curs.execute(f"update board set viewcount = board.viewcount + 1,updated_at = updated_at WHERE board.id='{id}'")
 
     db.commit()
     db.close()
