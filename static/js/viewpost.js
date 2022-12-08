@@ -11,10 +11,13 @@ function view_post_get(id) {
     type: 'get',
     url: `/views/${id}`,
     success: function (response) {
-      if (response[0]['view_post_list'] == 0 || response[0]['view_post_list'][0]['deleted'] == 1) {
-        let empty_hrml = `<h1>올바른 주소가 아닙니다!!</h1>
+      if (
+        response[0]['view_post_list'] == 0 ||
+        response[0]['view_post_list'][0]['deleted'] == 1
+      ) {
+        let empty_html = `<h1>올바른 주소가 아닙니다!!</h1>
                           <h5>주소가 잘못입력되었거나 변경,또는 삭제되어 요청한 페이지를 읽을 수 없습니다..</h5>`;
-          $('#view_post').append(empty_hrml)
+        $('#view_post').append(empty_html);
       } else {
         let rows = response[0]['view_post_list'];
 
@@ -32,30 +35,36 @@ function view_post_get(id) {
         document.querySelector('#post_time').innerHTML = time;
         document.querySelector('#post_name').innerHTML = name;
         document.querySelector('#post_cnt').innerHTML = cnt;
-        document.querySelector('#likeCnt').innerHTML = `좋아요 갯수 :${boardLike}`;
-        
-        document.querySelector('#likeimg').addEventListener('click', ()=>{ like(id, userId); });
+        document.querySelector(
+          '#likeCnt'
+        ).innerHTML = `좋아요 갯수 :${boardLike}`;
+
+        document.querySelector('#likeimg').addEventListener('click', () => {
+          like(id, userId);
+        });
 
         if (response[1] == 0) {
           document.querySelector('#likeimg').innerHTML = '🤍';
         } else {
           document.querySelector('#likeimg').innerHTML = '❤️';
         }
-        
+
         document.querySelector('#post_content').innerHTML = content;
         if (file_url != null) {
           let temp_img_tag = `<img src="static/upload/image/${file_url}" style="width:500px; height:500px;"></br>`;
           document.querySelector('#post_img').innerHTML = temp_img_tag;
-        } 
+        }
 
-        document.querySelector('#delete_post').addEventListener('click', ()=>{ 
+        document.querySelector('#delete_post').addEventListener('click', () => {
           if (confirm('삭제하시겠습니까?')) {
             delete_post(id);
           }
         });
-        document.querySelector('#update_post > a').href = `/temp_update?id=${id}`;
+        document.querySelector(
+          '#update_post > a'
+        ).href = `/temp_update?id=${id}`;
       }
-    }
+    },
   });
 }
 
@@ -83,21 +92,21 @@ function like(id, userId) {
     url: '/liked',
     data: { board_id_give: boardId, writer_id_give: writerId },
     success: function (response) {
-        if(response['msg']== 1 ){
-            alert('로그인이 필요합니다')
-        }
-        let likeCnt = '좋아요 갯수 :' +  String(response[0]['cnt']['liked']);
-        let heart = '❤️'
-        let noneheart = '🤍'
-        // $('#likeCnt').html(likeCnt)
-        if(response[1] === 0){
-            $('#likeCnt').html(likeCnt)
-            $('#likeimg').html(noneheart)
-        }else{
-            $('#likeCnt').html(likeCnt)
-            $('#likeimg').html(heart)
-        }
-        showRank()
-    }
+      if (response['msg'] == 1) {
+        alert('로그인이 필요합니다');
+      }
+      let likeCnt = '좋아요 갯수 :' + String(response[0]['cnt']['liked']);
+      let heart = '❤️';
+      let noneheart = '🤍';
+      // $('#likeCnt').html(likeCnt)
+      if (response[1] === 0) {
+        $('#likeCnt').html(likeCnt);
+        $('#likeimg').html(noneheart);
+      } else {
+        $('#likeCnt').html(likeCnt);
+        $('#likeimg').html(heart);
+      }
+      showRank();
+    },
   });
 }
