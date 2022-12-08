@@ -7,40 +7,53 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
+
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">계정 생성</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body">
         <div class="register">
           <div class="mb-3">
             <form id="file_form" enctype="multipart/form-data">
-              <div class="form-floating">
-                <input type="user_name" name="user_name" class="form-control" id="user_name" placeholder="Name" required>
-                <label for="user_name">이름</label>
+              <div class="input-group form-floating">
+                <input type="text" name="register_email" class="form-control" id="register_email" placeholder="Email" required>
+                <label for="register_email">이메일</label>
+                <input type="button" onclick="email_click()" class="btn btn-primary" value="Email Check" />
               </div>
+
               <div class="form-floating">
                 <input type="password" name="register_password" class="form-control" id="register_password" placeholder="Password" required>
                 <label for="register_password">비밀번호</label>
               </div>
+
               <div class="form-floating">
-                <input type="text" name="register_email" class="form-control" id="register_email" placeholder="Email" required>
-                <label for="register_email">이메일</label>
+                <input type="user_name" name="user_name" class="form-control" id="user_name" placeholder="Name" required>
+                <label for="user_name">이름</label>
               </div>
-              <input type="button" onclick="email_click()" class="btn btn-primary" value="Email Check" />
-              <input class="form-control" type="file"  name="file_data" />
-              <!-- <input class="form-control" accept="image/*" type="file" id="input_file"> -->
+              
+              <input onchange="preview_image(this)" class="form-control" type="file"  name="file_data" />
             </form>
-            <img id="test_img" src="" alt="" />
+
+            <img id="preview_image" src="" alt="" style="width: 150px;"/>
+
           </div>
         </div>
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
         <button onclick="register_click()" type="button"  class="btn btn-primary">가입하기</button>
       </div>
+
     </div>
   </div>
 </div>
-  </body>
 
+<script>
+  function preview_image(e){
+    let url = URL.createObjectURL(e.files[0]);
+    document.querySelector('#preview_image').src = url;
+  }
+</script>

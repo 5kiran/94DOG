@@ -13,21 +13,35 @@
     <link href="/static/css/liked.css" rel="stylesheet">
 </head>
 <body>
-    <div id="view_post" class="view_post" style="margin-top: 15px;">
-        <button type="button" onclick="cancle_viewpost()" class="btn btn-outline-dark">뒤로가기</button>
-        <h1 id="post_title">title</h1>
-        <h5>작성 시간 : <span id="post_time"></span></h5>
-        <h5>작성자 : <span id="post_name"></span></h5>
-        <h5>조회수 : <span id="post_cnt"></span></h5>
-        <div>
-            <h5 id ="likeCnt">좋아요 갯수 : 0</h5>
-            <a id ="likeimg" class="likebutton">🤍</a><br>
-        </div>
-        <h5>내용 : <br><br><span id="post_content"></span></h5>
-        <div id="post_img"></div>
-        
-        <button type="button" id="delete_post" class="btn btn-outline-dark delete_ment">삭제</button>
-        <button type="button" id="update_post" class="btn btn-outline-dark recover"><a href="/temp_update?id=${id}">수정</a></button>
+  <div class="mypost" id="post">
+    <form id="file_form" enctype="multipart/form-data">
+      <div class="input-group d-flex mb-2 mt-3">
+        <input type="text" class="form-control text border-dark" id="post_title" name="title" readonly/>
+      </div>
+      <div class="input-group d-flex mb-2">
+        <button type="button" class="btn btn-outline-dark readonly">작성자</button>
+        <input id="post_name" type="text" class="form-control border-dark" readonly>
+        <button type="button" class="btn btn-outline-dark">작성시간</button>
+        <input id="post_time" type="text" class="form-control border-dark" readonly>
+      </div>
+      <div class="input-group mb-2">
+        <button type="button" class="btn btn-outline-dark readonly">조회수</button>
+        <input id="post_cnt" type="text" class="form-control border-dark" readonly>
+      </div>
+      <div class="input-group mb-2">
+        <button id="like_btn" type="button" class="btn btn-outline-danger">좋아요 🤍</button>
+        <input id="likeCnt" type="text" class="form-control border-dark" readonly>
+      </div>
+      <div id="post_img"></div>
+      <div class="mb-2">
+        <textarea class="form-control text border-dark" id="content" name="content" rows="8" readonly></textarea>
+      </div>
+    </form>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+      <button type="button" onclick="cancle_viewpost()" class="btn btn-outline-dark">뒤로가기</button>
+      <button type="button" id="delete_post" class="btn btn-outline-secondary delete_ment">삭제</button>
+      <button type="button" id="update_post" class="btn btn-dark recover">수정</button>
     </div>
+  </div>
 </body>
 </html>
