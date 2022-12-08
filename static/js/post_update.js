@@ -34,8 +34,8 @@ function modi_post() {
         alert('빈칸을 모두 채워주세요 T^T')
     } else {
         $.ajax({
-            type: "POST",
-            url: "/post/modi",
+            type: "PUT",
+            url: "/api/boards/{id}",
             data: data,
             contentType: false,
             processData: false,
