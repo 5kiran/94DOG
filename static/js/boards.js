@@ -3,36 +3,35 @@ $(document).ready(() => {
   setBoards();
 });
 
-const setBoards = (page) => {
-  if (page == undefined) {
-    $.ajax({
-      type: "GET",
-      url: '/boards',
-      data: {},
-      success: (res) => {
-        if (res.response.total_page === 0) {
-          $('#boards').append(`<h1>등록된 게시글이 없습니다.</h1>`);
-        } else {
-          setBoardsContent(res.response);
-          setPagination(res.response);
-        }
-      }
-    });
-  } else {
-    $.ajax({
-      type: "GET",
-      url: `/boards?p=${page}`,
-      data: {},
-      success: (res) => {
-        if (res.response.total_page === 0) {
-          $('#boards').append(`<h1>등록된 게시글이 없습니다.</h1>`);
-        } else {
-          setBoardsContent(res.response);
-          setPagination(res.response);
-        }
-      }
-    });
+const setBoards = (page, user_id) => {
+  let boards_uri = `/boards`;
+  if (page != undefined) {
+    boards_uri = `/boards?p=${page}`;
   }
+  if (user_id != undefined) {
+    if (page != undefined) {
+      boards_uri = `/boards?u=${user_id}&p=${page}`;
+    } else {
+      boards_uri = `/boards?u=${user_id}`;
+    }
+  }
+  $.ajax({
+    type: "GET",
+    url: boards_uri,
+    data: {},
+    success: (res) => {
+      if (Object.keys(res.response.boards).length <= 0){
+        $('#boards').append(`<h1>등록된 게시글이 없습니다.</h1>`);
+      } else {
+        if ( res.response.total_page === 0) {
+          $('#boards').append(`<h1>등록된 게시글이 없습니다.</h1>`);
+        } else {
+          setBoardsContent(res.response);
+          setPagination(res.response);
+        }
+      }
+    }
+  });
 };
 
 const setBoardsContent = (response) => {
