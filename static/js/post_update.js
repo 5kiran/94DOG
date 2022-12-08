@@ -23,9 +23,12 @@ function getFormatDate(date) {
 }
 
 function modi_post() {
+    $('#board_id').val(id);
     const title = $('#title').val();
     const content = $('#content').val();
-    const date = getFormatDate(new Date());
+    // const date = getFormatDate(new Date());
+    const input_file = document.querySelector('#file_form');
+    let data = new FormData(input_file);
 
     if (title === '' || content === '') {
         alert('빈칸을 모두 채워주세요 T^T')
@@ -33,12 +36,9 @@ function modi_post() {
         $.ajax({
             type: "POST",
             url: "/post/modi",
-            data: {
-                title_give: title,
-                content_give: content,
-                data_give: date,
-                id_give: id
-            },
+            data: data,
+            contentType: false,
+            processData: false,
             success: function (response) {
                 alert(response['msg'])
                 location.href = `/viewpost-layout?id=${id}`;

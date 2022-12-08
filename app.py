@@ -432,11 +432,12 @@ def modi_post():
     if len(session) == 0 :
       return jsonify({'msg': '로그인 후 이용해주세요.'})
 
-    title_receive = request.form.get('title_give')
-    content_receive = request.form.get('content_give')
-    update_at_receive = request.form.get('data_give')
-    id_receive = request.form.get('id_give')
+    title_receive = request.form.get('title')
+    content_receive = request.form.get('content')
+    id_receive = request.form.get('board_id')
     user_id = session['id']
+    email_hash = hashlib.sha256(session['email'].encode('utf-8')).hexdigest()
+    file = request.files["post_file"]
 
     find_user = f'select * from board where user_id = {user_id} and id = {id_receive}'
     conn = DB('dict')
@@ -447,8 +448,24 @@ def modi_post():
       app.logger.info(f'[{request.method}] {request.path} :: 수정={modi_chal}')
       return jsonify({'msg': '작성자가 아닙니다.'})
 
-    sql = 'update board set title=%s, content=%s, updated_at=%s where id=%s'
-    update_list = [title_receive, content_receive, update_at_receive, id_receive]
+
+    if file:
+      extension = file.filename.split('.')[-1]
+      today = datetime.now()
+      mtime = today.strftime('%Y-%m-%d-%H-%M-%S')
+      filename = f'{email_hash}-{mtime}.{extension}'
+      save_to = f'static/upload/image/{filename}'
+      file.save(save_to)
+
+      sql = 'update board set title=%s, content=%s, file_url=%s where id=%s'
+      update_list = [title_receive, content_receive, filename, id_receive]
+     
+
+    else:
+      sql = 'update board set title=%s, content=%s where id=%s'
+      update_list = [title_receive, content_receive, id_receive]
+
+    
     conn = DB('dict')
     conn.save_one(sql, update_list)
 
