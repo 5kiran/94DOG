@@ -13,7 +13,8 @@
   align-items: center;
   border-radius: 1rem;
 }
-#likeRank {
+
+.likeRank {
   background-color: #ffc107;
 
   display: flex;
