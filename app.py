@@ -224,7 +224,7 @@ def liked():
   return render_template('components/liked.html', name = session['name'], email = session['email'], id = session['id'])
 
 
-@app.route('/liked',methods=['POST'])
+@app.route('/api/liked',methods=['POST'])
 def like():
   
   if len(session)== 0:
@@ -275,7 +275,7 @@ def like():
     curr = 0
     return jsonify({'cnt': cnt},curr)
 
-@app.route("/liked/rank", methods=["GET"])
+@app.route("/api/ranks", methods=["GET"])
 def like_rank():
   sql = 'SELECT liked.writer_id, `user`.name, count(writer_id) AS like_cnt FROM liked LEFT JOIN `user`ON liked.writer_id = `user`.id GROUP BY `user`.name, liked.writer_id ORDER BY like_cnt DESC LIMIT 5'
   conn = DB('dict')
