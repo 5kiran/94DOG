@@ -6,6 +6,7 @@ import hashlib
 import logging
 import os
 from db import DB
+import re
 
 # logging system setting
 if not os.path.isdir('logs'):
@@ -148,6 +149,7 @@ def register():
 @app.route("/email", methods=["POST"])
 def email():
   email_receive = request.form.get("email_give")
+  email_regex = re.compile("^[a-zA-Z0–9][a-zA-Z0–9._]+[@][a-zA-Z][A-Za-z.]+[.]\w{2,}")
 
   sql = 'SELECT * FROM user WHERE email = %s'
   conn = DB('dict')
@@ -161,7 +163,10 @@ def email():
     log_check = "success"
   app.logger.info(f'[{request.method}] {request.path} :: email_check={log_check}')
 
-  if check:
+  if re.fullmatch(email_regex, email_receive) == None:
+    return jsonify({'msg': '이메일 형식이 올바르지 않습니다.'})
+  elif check:
+  # if check:
     return jsonify({'msg': '중복된 이메일입니다.'})
   else:
     return jsonify({'msg': '사용 가능한 이메일입니다.'})
@@ -269,6 +274,7 @@ def like_rank():
   like_data = conn.select_all(sql)
   
   return jsonify({'likeRankList' :like_data})
+
 
 
 # 수정2
