@@ -157,6 +157,7 @@ def email():
 
   log_check = ""
 
+
   if check:
     log_check = "fail"
   else:
