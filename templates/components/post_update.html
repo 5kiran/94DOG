@@ -29,15 +29,14 @@
         <button onclick="cancel_post()" type="button" class="btn btn-outline-secondary hidebutton">수정 취소</button>
         <button onclick="modi_post()" type="button" class="btn btn-dark">수정 완료</button>
       </div>
-      <div>
-        <img src="" id="post_file_preview" style="max-width: 500px; max-height: 500px;">
-      </div>
+      <div id="post_file_preview"></div>
     </div>
 
     <script>
       function preview_image(e){
         let url = URL.createObjectURL(e.files[0]);
-        document.querySelector('#post_file_preview').src = url;
+        document.querySelector('#post_file_preview').innerHTML 
+        = `<img src="${url}" id="post_file_preview" style="max-width: 500px; max-height: 500px;">`;
       }
     </script>
   </body>

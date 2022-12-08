@@ -64,5 +64,9 @@ function preview(id) {
 
                 $(`#title`).val(title);
                 $(`#content`).val(content);
-                document.querySelector('#post_file_preview').src = 'static/upload/image/'+file_url;
+
+                if (file_url != null) {
+                    document.querySelector('#post_file_preview').innerHTML 
+                    = `<img src="static/upload/image/${file_url}" id="post_file_preview" style="max-width: 500px; max-height: 500px;">`;
+                }
         }})}
