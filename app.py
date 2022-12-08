@@ -40,37 +40,26 @@ def pagination():
   ONE_SECTION = 5
   # 페이지 기본값
   page = 1
-  user_id = 0
-
   # 현재 페이지
   if request.args:
-    if 'p' in request.args: 
-      page = int(request.args['p'])
-    if 'u' in request.args: 
-      user_id = int(request.args['u'])
+    page = int(request.args['p'])
 
-  if (user_id != 0):
-    app.logger.info(f'[{request.method}] {request.path} :: page={page}, user_id={user_id}')
-  else:
-    app.logger.info(f'[{request.method}] {request.path} :: page={page}')
+  app.logger.info(f'[{request.method}] {request.path} :: page={page}')
 
   # 전체 게시글 수
-  sql = ''
-  if (user_id != 0):
-    sql = f'SELECT count(*) as all_count FROM board WHERE deleted = false and user_id = {user_id}'
-  else:
-    sql = 'SELECT count(*) as all_count FROM board WHERE deleted = false' 
-
+  sql = 'SELECT count(*) as all_count FROM board WHERE deleted = false' 
   conn = DB('dict')
   all_count = conn.select_all(sql)[0]['all_count']
   
   total_page = all_count // ONE_PAGE + (1 if all_count % ONE_PAGE != 0 else 0)
 
-  # 잘못된 페이지 요청에 대한 예외처리
-  if page < 1 or page > total_page or user_id < 0:
-    app.logger.error(f'[{request.method}] {request.path} :: 잘못된 페이지 요청: page={page}, user_id={user_id}')
+  if total_page == 0:
     response = {'boards': {}, 'page': page, 'total_page': total_page}
     return jsonify({'response': response})
+
+  if page < 1 or page > total_page:
+    print('잘못된 페이지 요청 예외처리')
+    return render_template('components/fail.html')
 
   start_page = (page - 1) // ONE_SECTION * ONE_SECTION
   if start_page % ONE_SECTION == 0:
@@ -80,12 +69,7 @@ def pagination():
   if end_page > total_page:
     end_page = total_page
 
-  sql = ''
-  if (user_id != 0):
-    sql = f'SELECT board.user_id, board.id,title,user.name,viewcount,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false AND user_id = {user_id} ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
-  else:
-    sql = f'SELECT board.user_id, board.id,title,user.name,viewcount,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
-
+  sql = f'SELECT board.id,title,user.name,viewcount,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
   conn = DB('dict')
   boards = conn.select_all(sql)
 
@@ -99,13 +83,18 @@ def register_page():
   return render_template("components/register.html")
 
 
-@app.route("/login", methods=['GET'])
+@app.route("/login")
 def login_page():
   return render_template("components/login.html")
+
+@app.route("/home")
+def home_page():
+  return render_template("components/home.html")
 
 
 @app.route("/api/users/register", methods=["POST"])
 def register():
+
   name_receive = request.form.get("user_name")
   email_receive = request.form.get("register_email")
 
@@ -159,7 +148,7 @@ def register():
 @app.route("/api/users/email", methods=["POST"])
 def email():
   email_receive = request.form.get("email_give")
-  email_regex = re.compile('^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+  email_regex = re.compile("^[a-zA-Z0–9][a-zA-Z0–9._]+[@][a-zA-Z][A-Za-z.]+[.]\w{2,}")
 
   sql = 'SELECT * FROM user WHERE email = %s'
   conn = DB('dict')
@@ -184,6 +173,7 @@ def email():
 
 @app.route('/api/users/login', methods=['POST'])
 def login():
+
   email_receive = request.form['email_give']
   password_receive = request.form['password_give']
 
@@ -198,6 +188,7 @@ def login():
   login_email = email_receive
 
   app.logger.info(f'[{request.method}] {request.path} :: login={login_email}')
+
 
   if record and hw == True:
     session['loggedin'] = True
@@ -224,7 +215,7 @@ def liked():
   return render_template('components/liked.html', name = session['name'], email = session['email'], id = session['id'])
 
 
-@app.route('/liked',methods=['POST'])
+@app.route('/api/liked',methods=['POST'])
 def like():
   
   if len(session)== 0:
@@ -275,9 +266,9 @@ def like():
     curr = 0
     return jsonify({'cnt': cnt},curr)
 
-@app.route("/liked/rank", methods=["GET"])
+@app.route("/api/ranks", methods=["GET"])
 def like_rank():
-  sql = 'SELECT liked.writer_id, `user`.name, count(writer_id) AS like_cnt FROM liked LEFT JOIN `user`ON liked.writer_id = `user`.id GROUP BY `user`.name, liked.writer_id ORDER BY like_cnt DESC LIMIT 5'
+  sql = 'SELECT `user`.name,count(writer_id) AS like_cnt FROM liked LEFT JOIN `user`ON liked.writer_id = `user`.id GROUP BY `user`.name ORDER BY  like_cnt DESC LIMIT 5'
   conn = DB('dict')
   like_data = conn.select_all(sql)
   
@@ -302,7 +293,7 @@ def post_update():
 
 
 # 게시글 저장 기능
-@app.route('/post', methods=['POST'])
+@app.route('/api/boards/{id}', methods=['POST'])
 def save_post():
     post_chal = ""
     upload_file = ""
@@ -312,15 +303,11 @@ def save_post():
       app.logger.info(f'[{request.method}] {request.path} :: post_chal={post_chal}')
       return jsonify({'msg': '로그인 후 이용해주세요.'})
     
-
     title_receive = request.form.get("title")
     content_receive = request.form.get("content")
     user_id = session['id']
     email_hash = hashlib.sha256(session['email'].encode('utf-8')).hexdigest()
     file = request.files["post_file"]
-
-   
-
 
     sql = ''
     insert_list = []
@@ -341,16 +328,13 @@ def save_post():
       sql = 'insert into board (title, content, user_id) value (%s, %s, %s)'
       insert_list = [title_receive, content_receive, user_id]
 
-
     conn = DB('dict')
     conn.save_one(sql, insert_list)
-
-  
    
     return jsonify({'msg': '게시글 저장 완료!'})
 
 # 게시글 삭제 기능
-@app.route('/post/delete', methods=['POST'])
+@app.route('/api/boards/{id}', methods=['PATCH'])
 def delete_post():
     delete_chal = ""
     if len(session) == 0:
@@ -378,7 +362,7 @@ def delete_post():
     return jsonify({'msg': '게시글 삭제 완료!'})
 
 
-@app.route('/views/<id>', methods=['get'])
+@app.route('/api/boards/<id>', methods=['GET'])
 def view_post(id):
     post_view = ""    
     sql = f"select board.id, title, liked, content, user.name, user_id, board.created_at, file_url, updated_at, viewcount, deleted from board left join `user` ON board.user_id = user.id WHERE board.id='{id}'"
@@ -424,8 +408,8 @@ def like_find_user(board_id):
     return like_data
 
   
-
-@app.route('/post/modi', methods=['POST'])
+# 게시글 수정 기능
+@app.route('/api/boards/{id}', methods=['PUT'])
 def modi_post():
     modi_chal = ""
     if len(session) == 0 :

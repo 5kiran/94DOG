@@ -8,8 +8,8 @@ $(document).ready(function () {
 
 function view_post_get(id) {
   $.ajax({
-    type: 'get',
-    url: `/views/${id}`,
+    type: 'GET',
+    url: `/api/boards/${id}`,
     success: function (response) {
       if (
         response[0]['view_post_list'] == 0 ||
@@ -76,8 +76,8 @@ function view_post_get(id) {
 
 function delete_post(id) {
   $.ajax({
-    type: 'POST',
-    url: '/post/delete',
+    type: 'PATCH',
+    url: '/api/boards/{id}',
     data: { id_give: id },
     success: function (response) {
       alert(response['msg']);
@@ -95,7 +95,7 @@ function like(id, userId) {
   const writerId = userId;
   $.ajax({
     type: 'POST',
-    url: '/liked',
+    url: '/api/liked',
     data: { board_id_give: boardId, writer_id_give: writerId },
     success: function (response) {
       if (response['msg'] == 1) {

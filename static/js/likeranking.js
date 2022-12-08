@@ -1,7 +1,7 @@
 function showRank() {
   $.ajax({
     type: 'GET',
-    url: `/liked/rank`,
+    url: `/api/ranks`,
     data: {},
     success: function (response) {
       let likeRankList = response['likeRankList'];
