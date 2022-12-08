@@ -27,15 +27,15 @@ function goRankBoards(id) {
 }
 
 const setBoards2 = (page, user_id) => {
-  let boards_uri = `/boards`;
+  let boards_uri = `/api/boards`;
   if (page != undefined) {
-    boards_uri = `/boards?p=${page}`;
+    boards_uri = `/api/boards?p=${page}`;
   }
   if (user_id != undefined) {
     if (page != undefined) {
-      boards_uri = `/boards?u=${user_id}&p=${page}`;
+      boards_uri = `/api/boards?u=${user_id}&p=${page}`;
     } else {
-      boards_uri = `/boards?u=${user_id}`;
+      boards_uri = `/api/boards?u=${user_id}`;
     }
   }
   $.ajax({

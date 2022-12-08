@@ -100,6 +100,8 @@ function like(id, userId) {
     success: function (response) {
       if (response['msg'] == 1) {
         alert('로그인이 필요합니다');
+        location.href="/";
+        return;
       }
       let likeCnt = response[0]['cnt']['liked'];
       // let heart = '❤️';
