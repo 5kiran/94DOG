@@ -13,18 +13,21 @@
 
 <body>
   <div class="mypost" id="post">
+    <form id="file_form" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="exampleFormControlInput1" class="form-label"></label>
-        <input type="text" class="text" id="title" style="width: 95%; max-width: 600px;"/>
+        <input type="text" class="text" id="title" name="title" style="width: 95%; max-width: 600px;"/>
     </div>
     <div class="mb-3">
       <label for="exampleFormControlTextarea1" class="form-label"></label>
-      <textarea class="textbox" id="content" rows="3" style="width: 95%; max-width: 600px; height: 400px; max-height: 95%;"></textarea>
+      <textarea class="textbox" id="content" name="content" rows="3" style="width: 95%; max-width: 600px; height: 400px; max-height: 95%;"></textarea>
     </div>
     <div class="mb-3">
-      <label for="formFile" class="form-label"></label>
+      <label for="formFile" class="form-label" ></label>
       <input class="form-control" type="file" id="post_file" name="post_file" style="width: 250px;" />
     </div>
+    <input type="hidden" id="board_id" class="board_id" name="board_id"/>
+  </form>
   <div>
       <button onclick="modi_post()" type="button" class="btn btn-dark">수정 완료</button>
       <button onclick="cancel_post()" type="button" class="btn btn-light hidebutton">수정 취소</button>
