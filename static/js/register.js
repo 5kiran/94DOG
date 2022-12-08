@@ -22,7 +22,7 @@ function register_click() {
   } else {
     $.ajax({
       type: 'POST',
-      url: '/register',
+      url: '/api/users/register',
       data: data,
       contentType: false,
       processData: false,
@@ -40,7 +40,7 @@ function email_click() {
 
   $.ajax({
     type: 'POST',
-    url: '/email',
+    url: '/api/users/email',
     data: {
       email_give: email,
     },
