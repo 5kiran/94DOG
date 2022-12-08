@@ -16,7 +16,7 @@ function save_post() {
   } else {
     $.ajax({
       type: 'POST',
-      url: '/post',
+      url: '/api/boards/{id}',
       data: data,
       contentType: false,
       processData: false,
