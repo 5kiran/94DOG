@@ -15,9 +15,9 @@ function view_post_get(id) {
         response[0]['view_post_list'] == 0 ||
         response[0]['view_post_list'][0]['deleted'] == 1
       ) {
-        let empty_hrml = `<h1>올바른 주소가 아닙니다!!</h1>
+        let empty_html = `<h1>올바른 주소가 아닙니다!!</h1>
                           <h5>주소가 잘못입력되었거나 변경,또는 삭제되어 요청한 페이지를 읽을 수 없습니다..</h5>`;
-        $('#view_post').append(empty_hrml);
+        $('#view_post').append(empty_html);
       } else {
         let rows = response[0]['view_post_list'];
 
