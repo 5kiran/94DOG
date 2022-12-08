@@ -7,7 +7,7 @@ function login_click() {
   } else {
     $.ajax({
       type: 'POST',
-      url: '/login/in',
+      url: '/login',
       data: {
         email_give: email,
         password_give: password,

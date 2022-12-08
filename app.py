@@ -40,26 +40,37 @@ def pagination():
   ONE_SECTION = 5
   # 페이지 기본값
   page = 1
+  user_id = 0
+
   # 현재 페이지
   if request.args:
-    page = int(request.args['p'])
+    if 'p' in request.args: 
+      page = int(request.args['p'])
+    if 'u' in request.args: 
+      user_id = int(request.args['u'])
 
-  app.logger.info(f'[{request.method}] {request.path} :: page={page}')
+  if (user_id != 0):
+    app.logger.info(f'[{request.method}] {request.path} :: page={page}, user_id={user_id}')
+  else:
+    app.logger.info(f'[{request.method}] {request.path} :: page={page}')
 
   # 전체 게시글 수
-  sql = 'SELECT count(*) as all_count FROM board WHERE deleted = false' 
+  sql = ''
+  if (user_id != 0):
+    sql = f'SELECT count(*) as all_count FROM board WHERE deleted = false and user_id = {user_id}'
+  else:
+    sql = 'SELECT count(*) as all_count FROM board WHERE deleted = false' 
+
   conn = DB('dict')
   all_count = conn.select_all(sql)[0]['all_count']
   
   total_page = all_count // ONE_PAGE + (1 if all_count % ONE_PAGE != 0 else 0)
 
-  if total_page == 0:
+  # 잘못된 페이지 요청에 대한 예외처리
+  if page < 1 or page > total_page or user_id < 0:
+    app.logger.error(f'[{request.method}] {request.path} :: 잘못된 페이지 요청: page={page}, user_id={user_id}')
     response = {'boards': {}, 'page': page, 'total_page': total_page}
     return jsonify({'response': response})
-
-  if page < 1 or page > total_page:
-    print('잘못된 페이지 요청 예외처리')
-    return render_template('components/fail.html')
 
   start_page = (page - 1) // ONE_SECTION * ONE_SECTION
   if start_page % ONE_SECTION == 0:
@@ -69,7 +80,12 @@ def pagination():
   if end_page > total_page:
     end_page = total_page
 
-  sql = f'SELECT board.id,title,user.name,viewcount,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
+  sql = ''
+  if (user_id != 0):
+    sql = f'SELECT board.user_id, board.id,title,user.name,viewcount,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false AND user_id = {user_id} ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
+  else:
+    sql = f'SELECT board.user_id, board.id,title,user.name,viewcount,board.created_at,file_url,updated_at from board left join `user` ON board.user_id = user.id WHERE deleted = false ORDER BY id DESC LIMIT {ONE_PAGE} OFFSET {(page-1)*5}'
+
   conn = DB('dict')
   boards = conn.select_all(sql)
 
@@ -83,19 +99,13 @@ def register_page():
   return render_template("components/register.html")
 
 
-@app.route("/login")
+@app.route("/login", methods=['GET'])
 def login_page():
   return render_template("components/login.html")
 
 
-@app.route("/home")
-def home_page():
-  return render_template("components/home.html")
-
-
-@app.route("/register/in", methods=["POST"])
+@app.route("/register", methods=["POST"])
 def register():
-
   name_receive = request.form.get("user_name")
   email_receive = request.form.get("register_email")
 
@@ -149,7 +159,7 @@ def register():
 @app.route("/email", methods=["POST"])
 def email():
   email_receive = request.form.get("email_give")
-  email_regex = re.compile("^[a-zA-Z0–9][a-zA-Z0–9._]+[@][a-zA-Z][A-Za-z.]+[.]\w{2,}")
+  email_regex = re.compile('^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
 
   sql = 'SELECT * FROM user WHERE email = %s'
   conn = DB('dict')
@@ -173,9 +183,8 @@ def email():
     return jsonify({'msg': '사용 가능한 이메일입니다.'})
 
 
-@app.route('/login/in', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def login():
-
   email_receive = request.form['email_give']
   password_receive = request.form['password_give']
 
@@ -190,7 +199,6 @@ def login():
   login_email = email_receive
 
   app.logger.info(f'[{request.method}] {request.path} :: login={login_email}')
-
 
   if record and hw == True:
     session['loggedin'] = True
@@ -270,7 +278,7 @@ def like():
 
 @app.route("/liked/rank", methods=["GET"])
 def like_rank():
-  sql = 'SELECT `user`.name,count(writer_id) AS like_cnt FROM liked LEFT JOIN `user`ON liked.writer_id = `user`.id GROUP BY `user`.name ORDER BY  like_cnt DESC LIMIT 5'
+  sql = 'SELECT liked.writer_id, `user`.name, count(writer_id) AS like_cnt FROM liked LEFT JOIN `user`ON liked.writer_id = `user`.id GROUP BY `user`.name, liked.writer_id ORDER BY like_cnt DESC LIMIT 5'
   conn = DB('dict')
   like_data = conn.select_all(sql)
   

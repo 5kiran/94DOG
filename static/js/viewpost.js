@@ -31,38 +31,41 @@ function view_post_get(id) {
         let userId = rows[0]['user_id'];
         let cnt = rows[0]['viewcount'] + 1;
 
-        document.querySelector('#post_title').innerHTML = title;
-        document.querySelector('#post_time').innerHTML = time;
-        document.querySelector('#post_name').innerHTML = name;
-        document.querySelector('#post_cnt').innerHTML = cnt;
-        document.querySelector(
-          '#likeCnt'
-        ).innerHTML = `좋아요 갯수 :${boardLike}`;
+        document.querySelector('#post_title').value = title;
+        document.querySelector('#post_name').value = name;
+        document.querySelector('#post_time').value = new Date(time).toLocaleString();
 
-        document.querySelector('#likeimg').addEventListener('click', () => {
-          like(id, userId);
-        });
-
-        if (response[1] == 0) {
-          document.querySelector('#likeimg').innerHTML = '🤍';
-        } else {
-          document.querySelector('#likeimg').innerHTML = '❤️';
-        }
-
-        document.querySelector('#post_content').innerHTML = content;
+        document.querySelector('#post_cnt').value = cnt;
+        document.querySelector('#content').value = content;
+        
+        // 이미지
         if (file_url != null) {
-          let temp_img_tag = `<img src="static/upload/image/${file_url}" style="width:500px; height:500px;"></br>`;
+          let temp_img_tag = `<img class="img-fluid" src="static/upload/image/${file_url}"></br>`;
           document.querySelector('#post_img').innerHTML = temp_img_tag;
         }
 
+        // 좋아요
+        document.querySelector('#likeCnt').value = boardLike;
+        if (response[1] == 0) {
+          document.querySelector('#like_btn').innerHTML = '좋아요 🤍';
+        } else {
+          document.querySelector('#like_btn').innerHTML = '좋아요 ❤️';
+        }
+        // 좋아요 기능
+        document.querySelector('#like_btn').addEventListener('click', () => {
+          like(id, userId);
+        });
+
+        // 삭제
         document.querySelector('#delete_post').addEventListener('click', () => {
           if (confirm('삭제하시겠습니까?')) {
             delete_post(id);
           }
         });
-        document.querySelector(
-          '#update_post > a'
-        ).href = `/temp_update?id=${id}`;
+        // 수정
+        document.querySelector('#update_post').addEventListener('click', ()=>{
+          location.href = `/temp_update?id=${id}`;
+        })
       }
     },
   });
@@ -95,16 +98,16 @@ function like(id, userId) {
       if (response['msg'] == 1) {
         alert('로그인이 필요합니다');
       }
-      let likeCnt = '좋아요 갯수 :' + String(response[0]['cnt']['liked']);
-      let heart = '❤️';
-      let noneheart = '🤍';
+      let likeCnt = response[0]['cnt']['liked'];
+      // let heart = '❤️';
+      // let noneheart = '🤍';
       // $('#likeCnt').html(likeCnt)
       if (response[1] === 0) {
-        $('#likeCnt').html(likeCnt);
-        $('#likeimg').html(noneheart);
+        document.querySelector('#likeCnt').value = likeCnt;
+        document.querySelector('#like_btn').innerHTML = '좋아요 🤍';
       } else {
-        $('#likeCnt').html(likeCnt);
-        $('#likeimg').html(heart);
+        document.querySelector('#likeCnt').value = likeCnt;
+        document.querySelector('#like_btn').innerHTML = '좋아요 ❤️';
       }
       showRank();
     },

@@ -56,13 +56,17 @@ function preview(id) {
         type: "get", 
         url: `/preview/${id}`,
         success: function (response) {
-                let rows = response['preview_list'][0]
+                let rows = response['preview_list'][0];
                 
-                let title = rows['title']
-                let content = rows['content']
-                // let file_url = rows['file_url']
+                let title = rows['title'];
+                let content = rows['content'];
+                let file_url = rows['file_url'];
 
-                $(`#title`).val(title)
-                $(`#content`).val(content)
-                // $(`#post_file`).val(file_url)
+                $(`#title`).val(title);
+                $(`#content`).val(content);
+
+                if (file_url != null) {
+                    document.querySelector('#post_file_preview').innerHTML 
+                    = `<img src="static/upload/image/${file_url}" id="post_file_preview" style="max-width: 500px; max-height: 500px;">`;
+                }
         }})}
