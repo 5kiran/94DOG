@@ -9,14 +9,10 @@ function register_click() {
   const check_email = document.getElementById('register_email').value;
   const check_password = document.getElementById('register_password').value;
   const check_name = document.getElementById('user_name').value;
-  let emailRegExp =
-    /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
   let count = cnt;
 
   if (user_name === '' || check_email === '' || check_password === '') {
     alert('모두 입력해주세요.');
-  } else if (!emailRegExp.test(check_email)) {
-    alert('이메일 형식이 올바르지 않습니다.');
   } else if (check_password.length > 30) {
     alert('패스워드의 길이를 줄여주세요.');
   } else if (check_name.length > 20) {
