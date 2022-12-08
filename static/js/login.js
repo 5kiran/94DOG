@@ -21,4 +21,6 @@ function login_click() {
       },
     });
   }
+  console.log(typeof email);
+  console.log(typeof password);
 }
