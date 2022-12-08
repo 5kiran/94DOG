@@ -296,14 +296,23 @@ def post_update():
 # 게시글 저장 기능
 @app.route('/post', methods=['POST'])
 def save_post():
+    post_chal = ""
+    upload_file = ""
+
     if len(session) == 0 :
+      post_chal = "false"
+      app.logger.info(f'[{request.method}] {request.path} :: post_chal={post_chal}')
       return jsonify({'msg': '로그인 후 이용해주세요.'})
+    
 
     title_receive = request.form.get("title")
     content_receive = request.form.get("content")
     user_id = session['id']
     email_hash = hashlib.sha256(session['email'].encode('utf-8')).hexdigest()
     file = request.files["post_file"]
+
+   
+
 
     sql = ''
     insert_list = []
@@ -314,22 +323,28 @@ def save_post():
       filename = f'{email_hash}-{mtime}.{extension}'
       save_to = f'static/upload/image/{filename}'
       file.save(save_to)
-
+      upload_file = "true"
+      app.logger.info(f'[{request.method}] {request.path} :: upload={upload_file}')
       sql = 'insert into board (title, content, user_id, file_url) value (%s, %s, %s, %s)'
       insert_list = [title_receive, content_receive, user_id, filename]
     else:
+      upload_file = "false"
+      app.logger.info(f'[{request.method}] {request.path} :: upload={upload_file}')
       sql = 'insert into board (title, content, user_id) value (%s, %s, %s)'
       insert_list = [title_receive, content_receive, user_id]
 
 
     conn = DB('dict')
     conn.save_one(sql, insert_list)
+
+  
    
     return jsonify({'msg': '게시글 저장 완료!'})
 
 # 게시글 삭제 기능
 @app.route('/post/delete', methods=['POST'])
 def delete_post():
+    delete_chal = ""
     if len(session) == 0:
       return jsonify({'msg': '로그인 후 이용해주세요.'})
     
@@ -341,18 +356,24 @@ def delete_post():
     a = conn.select_one(find_user)
 
     if a is None:
+      delete_chal = "false : not writer"
+      app.logger.info(f'[{request.method}] {request.path} :: 삭제={delete_chal}')
       return jsonify({'msg': '작성자가 아닙니다.'})
     
     sql = f"update board set deleted=1 where id='{id_receive}'"
     conn = DB('dict')
     conn.save_one(sql)
 
+    delete_chal = "success"
+    app.logger.info(f'[{request.method}] {request.path} :: 삭제={delete_chal}')
+
     return jsonify({'msg': '게시글 삭제 완료!'})
 
 
 @app.route('/views/<id>', methods=['get'])
 def view_post(id):
-    sql = f"select board.id, title, liked, content, user.name, user_id, board.created_at, file_url, updated_at, viewcount from board left join `user` ON board.user_id = user.id WHERE board.id='{id}'"
+    post_view = ""    
+    sql = f"select board.id, title, liked, content, user.name, user_id, board.created_at, file_url, updated_at, viewcount, deleted from board left join `user` ON board.user_id = user.id WHERE board.id='{id}'"
     conn = DB('dict')
     view_post = conn.select_all(sql)
 
@@ -375,8 +396,10 @@ def view_post(id):
     like_status = 0
 
     if like_find_user(id) is not None:
-      like_status += 1  
+      like_status += 1 
 
+    post_view = "번 게시글"
+    app.logger.info(f'[{request.method}] {request.path} :: 게시글 이동={id ,post_view}')
     return jsonify({'view_post_list':view_post} , like_status)
   
 
@@ -396,6 +419,7 @@ def like_find_user(board_id):
 
 @app.route('/post/modi', methods=['POST'])
 def modi_post():
+    modi_chal = ""
     if len(session) == 0 :
       return jsonify({'msg': '로그인 후 이용해주세요.'})
 
@@ -410,12 +434,17 @@ def modi_post():
     a = conn.select_one(find_user)
     
     if a is None:
+      modi_chal = "false : not writer"
+      app.logger.info(f'[{request.method}] {request.path} :: 수정={modi_chal}')
       return jsonify({'msg': '작성자가 아닙니다.'})
 
     sql = 'update board set title=%s, content=%s, updated_at=%s where id=%s'
     update_list = [title_receive, content_receive, update_at_receive, id_receive]
     conn = DB('dict')
     conn.save_one(sql, update_list)
+
+    modi_chal = "success"
+    app.logger.info(f'[{request.method}] {request.path} :: 수정={modi_chal}')
 
     return jsonify({'msg': '게시글 수정 완료!'})
 
