@@ -94,7 +94,7 @@
 
 # 프로젝트 마무리 후 회고
 오길환 - [블로그 링크](https://5kiran.tistory.com/38)  
-조성훈 - [블로그 링크](https://4sii.tistory.com/164)
+조성훈 - [블로그 링크](https://4sii.tistory.com/164)   
 김정민 - [블로그 링크](https://nomik.tistory.com/82)  
 
 # 시연 영상
