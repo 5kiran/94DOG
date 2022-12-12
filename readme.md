@@ -96,6 +96,9 @@
 오길환 - [블로그 링크](https://5kiran.tistory.com/38)  
 조성훈 - [블로그 링크](https://4sii.tistory.com/164)   
 김정민 - [블로그 링크](https://nomik.tistory.com/82)  
+한주호 - [블로그 링크](https://nojas.tistory.com/4)
+
+
 
 # 시연 영상
 [![내일배움캠프 팀프로젝트#2 - 개띠구조대 시연영상](https://img.youtube.com/vi/HBB6t49MhmI/0.jpg
